@@ -18,7 +18,7 @@ const Page = forwardRef(({ children, title = "", ...rest }, ref) => {
         <HelmetProvider>
             <div ref={ref} {...rest}>
                 <Helmet>
-                    <title>{"INCOG | " + title}</title>
+                    <title>{"VOLUME | " + title}</title>
                 </Helmet>
                 {children}
             </div>

@@ -1,14 +1,12 @@
-import {AppBar, IconButton, makeStyles, Toolbar, Typography} from "@material-ui/core";
-import useSettings from "../../hooks/useSettings";
-import {Box, Moon, Sun} from "react-feather";
-import {THEMES} from "../../constants";
+import {AppBar, IconButton, makeStyles, Toolbar, Typography, Box} from "@material-ui/core";
+import {AccountBalanceWallet} from "@material-ui/icons";
 import clsx from "clsx";
 import {Link as RouterLink} from "react-router-dom";
 import Logo from "../../components/Logo";
 
 const topBarStyles = makeStyles((theme) => ({
     root: {
-        backgroundColor: theme.palette.primary
+        backgroundColor: theme.palette.background.default
     },
     toolBar: {
         height: 72
@@ -16,19 +14,21 @@ const topBarStyles = makeStyles((theme) => ({
     logo: {
         marginRight: theme.spacing(2)
     },
-    buttonsContainer: {
+    topBarText: {
+        color: theme.palette.twinkle.main
+    },
+    priceContainer: {
         display: "flex",
         justifyContent: "flex-end"
-    }
+    },
 }));
 
 const TopBar = ({className, ...rest}) => {
-    const {settings, saveSettings} = useSettings();
     const classes = topBarStyles();
 
-    const handleThemeSwitch = () => {
-        saveSettings({theme: settings.theme === THEMES.LIGHT ? THEMES.DARK : THEMES.LIGHT})
-    };
+    const connectWallet = () => {
+
+    }
 
     return (
         <AppBar
@@ -38,15 +38,15 @@ const TopBar = ({className, ...rest}) => {
         >
             <Toolbar className={classes.toolBar}>
                 <RouterLink to={"/"}>
-                    <Logo className={classes.logo}/>
+                    {/*<Logo className={classes.logo}/>*/}
                 </RouterLink>
-                <Typography variant={"subtitle1"}>
-                    INCOG
+                <Typography variant={"subtitle1"} className={classes.topBarText}>
+                    VOLUME
                 </Typography>
-                <Box flexGrow={1} className={classes.buttonsContainer}>
-                    <IconButton style={{color: "white"}} onClick={handleThemeSwitch}>
-                        {settings.theme === THEMES.LIGHT ? <Moon/> : <Sun/>}
-                    </IconButton>
+                <Box flexGrow={1} className={classes.priceContainer}>
+                    <Typography variant={"h4"} className={classes.topBarText}>
+                        Price: $1.27
+                    </Typography>
                 </Box>
             </Toolbar>
         </AppBar>

@@ -48,17 +48,20 @@ const themesOptions = [
             background: {
                 default: "#0A0A0A",
             },
-            primary: {
-                main: "#333135"
+            star: {
+                main: "#F8F8F8"
             },
-            secondary: {
-                main: '#E88E17'
+            twinkle: {
+                main: '#F5BC00'
             },
-            tertiary: {
-                main: "#3187C4"
+            rocket: {
+                main: '#A1A1A1'
             },
-            text: {
-                primary: "#d9d9d9",
+            rocketTip: {
+                main: "#D33E43"
+            },
+            rocketDecal: {
+                main: "#017B8D",
             },
         },
         shadows: softShadows

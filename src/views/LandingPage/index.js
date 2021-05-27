@@ -1,37 +1,92 @@
 import Page from "../../components/Page";
-import {makeStyles} from "@material-ui/core";
+import {Container, makeStyles} from "@material-ui/core";
+import Anime from "react-anime"
+import {useEffect, useState} from "react";
 
 const landingStyles = makeStyles((theme) => ({
     root: {
-        backgroundColor: theme.palette.background.dark,
         display: 'flex',
         flexDirection: 'column',
         height: '100%'
     },
-    cardContainer: {
+    universeBackground: {
+        backgroundColor: theme.palette.background.default,
         paddingBottom: 80,
         paddingTop: 80,
-        display: "flex",
-        justifyContent: "center"
+        height: '100vh',
+        overflow: "hidden",
     },
-    cardContent: {
-        padding: theme.spacing(2),
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: 400
+    star: {
+        height: 50,
+        width: 50,
+
+    },
+    rocket: {
+        height: 300,
+        top: '50vh',
+        left: '20%',
+        position: "absolute"
     },
 }));
 
 const LandingPage = () => {
-
     const classes = landingStyles();
+
+    const [init, setInit] = useState(false);
+    const [delays, setDelays] = useState([]);
+
+    useEffect(() => {
+        if (!init) {
+            // Generate random delays
+            const tempDelays = [];
+            for (let i = 0; i < 20; i++) {
+                const delay = Math.floor(Math.random() * 5000);
+                tempDelays.push(delay);
+            }
+            setDelays(tempDelays);
+
+            // init true
+            setInit(true);
+        }
+    }, [init]);
 
     return (
         <Page
             classname={classes.root}
             title={'Home'}
         >
-            Landing page here
+            <Container
+                className={classes.universeBackground
+                }
+                maxWidth={"xl"}
+            >
+                {
+                    init &&
+                    <div>
+                        {/*Stars*/}
+                        {
+                            delays.map((d) => {
+                                return (
+                                    <div style={{width: '100%'}}>
+                                        <Anime
+                                            translateX={['110%', '-10%']}
+                                            loop={true}
+                                            duration={5000}
+                                            delay={d}
+                                            easing={"linear"}
+                                        >
+                                            <img src={"/star.svg"} alt={"star"} className={classes.star}/>
+                                        </Anime>
+                                    </div>
+                                );
+                            })
+                        }
+                        {/*End of Stars*/}
+
+                        <img src={"/rocket.svg"} alt={"rocket"} className={classes.rocket}/>
+                    </div>
+                }
+            </Container>
         </Page>
     )
 }
