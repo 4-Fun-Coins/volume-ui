@@ -56,9 +56,8 @@ const LandingPage = () => {
             title={'Home'}
         >
             <Container
-                className={classes.universeBackground
-                }
-                maxWidth={"xl"}
+                className={classes.universeBackground}
+                maxWidth={false}
             >
                 {
                     init &&
