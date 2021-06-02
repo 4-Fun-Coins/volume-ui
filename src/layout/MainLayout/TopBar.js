@@ -1,7 +1,10 @@
-import {AppBar, makeStyles, Toolbar, Typography, Box, Grid, Button} from "@material-ui/core";
+import {AppBar, makeStyles, Toolbar, Typography, Box, Grid, CircularProgress} from "@material-ui/core";
 import clsx from "clsx";
 import React, {useEffect, useState} from "react";
+import LoadingScreen from "../../components/LoadingScreen";
+
 const Big = require('big-js');
+const {getFuel} = require('../../utils/volume-core');
 
 const topBarStyles = makeStyles((theme) => ({
     root: {
@@ -28,16 +31,31 @@ const TopBar = ({className, ...rest}) => {
     const classes = topBarStyles();
 
     const [initFuel, setInitFuel] = useState(false);
-    const [fuel, setFuel] = useState(2452103);
+    const [fuel, setFuel] = useState(0);
+
+
     const [initialFuel, setInitialFuel] = useState(6307200);
+
+    const [initPercentage, setInitPercentage] = useState(false);
     const [fuelPercentage, setFuelPercentage] = useState(new Big(0));
 
     useEffect(() => {
         if (!initFuel) {
-            setFuelPercentage(new Big(fuel).div(initialFuel).times(100));
-            setInitFuel(true);
+            getFuel().then((res, rej) => {
+                if (!rej) {
+                    setFuel(res);
+                    setInitFuel(true);
+                }
+            });
         }
     }, [initFuel]);
+
+    useEffect(() => {
+        if (initFuel) {
+            setFuelPercentage(new Big(fuel).div(initialFuel).times(100));
+            setInitPercentage(true);
+        }
+    }, [initFuel, initPercentage]);
 
     return (
         <AppBar
@@ -46,10 +64,13 @@ const TopBar = ({className, ...rest}) => {
             {...rest}
         >
             <Toolbar className={classes.toolBar}>
-                <Grid container justify={"space-between"} style={{
-                    background: `linear-gradient(to right, #F5BC00 ${initFuel ? fuelPercentage : 100}%, #0A0A0A ${initFuel ? fuelPercentage : 0}%)`,
-                    borderRadius: 20
-                }}>
+                <Grid container
+                      alignItems={"center"}
+                      justify={"space-between"}
+                      style={{
+                          background: `linear-gradient(to right, #F5BC00 ${initFuel ? fuelPercentage : 100}%, #0A0A0A ${initFuel ? fuelPercentage : 0}%)`,
+                          borderRadius: 20
+                      }}>
                     {/*<Logo className={classes.logo}/>*/}
 
                     <Grid item>
@@ -59,11 +80,18 @@ const TopBar = ({className, ...rest}) => {
                     </Grid>
 
                     <Grid item>
-                        <Typography variant="h4" className={classes.topBarText}>
-                            {
-                                `${Math.round(new Big(fuel).div(initialFuel).times(100))}%`
-                            }
-                        </Typography>
+                        {
+                            !initPercentage &&
+                            <CircularProgress style={{color: "#0A0A0A", padding: '0.3em'}}/>
+                        }
+                        {
+                            initPercentage &&
+                            <Typography variant="h4" className={classes.topBarText}>
+                                {
+                                    `${fuelPercentage}%`
+                                }
+                            </Typography>
+                        }
                     </Grid>
 
                     <Grid item>

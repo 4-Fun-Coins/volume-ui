@@ -1,6 +1,6 @@
 import Page from "../../components/Page";
 import {Container, makeStyles} from "@material-ui/core";
-import Anime from "react-anime"
+import Anime from "react-anime";
 import {useEffect, useState} from "react";
 
 const landingStyles = makeStyles((theme) => ({
