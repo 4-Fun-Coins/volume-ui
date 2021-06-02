@@ -1,3 +1,3 @@
 module.exports = {
-    volumeAddress: '0xD3Caea86409aD84797C79099cFf5110182B73Bae'
+    volumeAddress: '0xD3Caea86409aD84797C79099cFf5110182B73Bae' // change this to contract address first
 }
