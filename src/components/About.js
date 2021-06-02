@@ -4,8 +4,6 @@ import React from "react";
 const aboutStyles = makeStyles((theme) => ({
     universeBackground: {
         backgroundColor: theme.palette.background.default,
-        paddingBottom: 0,
-        paddingTop: 0,
         height: '100vh',
         overflow: "hidden",
     },
@@ -14,20 +12,20 @@ const aboutStyles = makeStyles((theme) => ({
     },
     paper: {
         backgroundColor: theme.palette.background.default,
-        paddingLeft: 40,
-        paddingRight: 40,
-        paddingTop: 60,
-        paddingBottom: 60
+        paddingLeft: "2.7em",
+        paddingRight: "2.7em",
+        paddingTop: "3.8em",
+        paddingBottom: "3.8em"
     },
     mainHeading: {
         color: theme.palette.star.main,
         textAlign: "center",
-        paddingBottom: 25,
+        paddingBottom: "1.8em",
     },
     cardHeading: {
         color: theme.palette.twinkle.main,
         textAlign: "center",
-        padding: 5,
+        padding: "0.7em",
     },
     cardBody: {
         color: theme.palette.star.main,
@@ -90,7 +88,7 @@ const About = () => {
                 </Grid>
             </Grid>
         </Container>
-    )
+    );
 }
 
 export default About;
