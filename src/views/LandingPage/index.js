@@ -1,20 +1,16 @@
 import Page from "../../components/Page";
-import {Container, makeStyles} from "@material-ui/core";
+import {Container, makeStyles, Typography} from "@material-ui/core";
 import Anime from "react-anime";
 import {useEffect, useState} from "react";
+import About from "../../components/About";
+import Stats from "../../components/Stats";
+import GlobalStyles from "../../components/GlobalStyles";
 
 const landingStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
         height: '100%'
-    },
-    universeBackground: {
-        backgroundColor: theme.palette.background.default,
-        paddingBottom: 80,
-        paddingTop: 80,
-        height: '100vh',
-        overflow: "hidden",
     },
     star: {
         height: 50,
@@ -27,6 +23,13 @@ const landingStyles = makeStyles((theme) => ({
         left: '20%',
         position: "absolute"
     },
+    universeBackground: {
+        backgroundColor: theme.palette.background.default,
+        paddingBottom: 80,
+        paddingTop: 80,
+        height: '100vh',
+        overflow: "hidden",
+    }
 }));
 
 const LandingPage = () => {
@@ -85,6 +88,20 @@ const LandingPage = () => {
                         <img src={"/rocket.svg"} alt={"rocket"} className={classes.rocket}/>
                     </div>
                 }
+            </Container>
+
+            <Container
+                maxWidth={false}
+                className={classes.universeBackground}
+            >
+                <About/>
+            </Container>
+
+            <Container
+                maxWidth={false}
+                className={classes.universeBackground}
+            >
+                <Stats/>
             </Container>
         </Page>
     )
