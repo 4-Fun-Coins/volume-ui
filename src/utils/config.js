@@ -1,4 +1,3 @@
 module.exports = {
-    volumeAddress: '0x722F64758d3bBEb9D1eF90654a3267422A7D2f20', // change this to contract address first
-    startingBlock: 0 // Set this to the block on which volume has been deployed
+    volumeAddress: '0xBfAa1A4597add71967aBD7D342f82355F991647E', // change this to contract address first
 }
