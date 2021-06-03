@@ -1,19 +1,22 @@
 import {
     Box,
-    Button, ButtonBase,
+    Button,
     Container,
-    createMuiTheme,
     Divider,
-    Grid, IconButton,
+    Grid,
     makeStyles,
     TextField,
     Typography,
-    withStyles
 } from "@material-ui/core";
 import {useEffect, useState} from "react";
-import {getStats} from "../utils/stats";
 import {Search} from "@material-ui/icons";
 import LoadingScreen from "./LoadingScreen";
+import {
+    getTotalFuelAdded,
+    getFuelAddedForAddress
+} from "../utils/volume-core";
+import {string} from "prop-types";
+const Big = require('big-js');
 
 const statsStyles = makeStyles((theme) => ({
     universeBackground: {
@@ -47,19 +50,36 @@ const statsStyles = makeStyles((theme) => ({
 const Stats = () => {
     const classes = statsStyles();
 
-    const [initLogs, setInitLogs] = useState(false);
+    // Global stats
+    const [loadingGlobalStats, setLoadingGlobalStats] = useState(false);
+    const [initGlobalStats, setInitGlobalStats] = useState(false);
+    const [globalBlocks, setGlobalBlocks] = useState(0);
+    const [globalSeconds, setGlobalSeconds] = useState(new Big(0));
 
-    const [loadingStats, setLoadingStats] = useState(false);
-    const [initStats, setInitStats] = useState(true);
+    // User stats
+    const [userAddress, setUserAddress] = useState('');
+    const [loadingUserStats, setLoadingUserStats] = useState(false);
+    const [initUserStats, setInitUserStats] = useState(false);
+    const [userBlocks, setUserBlocks] = useState(0);
+    const [userSeconds, setUserSeconds] = useState(new Big(0));
 
     useEffect(() => {
-        if (!initLogs) {
-            getStats().then(res => {
-                console.log(res);
-                setInitLogs(true);
+        if (!initGlobalStats) {
+            setLoadingGlobalStats(true);
+            // Fetch global stats
+            getTotalFuelAdded().then((res) => {
+                setGlobalBlocks(res);
+                setGlobalSeconds(new Big(res).times(5).toString());
+                //
+                setLoadingGlobalStats(false);
+                setInitGlobalStats(true);
+            }).catch((err) => {
+                // TODO - handle error
+
+                setLoadingGlobalStats(false);
             });
         }
-    }, [initLogs]);
+    }, [loadingGlobalStats]);
 
     return (
         <Container
@@ -81,6 +101,9 @@ const Stats = () => {
                     label={"Wallet Address"}
                     variant={"outlined"}
                     color={"secondary"}
+                    onChange={(event) => {
+                        setUserAddress(event.target.value);
+                    }}
                 />
 
                 <Button
@@ -89,22 +112,36 @@ const Stats = () => {
                     startIcon={<Search style={{marginLeft: '0.5em'}}/>}
                     className={classes.submitButton}
                     onClick={async () => {
-                        setLoadingStats(true);
+                        setLoadingUserStats(true);
 
-                        // Fetch the stats here
-                        const res = await getStats();
-                        // TODO - assign stats from res
-
-                        // Set loading stats to false & initStats to true
-                        setLoadingStats(false);
+                        // Fetch the user stats here
+                        getFuelAddedForAddress(userAddress).then((res) => {
+                            setUserBlocks(res);
+                            setUserSeconds(new Big(res).times(5).toString());
+                            // Set loading stats to false & initStats to true
+                            setLoadingUserStats(false);
+                            setInitUserStats(true);
+                        }).catch((err) => {
+                            // TODO - Show error to user
+                            // If false - user input invalid address
+                            // If not - possible rpc node error
+                            setLoadingUserStats(false);
+                        });
                     }}
                 />
             </Grid>
 
             <Grid container item justify={"center"}>
-                {initStats && !loadingStats &&
-                    <Grid container item className={classes.statsWrapper} sm={6} spacing={2}>
-                        {/*Global stats*/}
+                <Grid container item className={classes.statsWrapper} sm={6} spacing={2} justify={"center"}>
+                    {/*Global stats*/}
+                    {
+                        loadingGlobalStats && !initGlobalStats &&
+                        <Grid item>
+                            <LoadingScreen transparent/>
+                        </Grid>
+                    }
+                    {initGlobalStats && !loadingGlobalStats &&
+                    <>
                         <Grid container item sm={12} justify={"center"}>
                             <Box className={classes.subtitle}>
                                 <Typography variant={"h3"}>
@@ -121,7 +158,7 @@ const Stats = () => {
 
                         <Grid container item sm={6} justify={"center"}>
                             <Typography variant={"h3"} color={"primary"} sm={6}>
-                                15 blocks
+                                {globalBlocks} blocks
                             </Typography>
                         </Grid>
 
@@ -133,10 +170,22 @@ const Stats = () => {
 
                         <Grid container item sm={6} justify={"center"}>
                             <Typography variant={"h3"} color={"primary"} sm={6}>
-                                75 seconds
+                                {globalSeconds} seconds
                             </Typography>
                         </Grid>
+                    </>
+                    }
 
+                    {
+                        loadingUserStats && !initUserStats &&
+                        <Grid item>
+                            <LoadingScreen transparent/>
+                        </Grid>
+
+
+                    }
+                    {initUserStats && !loadingUserStats &&
+                    <>
                         <Grid item sm={12}>
                             <Divider light={true}/>
                         </Grid>
@@ -158,7 +207,7 @@ const Stats = () => {
 
                         <Grid container item sm={6} justify={"center"}>
                             <Typography variant={"h3"} color={"primary"} sm={6}>
-                                15 blocks
+                                {userBlocks} blocks
                             </Typography>
                         </Grid>
 
@@ -170,16 +219,14 @@ const Stats = () => {
 
                         <Grid container item sm={6} justify={"center"}>
                             <Typography variant={"h3"} color={"primary"} sm={6}>
-                                75 seconds
+                                {userSeconds} seconds
                             </Typography>
                         </Grid>
+                    </>
+                    }
 
-                    </Grid>
-                }
-                {
-                    loadingStats &&
-                        <LoadingScreen transparent/>
-                }
+
+                </Grid>
             </Grid>
 
 
