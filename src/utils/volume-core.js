@@ -17,6 +17,38 @@ let volumeABI = [
         ],
         "stateMutability": "view",
         "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getTotalFuelAdded",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "getPersonalFuelAdded",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
     }
 ];
 
@@ -32,6 +64,42 @@ async function getFuel() {
     });
 }
 
+async function getTotalFuelAdded() {
+    return new Promise((resolve, reject) => {
+        const volume = new web3.eth.Contract(volumeABI, volumeAddress);
+        volume.methods.getTotalFuelAdded().call((error, totalFuel) => {
+            if (error)
+                reject(error);
+
+            resolve(web3.utils.fromWei(totalFuel));
+        });
+    });
+}
+
+async function getFuelAddedForAddress(address) {
+    return new Promise((resolve, reject) => {
+        if (web3.utils.isAddress(address)) {
+            if (web3.utils.checkAddressChecksum(address)) {
+                const volume = new web3.eth.Contract(volumeABI, volumeAddress);
+                volume.methods.getPersonalFuelAdded(address).call((error, totalFuelForAddress) => {
+                    if (error)
+                        reject(error);
+
+                    resolve(web3.utils.fromWei(totalFuelForAddress));
+                });
+            } else {
+                reject(false);
+            }
+        } else {
+            reject(false);
+        }
+    });
+
+
+}
+
 module.exports = {
-    getFuel
+    getFuel,
+    getTotalFuelAdded,
+    getFuelAddedForAddress
 }
