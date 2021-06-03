@@ -38,6 +38,9 @@ const statsStyles = makeStyles((theme) => ({
         borderColor: "gray",
         borderStyle: "solid",
         padding: "1em"
+    },
+    subtitle: {
+        color: theme.palette.star.main
     }
 }));
 
@@ -102,12 +105,54 @@ const Stats = () => {
                 {initStats && !loadingStats &&
                     <Grid container item className={classes.statsWrapper} sm={6} spacing={2}>
                         {/*Global stats*/}
+                        <Grid container item sm={12} justify={"center"}>
+                            <Box className={classes.subtitle}>
+                                <Typography variant={"h3"}>
+                                    Global Stats
+                                </Typography>
+                            </Box>
+                        </Grid>
 
-                        <Divider />
-                        {/*User stats*/}
                         <Grid container item sm={6} justify={"center"}>
                             <Typography variant={"h3"} color={"secondary"}>
                                 Total fuel added (blocks):
+                            </Typography>
+                        </Grid>
+
+                        <Grid container item sm={6} justify={"center"}>
+                            <Typography variant={"h3"} color={"primary"} sm={6}>
+                                15 blocks
+                            </Typography>
+                        </Grid>
+
+                        <Grid container item sm={6} justify={"center"}>
+                            <Typography variant={"h3"} color={"secondary"}>
+                                Est time added (seconds):
+                            </Typography>
+                        </Grid>
+
+                        <Grid container item sm={6} justify={"center"}>
+                            <Typography variant={"h3"} color={"primary"} sm={6}>
+                                75 seconds
+                            </Typography>
+                        </Grid>
+
+                        <Grid item sm={12}>
+                            <Divider light={true}/>
+                        </Grid>
+
+                        {/*User stats*/}
+                        <Grid container item sm={12} justify={"center"}>
+                            <Box className={classes.subtitle}>
+                                <Typography variant={"h3"}>
+                                    Personal Stats
+                                </Typography>
+                            </Box>
+                        </Grid>
+
+                        <Grid container item sm={6} justify={"center"}>
+                            <Typography variant={"h3"} color={"secondary"}>
+                                Your fuel added (blocks):
                             </Typography>
                         </Grid>
 
