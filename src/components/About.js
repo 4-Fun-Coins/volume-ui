@@ -4,11 +4,6 @@ import React from "react";
 const aboutStyles = makeStyles((theme) => ({
     universeBackground: {
         backgroundColor: theme.palette.background.default,
-        height: '100vh',
-        overflow: "hidden",
-    },
-    gridContainer: {
-
     },
     paper: {
         backgroundColor: theme.palette.background.default,
@@ -29,6 +24,11 @@ const aboutStyles = makeStyles((theme) => ({
     },
     cardBody: {
         color: theme.palette.star.main,
+    },
+    images: {
+        maxWidth: "50%",
+        maxHeight: "100%",
+        display: "block"
     }
 }));
 
@@ -40,7 +40,7 @@ const About = () => {
             className={classes.universeBackground}
             maxWidth={false}
         >
-            <Grid container spacing={3} alignItems={"center"} justify={"space-evenly"} className={classes.gridContainer}>
+            <Grid container spacing={3} alignItems={"center"} justify={"space-evenly"}>
                 <Grid item xs={12}>
                     <Box className={classes.mainHeading}>
                         <Typography variant={"h1"}>
@@ -49,42 +49,76 @@ const About = () => {
                     </Box>
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
-                    <Paper elevation={3} variant={"outlined"}  className={classes.paper}>
-                        <Box className={classes.cardHeading}>
-                            <Typography variant={"h2"}>
-                                Volume
-                            </Typography>
-                        </Box>
+                <Grid container item xs={12}>
+                    <Grid item xs={6}>
+                        <Paper elevation={3} variant={"outlined"}  className={classes.paper}>
+                            <Box className={classes.cardHeading}>
+                                <Typography variant={"h2"}>
+                                    Volume
+                                </Typography>
+                            </Box>
 
-                        <Box className={classes.cardBody}>
-                            <Typography variant={"body1"}>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. In id nibh eget lorem consequat tempus ut ac ante. Aliquam semper lacus ut sem semper, at fermentum velit sagittis.
-                                Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla tincidunt urna eu sapien egestas, nec congue orci lobortis. Integer eu tellus id sem iaculis cursus a a sapien.
-                                Sed finibus suscipit purus sit amet venenatis. Aenean vestibulum porttitor tellus laoreet aliquam. Phasellus gravida mauris at ipsum sodales, sit amet aliquam urna facilisis.
-                                Ut porta velit lectus, non rhoncus ante placerat sed. Ut sit amet consectetur nisl, eu sollicitudin massa. Cras.
-                            </Typography>
-                        </Box>
-                    </Paper>
+                            <Box className={classes.cardBody}>
+                                <Typography variant={"body1"}>
+                                    Volume is a project created to teach people the basics of tokenomics and how statistics like value and volume are affected by certain core functionalities within a
+                                    token.
+                                    For instance, if a token has a diminishing supply, the value should have an upwards pressure. However, this does not mean the price can not go down. Volume aims
+                                    to teach people this through a practical approach - by letting people see how much fuel they added to the rocket, and how that impacts the time the rocket can
+                                    still fly (More on this in tokenomics).
+                                </Typography>
+                            </Box>
+                        </Paper>
+                    </Grid>
+
+                    <Grid container item xs={6} justify={"center"}>
+                        <img
+                            alt="Logo"
+                            src={"/explorer.jpg"}
+                            className={classes.images}
+                        />
+                    </Grid>
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
-                    <Paper elevation={3} variant={"outlined"} className={classes.paper}>
-                        <Box className={classes.cardHeading}>
-                            <Typography variant={"h2"}>
-                                Tokenomics
-                            </Typography>
-                        </Box>
+                <Grid container item xs={12}>
+                    <Grid container item xs={6} justify={"center"}>
+                        <img
+                            alt="Logo"
+                            src={"/arsonist.jpg"}
+                            className={classes.images}
+                        />
+                    </Grid>
 
-                        <Box className={classes.cardBody}>
-                            <Typography variant={"body1"}>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. In id nibh eget lorem consequat tempus ut ac ante. Aliquam semper lacus ut sem semper, at fermentum velit sagittis.
-                                Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla tincidunt urna eu sapien egestas, nec congue orci lobortis. Integer eu tellus id sem iaculis cursus a a sapien.
-                                Sed finibus suscipit purus sit amet venenatis. Aenean vestibulum porttitor tellus laoreet aliquam. Phasellus gravida mauris at ipsum sodales, sit amet aliquam urna facilisis.
-                                Ut porta velit lectus, non rhoncus ante placerat sed. Ut sit amet consectetur nisl, eu sollicitudin massa. Cras.
-                            </Typography>
-                        </Box>
-                    </Paper>
+                    <Grid item xs={6}>
+                        <Paper elevation={3} variant={"outlined"} className={classes.paper}>
+                            <Box className={classes.cardHeading}>
+                                <Typography variant={"h2"}>
+                                    Tokenomics
+                                </Typography>
+                            </Box>
+
+                            <Box className={classes.cardBody}>
+                                <Typography variant={"body1"}>
+                                    Volume's tokenomics can be broken down into 2 parts:
+                                </Typography>
+
+                                <br/>
+
+                                <Typography variant={"body1"}>
+                                    1. Lifetime - As blocks go by, the rocket consumes fuel. It starts on 1 year's worth of blocks on the Binance Smart Chain (approx. 6.2M). Each
+                                    block that passes gets removed from the fuel tank. If the tank is empty, the token freezes and can no longer be traded - the rocket has crashed.
+                                    Please note that you will essentially lose the tokens you own if the rocket crashes, since they will not be tradable any longer.
+                                </Typography>
+
+                                <br/>
+
+                                <Typography variant={"body1"}>
+                                    2. Refuel - Every transaction made will add fuel to the tank (0.01% of the total transaction). The amount of fuel added will be proportional to the
+                                    amount burned from the total supply. For instance, if the total supply is 100 and your transaction resulted in 10 tokens being burned,
+                                    you burned 10% of the total supply and you will add 10% to the remaining fuel tank.
+                                </Typography>
+                            </Box>
+                        </Paper>
+                    </Grid>
                 </Grid>
             </Grid>
         </Container>
