@@ -1,6 +1,5 @@
 const Web3 = require('web3');
 const {volumeAddress} = require('./config.js');
-const Big = require('big-js');
 
 let web3 = new Web3("ws://localhost:8545");
 
@@ -81,7 +80,7 @@ async function getFuelAddedForAddress(address) {
         if (web3.utils.isAddress(address)) {
             if (web3.utils.checkAddressChecksum(address)) {
                 const volume = new web3.eth.Contract(volumeABI, volumeAddress);
-                volume.methods.getPersonalFuelAdded(address).call((error, totalFuelForAddress) => {
+                volume.methods.getUserFuelAdded(address).call((error, totalFuelForAddress) => {
                     if (error)
                         reject(error);
 

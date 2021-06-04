@@ -15,7 +15,6 @@ import {
     getTotalFuelAdded,
     getFuelAddedForAddress
 } from "../utils/volume-core";
-import {string} from "prop-types";
 const Big = require('big-js');
 
 const statsStyles = makeStyles((theme) => ({
