@@ -48,6 +48,12 @@ const themesOptions = [
             background: {
                 default: "#0A0A0A",
             },
+            primary: {
+                main: "#D33E43"
+            },
+            secondary: {
+                main: "#F5BC00"
+            },
             star: {
                 main: "#F8F8F8"
             },

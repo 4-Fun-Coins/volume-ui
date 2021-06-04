@@ -55,7 +55,7 @@ const LandingPage = () => {
 
     return (
         <Page
-            classname={classes.root}
+            className={classes.root}
             title={'Home'}
         >
             <Container
@@ -69,7 +69,7 @@ const LandingPage = () => {
                         {
                             delays.map((d) => {
                                 return (
-                                    <div style={{width: '100%'}}>
+                                    <div style={{width: '100%'}} key={d}>
                                         <Anime
                                             translateX={['110%', '-10%']}
                                             loop={true}
