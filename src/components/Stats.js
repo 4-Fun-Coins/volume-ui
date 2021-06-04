@@ -54,6 +54,7 @@ const Stats = () => {
     const [initGlobalStats, setInitGlobalStats] = useState(false);
     const [globalBlocks, setGlobalBlocks] = useState(0);
     const [globalSeconds, setGlobalSeconds] = useState(new Big(0));
+    const [globalError, setGlobalError] = useState(false);
 
     // User stats
     const [userAddress, setUserAddress] = useState('');
@@ -61,6 +62,8 @@ const Stats = () => {
     const [initUserStats, setInitUserStats] = useState(false);
     const [userBlocks, setUserBlocks] = useState(0);
     const [userSeconds, setUserSeconds] = useState(new Big(0));
+    const [userAddressError, setUserAddressError] = useState(false);
+    const [userRPCError, setUserRPCError] = useState(false);
 
     useEffect(() => {
         if (!initGlobalStats) {
@@ -73,8 +76,7 @@ const Stats = () => {
                 setLoadingGlobalStats(false);
                 setInitGlobalStats(true);
             }).catch((err) => {
-                // TODO - handle error
-
+                setGlobalError(true);
                 setLoadingGlobalStats(false);
             });
         }
@@ -112,6 +114,8 @@ const Stats = () => {
                     className={classes.submitButton}
                     onClick={async () => {
                         setLoadingUserStats(true);
+                        setUserAddressError(false);
+                        setUserRPCError(false);
 
                         // Fetch the user stats here
                         getFuelAddedForAddress(userAddress).then((res) => {
@@ -121,10 +125,16 @@ const Stats = () => {
                             setLoadingUserStats(false);
                             setInitUserStats(true);
                         }).catch((err) => {
-                            // TODO - Show error to user
+                            console.log("In error")
                             // If false - user input invalid address
                             // If not - possible rpc node error
+                            if (!err) {
+                                setUserAddressError(true);
+                            } else {
+                                setUserRPCError(true);
+                            }
                             setLoadingUserStats(false);
+                            setInitUserStats(true);
                         });
                     }}
                 />
@@ -139,7 +149,7 @@ const Stats = () => {
                             <LoadingScreen transparent/>
                         </Grid>
                     }
-                    {initGlobalStats && !loadingGlobalStats &&
+                    {initGlobalStats && !loadingGlobalStats && !globalError &&
                     <>
                         <Grid container item sm={12} justify={"center"}>
                             <Box className={classes.subtitle}>
@@ -175,6 +185,24 @@ const Stats = () => {
                     </>
                     }
 
+                    {initGlobalStats && !loadingGlobalStats && globalError &&
+                        <>
+                            <Grid container item sm={12} justify={"center"}>
+                                <Box className={classes.subtitle}>
+                                    <Typography variant={"h3"}>
+                                        Global Stats
+                                    </Typography>
+                                </Box>
+                            </Grid>
+
+                            <Grid container item sm={12} justify={"center"}>
+                                <Typography variant={"body1"} color={"primary"}>
+                                    Unknown Error - Possible RPC node down. Try refreshing the page soon.
+                                </Typography>
+                            </Grid>
+                        </>
+                    }
+
                     {
                         loadingUserStats && !initUserStats &&
                         <Grid item>
@@ -183,7 +211,7 @@ const Stats = () => {
 
 
                     }
-                    {initUserStats && !loadingUserStats &&
+                    {initUserStats && !loadingUserStats && !userAddressError && !userRPCError &&
                     <>
                         <Grid item sm={12}>
                             <Divider light={true}/>
@@ -224,7 +252,51 @@ const Stats = () => {
                     </>
                     }
 
+                    {initUserStats && !loadingUserStats && userAddressError &&
+                    <>
+                        <Grid item sm={12}>
+                            <Divider light={true}/>
+                        </Grid>
 
+                        {/*User stats*/}
+                        <Grid container item sm={12} justify={"center"}>
+                            <Box className={classes.subtitle}>
+                                <Typography variant={"h3"}>
+                                    Personal Stats
+                                </Typography>
+                            </Box>
+                        </Grid>
+
+                        <Grid container item sm={12} justify={"center"}>
+                            <Typography variant={"body1"} color={"primary"}>
+                                You entered an invalid address, please try again.
+                            </Typography>
+                        </Grid>
+                    </>
+                    }
+
+                    {initUserStats && !loadingUserStats && userRPCError &&
+                    <>
+                        <Grid item sm={12}>
+                            <Divider light={true}/>
+                        </Grid>
+
+                        {/*User stats*/}
+                        <Grid container item sm={12} justify={"center"}>
+                            <Box className={classes.subtitle}>
+                                <Typography variant={"h3"}>
+                                    Personal Stats
+                                </Typography>
+                            </Box>
+                        </Grid>
+
+                        <Grid container item sm={12} justify={"center"}>
+                            <Typography variant={"body1"} color={"primary"}>
+                                Unknown Error - Possible RPC node down. Please try again soon.
+                            </Typography>
+                        </Grid>
+                    </>
+                    }
                 </Grid>
             </Grid>
 

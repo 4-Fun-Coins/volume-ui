@@ -38,7 +38,7 @@ let volumeABI = [
                 "type": "address"
             }
         ],
-        "name": "getPersonalFuelAdded",
+        "name": "getUserFuelAdded",
         "outputs": [
             {
                 "internalType": "uint256",
