@@ -1,10 +1,9 @@
 import Page from "../../components/Page";
-import {Container, makeStyles, Typography} from "@material-ui/core";
+import {Container, Divider, makeStyles, Typography} from "@material-ui/core";
 import Anime from "react-anime";
 import {useEffect, useState} from "react";
 import About from "../../components/About";
 import Stats from "../../components/Stats";
-import GlobalStyles from "../../components/GlobalStyles";
 
 const landingStyles = makeStyles((theme) => ({
     root: {
@@ -29,6 +28,16 @@ const landingStyles = makeStyles((theme) => ({
         paddingTop: 80,
         height: '100vh',
         overflow: "hidden",
+    },
+    aboutBackground: {
+        backgroundColor: theme.palette.background.default,
+        paddingBottom: 80,
+        paddingTop: 80,
+    },
+    statsBackground: {
+        backgroundColor: theme.palette.background.default,
+        paddingBottom: 80,
+        paddingTop: 80,
     }
 }));
 
@@ -92,14 +101,14 @@ const LandingPage = () => {
 
             <Container
                 maxWidth={false}
-                className={classes.universeBackground}
+                className={classes.aboutBackground}
             >
                 <About/>
             </Container>
 
             <Container
                 maxWidth={false}
-                className={classes.universeBackground}
+                className={classes.statsBackground}
             >
                 <Stats/>
             </Container>

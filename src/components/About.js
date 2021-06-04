@@ -49,7 +49,7 @@ const About = () => {
                     </Box>
                 </Grid>
 
-                <Grid container item xs={12}>
+                <Grid container item xs={12} alignItems={"center"}>
                     <Grid item xs={6}>
                         <Paper elevation={3} variant={"outlined"}  className={classes.paper}>
                             <Box className={classes.cardHeading}>
@@ -79,7 +79,7 @@ const About = () => {
                     </Grid>
                 </Grid>
 
-                <Grid container item xs={12}>
+                <Grid container item xs={12} alignItems={"center"}>
                     <Grid container item xs={6} justify={"center"}>
                         <img
                             alt="Logo"
