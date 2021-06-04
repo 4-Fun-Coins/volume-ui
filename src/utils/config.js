@@ -1,3 +1,4 @@
 module.exports = {
-    volumeAddress: '0xBfAa1A4597add71967aBD7D342f82355F991647E', // change this to contract address first
+    volumeAddress: '0x2D6cbda46E80310f46A56e955636A92c3d49B891', // Change this to the MainNet address for Volume
+    testVolumeAddress: '0x2D6cbda46E80310f46A56e955636A92c3d49B891' // This is currently the testnet address for TestVolume
 }
