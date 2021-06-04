@@ -125,9 +125,6 @@ const Stats = () => {
                             setLoadingUserStats(false);
                             setInitUserStats(true);
                         }).catch((err) => {
-                            console.log("In error")
-                            // If false - user input invalid address
-                            // If not - possible rpc node error
                             if (!err) {
                                 setUserAddressError(true);
                             } else {
@@ -197,7 +194,7 @@ const Stats = () => {
 
                             <Grid container item sm={12} justify={"center"}>
                                 <Typography variant={"body1"} color={"primary"}>
-                                    Unknown Error - Possible RPC node down. Try refreshing the page soon.
+                                    Unknown Error - RPC node could possible be down. Try refreshing the page soon.
                                 </Typography>
                             </Grid>
                         </>
@@ -292,7 +289,7 @@ const Stats = () => {
 
                         <Grid container item sm={12} justify={"center"}>
                             <Typography variant={"body1"} color={"primary"}>
-                                Unknown Error - Possible RPC node down. Please try again soon.
+                                Unknown Error - RPC node could possibly be down. Try refreshing the page soon.
                             </Typography>
                         </Grid>
                     </>
