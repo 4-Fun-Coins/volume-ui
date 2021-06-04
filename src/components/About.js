@@ -50,7 +50,7 @@ const About = () => {
                 </Grid>
 
                 <Grid container item xs={12} alignItems={"center"}>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} md={6}>
                         <Paper elevation={3} variant={"outlined"}  className={classes.paper}>
                             <Box className={classes.cardHeading}>
                                 <Typography variant={"h2"}>
@@ -70,7 +70,7 @@ const About = () => {
                         </Paper>
                     </Grid>
 
-                    <Grid container item xs={6} justify={"center"}>
+                    <Grid container item xs={12} md={6} justify={"center"}>
                         <img
                             alt="Logo"
                             src={"/explorer.jpg"}
@@ -80,7 +80,7 @@ const About = () => {
                 </Grid>
 
                 <Grid container item xs={12} alignItems={"center"}>
-                    <Grid container item xs={6} justify={"center"}>
+                    <Grid container item xs={12} md={6} justify={"center"}>
                         <img
                             alt="Logo"
                             src={"/arsonist.jpg"}
@@ -88,7 +88,7 @@ const About = () => {
                         />
                     </Grid>
 
-                    <Grid item xs={6}>
+                    <Grid item xs={12} md={6}>
                         <Paper elevation={3} variant={"outlined"} className={classes.paper}>
                             <Box className={classes.cardHeading}>
                                 <Typography variant={"h2"}>
