@@ -35,7 +35,7 @@ const Footer = () => {
         >
             <Divider variant={"fullWidth"} className={classes.divider}/>
             <Grid container spacing={2} justify={"space-around"}>
-                <Grid item xs={1}>
+                <Grid item xs={4} sm={4} md={1}>
                     <IconButton onClick={() => {
                         // Add discord link
                         window.open('https://discord.gg/CWpavWAyQ2', '_blank');
@@ -44,7 +44,7 @@ const Footer = () => {
                     </IconButton>
                 </Grid>
 
-                <Grid item xs={1}>
+                <Grid item xs={4} sm={4} md={1}>
                     <IconButton onClick={() => {
                         // Link to twitter page
                         window.open('https://twitter.com/4FC_Volume', '_blank');
@@ -53,7 +53,7 @@ const Footer = () => {
                     </IconButton>
                 </Grid>
 
-                <Grid item xs={1}>
+                <Grid item xs={4} sm={4} md={1}>
                     <IconButton onClick={() => {
                         // Link to twitter page
                         window.open('https://github.com/4-Fun-Coins', '_blank');
