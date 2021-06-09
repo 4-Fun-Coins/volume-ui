@@ -52,7 +52,7 @@ const landingStyles = makeStyles((theme) => ({
     },
     footerBackground: {
         backgroundColor: theme.palette.background.default,
-        paddingBottom: 80,
+        paddingBottom: 10,
         paddingTop: 80,
     }
 }));
