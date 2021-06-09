@@ -9,6 +9,7 @@ import React from "react";
 import DiscordIcon from "./CustomIcons/DiscordIcon";
 import TwitterIcon from "./CustomIcons/TwitterIcon";
 import {useHistory} from 'react-router-dom';
+import GitHubIcon from "./CustomIcons/GitHubIcon";
 
 const aboutStyles = makeStyles((theme) => ({
     universeBackground: {
@@ -33,7 +34,7 @@ const Footer = () => {
             maxWidth={false}
         >
             <Divider variant={"fullWidth"} className={classes.divider}/>
-            <Grid container xs={12} spacing={2} justify={"space-evenly"}>
+            <Grid container spacing={2} justify={"space-around"}>
                 <Grid item xs={1}>
                     <IconButton onClick={() => {
                         // Add discord link
@@ -49,6 +50,15 @@ const Footer = () => {
                         window.open('https://twitter.com/4FC_Volume', '_blank');
                     }}>
                         <TwitterIcon className={classes.icons}/>
+                    </IconButton>
+                </Grid>
+
+                <Grid item xs={1}>
+                    <IconButton onClick={() => {
+                        // Link to twitter page
+                        window.open('https://github.com/4-Fun-Coins', '_blank');
+                    }}>
+                        <GitHubIcon className={classes.icons}/>
                     </IconButton>
                 </Grid>
             </Grid>
