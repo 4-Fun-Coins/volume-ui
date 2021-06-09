@@ -33,7 +33,7 @@ const TopBar = ({className, ...rest}) => {
 
     const [initFuel, setInitFuel] = useState(false);
     const [fuel, setFuel] = useState(new Big(0));
-    const [seconds, setSeconds] = useState(new Big(0));
+    const [milliseconds, setMilliseconds] = useState(new Big(0));
 
     const [initialFuel, setInitialFuel] = useState(6307200);
 
@@ -45,8 +45,8 @@ const TopBar = ({className, ...rest}) => {
             getFuel().then((res, rej) => {
                 if (!rej) {
                     setFuel(new Big(res));
-                    setSeconds(new Big(res).times(5000));
-                    console.log(new Big(res).times(5000).toString());
+                    setMilliseconds(new Big(res).times(5000));
+                    console.log(new Big(res).times(5).times(1000).toString());
                     setInitFuel(true);
                 }
             });
@@ -89,7 +89,7 @@ const TopBar = ({className, ...rest}) => {
                         }
                         {
                             initPercentage &&
-                            <Countdown className={classes.topBarText} date={new Big(Date.now()).plus(seconds)}/>
+                            <Countdown className={classes.topBarText} date={Date.now() + Number(milliseconds)} />
                         }
                     </Grid>
 
