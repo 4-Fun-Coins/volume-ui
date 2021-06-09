@@ -25,11 +25,18 @@ const aboutStyles = makeStyles((theme) => ({
     cardBody: {
         color: theme.palette.star.main,
     },
-    images: {
+    image1: {
         maxWidth: "50%",
         maxHeight: "100%",
-        display: "block"
-    }
+        display: "block",
+        paddingTop: '1em'
+    },
+    image2: {
+        maxWidth: "50%",
+        maxHeight: "100%",
+        display: "block",
+        paddingBottom: '1em'
+    },
 }));
 
 const About = () => {
@@ -74,7 +81,7 @@ const About = () => {
                         <img
                             alt="Logo"
                             src={"/explorer.jpg"}
-                            className={classes.images}
+                            className={classes.image1}
                         />
                     </Grid>
                 </Grid>
@@ -84,7 +91,7 @@ const About = () => {
                         <img
                             alt="Logo"
                             src={"/arsonist.jpg"}
-                            className={classes.images}
+                            className={classes.image2}
                         />
                     </Grid>
 
