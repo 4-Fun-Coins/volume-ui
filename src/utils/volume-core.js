@@ -1,7 +1,7 @@
 const Web3 = require('web3');
-const {volumeAddress, testNetUrl} = require('./config.js');
+const {volumeAddress, mainNetUrl} = require('./config.js');
 
-let web3 = new Web3(testNetUrl);
+let web3 = new Web3(mainNetUrl);
 
 let volumeABI = [
     {
