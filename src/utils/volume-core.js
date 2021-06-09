@@ -51,7 +51,7 @@ let volumeABI = [
     }
 ];
 
-async function getFuel() {
+export async function getFuel() {
     return new Promise((resolve, reject) => {
         const volume = new web3.eth.Contract(volumeABI, volumeAddress);
         volume.methods.getFuel().call((error, fuel) => {
@@ -63,7 +63,7 @@ async function getFuel() {
     });
 }
 
-async function getTotalFuelAdded() {
+export async function getTotalFuelAdded() {
     return new Promise((resolve, reject) => {
         const volume = new web3.eth.Contract(volumeABI, volumeAddress);
         volume.methods.getTotalFuelAdded().call((error, totalFuel) => {
@@ -75,7 +75,7 @@ async function getTotalFuelAdded() {
     });
 }
 
-async function getFuelAddedForAddress(address) {
+export async function getFuelAddedForAddress(address) {
     return new Promise((resolve, reject) => {
         if (web3.utils.isAddress(address)) {
             if (web3.utils.checkAddressChecksum(address)) {
@@ -96,10 +96,4 @@ async function getFuelAddedForAddress(address) {
     });
 
 
-}
-
-module.exports = {
-    getFuel,
-    getTotalFuelAdded,
-    getFuelAddedForAddress
 }
