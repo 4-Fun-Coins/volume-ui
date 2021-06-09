@@ -46,7 +46,6 @@ const TopBar = ({className, ...rest}) => {
                 if (!rej) {
                     setFuel(new Big(res));
                     setMilliseconds(new Big(res).times(5000));
-                    console.log(new Big(res).times(5).times(1000).toString());
                     setInitFuel(true);
                 }
             });
