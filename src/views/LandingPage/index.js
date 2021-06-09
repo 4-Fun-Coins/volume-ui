@@ -4,6 +4,7 @@ import Anime from "react-anime";
 import {useEffect, useState} from "react";
 import About from "../../components/About";
 import Stats from "../../components/Stats";
+import Footer from "../../components/Footer";
 
 const landingStyles = makeStyles((theme) => ({
     root: {
@@ -44,6 +45,11 @@ const landingStyles = makeStyles((theme) => ({
         paddingTop: 80,
     },
     statsBackground: {
+        backgroundColor: theme.palette.background.default,
+        paddingBottom: 80,
+        paddingTop: 80,
+    },
+    footerBackground: {
         backgroundColor: theme.palette.background.default,
         paddingBottom: 80,
         paddingTop: 80,
@@ -221,6 +227,13 @@ const LandingPage = () => {
                 className={classes.statsBackground}
             >
                 <Stats/>
+            </Container>
+
+            <Container
+                maxWidth={false}
+                className={classes.footerBackground}
+            >
+                <Footer/>
             </Container>
         </Page>
     )
