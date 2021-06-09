@@ -2,6 +2,7 @@ import {AppBar, makeStyles, Toolbar, Typography, Box, Grid, CircularProgress} fr
 import clsx from "clsx";
 import React, {useEffect, useState} from "react";
 import LoadingScreen from "../../components/LoadingScreen";
+import Countdown from "react-countdown";
 
 const Big = require('big-js');
 const {getFuel} = require('../../utils/volume-core');
@@ -31,8 +32,8 @@ const TopBar = ({className, ...rest}) => {
     const classes = topBarStyles();
 
     const [initFuel, setInitFuel] = useState(false);
-    const [fuel, setFuel] = useState(0);
-
+    const [fuel, setFuel] = useState(new Big(0));
+    const [seconds, setSeconds] = useState(new Big(0));
 
     const [initialFuel, setInitialFuel] = useState(6307200);
 
@@ -43,7 +44,9 @@ const TopBar = ({className, ...rest}) => {
         if (!initFuel) {
             getFuel().then((res, rej) => {
                 if (!rej) {
-                    setFuel(res);
+                    setFuel(new Big(res));
+                    setSeconds(new Big(res).times(5000));
+                    console.log(new Big(res).times(5000).toString());
                     setInitFuel(true);
                 }
             });
@@ -86,11 +89,7 @@ const TopBar = ({className, ...rest}) => {
                         }
                         {
                             initPercentage &&
-                            <Typography variant="h4" className={classes.topBarText}>
-                                {
-                                    `${fuelPercentage}%`
-                                }
-                            </Typography>
+                            <Countdown className={classes.topBarText} date={new Big(Date.now()).plus(seconds)}/>
                         }
                     </Grid>
 
