@@ -13,19 +13,20 @@ const landingStyles = makeStyles((theme) => ({
         height: '100%'
     },
     star: {
-        height: 50,
-        width: 50,
+        height: '2%',
+        width: '2%',
     },
     planet: {
-        height: 150,
-        width: 150
+        height: '6%',
+        width: '6%'
     },
     rock: {
-        height: 75,
-        width: 75
+        height: '3%',
+        width: '3%'
     },
     rocket: {
-        height: 300,
+        height: '27%',
+        width: '27%',
         top: '50vh',
         left: '20%',
         position: "absolute"
