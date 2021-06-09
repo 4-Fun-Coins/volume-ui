@@ -97,7 +97,7 @@ const TopBar = ({className, ...rest}) => {
                     <Grid item>
                         <Box flexGrow={1} className={classes.priceContainer}>
                             <Typography variant={"h4"} className={classes.topBarText}>
-                                Price: $1.27
+                                {/*Price: $ - TODO fetch*/}
                             </Typography>
                         </Box>
                     </Grid>
