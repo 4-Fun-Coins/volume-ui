@@ -45,7 +45,7 @@ const statsStyles = makeStyles((theme) => ({
         padding: "1em"
     },
     mainHeading: {
-        color: theme.palette.text.heading
+        color: "#ef3e26"
     },
     subtitle: {
         color: theme.palette.flame.main
@@ -123,7 +123,7 @@ const Stats = () => {
 
                 <Grid container item justify={"center"}>
                     <Typography variant={"h1"} className={classes.mainHeading}>
-                        STATISTICS
+                        Statistics
                     </Typography>
                 </Grid>
             </Grid>

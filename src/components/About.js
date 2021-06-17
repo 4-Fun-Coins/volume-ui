@@ -13,7 +13,7 @@ const aboutStyles = makeStyles((theme) => ({
         paddingBottom: "3.8em"
     },
     mainHeading: {
-        color: theme.palette.text.heading,
+        color: "#f1892c",
         textAlign: "center",
         paddingBottom: "1.8em",
     },

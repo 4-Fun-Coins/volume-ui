@@ -66,14 +66,7 @@ const themesOptions = [
             rocket: {
                 main: '#A1A1A1'
             },
-            rocketTip: {
-                main: "#D33E43"
-            },
-            rocketDecal: {
-                main: "#017B8D",
-            },
             text: {
-                heading: '#ef3e26',
                 subHeading: '#f1076e',
                 text: '#2f50b9',
                 subText: '#94cffa',
