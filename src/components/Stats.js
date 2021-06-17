@@ -123,7 +123,7 @@ const Stats = () => {
             <Grid container>
 
                 <Grid container item justify={"center"}>
-                    <Typography variant={"h1"} style={{color: "#480168"}}>
+                    <Typography variant={"h1"} style={{color: "white"}}>
                         STATISTICS
                     </Typography>
                 </Grid>
