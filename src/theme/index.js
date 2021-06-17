@@ -77,7 +77,7 @@ const themesOptions = [
                 subHeading: '#f1076e',
                 text: '#2f50b9',
                 subText: '#94cffa',
-                paragraph: '#c2e7ff'
+                paragraph: '#e8c9ff'
             }
         },
         shadows: softShadows
