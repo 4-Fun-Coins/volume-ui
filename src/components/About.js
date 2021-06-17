@@ -13,7 +13,7 @@ const aboutStyles = makeStyles((theme) => ({
         paddingBottom: "3.8em"
     },
     mainHeading: {
-        color: theme.palette.star.main,
+        color: theme.palette.text.heading,
         textAlign: "center",
         paddingBottom: "1.8em",
     },
@@ -37,6 +37,9 @@ const aboutStyles = makeStyles((theme) => ({
         display: "block",
         paddingBottom: '1em'
     },
+    text: {
+        color: theme.palette.text.paragraph
+    }
 }));
 
 const About = () => {
@@ -66,7 +69,7 @@ const About = () => {
                             </Box>
 
                             <Box className={classes.cardBody}>
-                                <Typography variant={"body1"}>
+                                <Typography variant={"body1"} className={classes.text}>
                                     Volume is a project created to teach people the basics of tokenomics and how statistics like value and volume are affected by certain core functionalities within a
                                     token.
                                     For instance, if a token has a diminishing supply, the value should have an upwards pressure. However, this does not mean the price can not go down. Volume aims
@@ -104,21 +107,21 @@ const About = () => {
                             </Box>
 
                             <Box className={classes.cardBody}>
-                                <Typography variant={"body1"}>
+                                <Typography variant={"body1"} className={classes.text}>
                                     Volume's tokenomics can be broken down into 2 parts:
                                 </Typography>
 
                                 <br/>
 
-                                <Typography variant={"body1"}>
+                                <Typography variant={"body1"} className={classes.text}>
                                     1. Lifetime - As blocks go by, the rocket consumes fuel. It starts on 1 year's worth of blocks on the Binance Smart Chain (approx. 6.2M). Each
                                     block that passes gets removed from the fuel tank. If the tank is empty, the token freezes and can no longer be traded - the rocket has crashed.
-                                    Please note that you will essentially lose the tokens you own if the rocket crashes, since they will not be tradable any longer.
+                                    Please note that when the ship crashes, you will still be able to redeem your tokens for BNB through the escrow contract.
                                 </Typography>
 
                                 <br/>
 
-                                <Typography variant={"body1"}>
+                                <Typography variant={"body1"} className={classes.text}>
                                     2. Refuel - Every transaction made will add fuel to the tank (0.01% of the total transaction). The amount of fuel added will be proportional to the
                                     amount burned from the total supply. For instance, if the total supply is 100 and your transaction resulted in 10 tokens being burned,
                                     you burned 10% of the total supply and you will add 10% to the remaining fuel tank.
