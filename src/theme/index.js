@@ -73,7 +73,7 @@ const themesOptions = [
                 main: "#017B8D",
             },
             text: {
-                heading: '#ec2624',
+                heading: '#ef3e26',
                 subHeading: '#f1076e',
                 text: '#2f50b9',
                 subText: '#94cffa',
