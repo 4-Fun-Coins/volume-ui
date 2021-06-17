@@ -1,7 +1,6 @@
 import {AppBar, makeStyles, Toolbar, Typography, Box, Grid, CircularProgress} from "@material-ui/core";
 import clsx from "clsx";
 import React, {useEffect, useState} from "react";
-import LoadingScreen from "../../components/LoadingScreen";
 import Countdown from "react-countdown";
 
 const Big = require('big-js');
@@ -20,7 +19,11 @@ const topBarStyles = makeStyles((theme) => ({
     topBarText: {
         color: theme.palette.twinkle.main,
         mixBlendMode: "difference",
-        padding: '0.3em'
+        padding: '0.6em'
+    },
+    buttonText: {
+        color: theme.palette.twinkle.main,
+        mixBlendMode: "difference",
     },
     priceContainer: {
         display: "flex",
@@ -95,10 +98,11 @@ const TopBar = ({className, ...rest}) => {
                     <Grid item>
                         <Box flexGrow={1} className={classes.priceContainer}>
                             <Typography variant={"h4"} className={classes.topBarText}>
-                                {/*Price: $ - TODO fetch*/}
+                                {/*Price: $*/}
                             </Typography>
                         </Box>
                     </Grid>
+
                 </Grid>
             </Toolbar>
         </AppBar>

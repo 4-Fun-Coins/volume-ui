@@ -8,14 +8,17 @@ import {
     TextField,
     Typography,
 } from "@material-ui/core";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Search} from "@material-ui/icons";
 import LoadingScreen from "./LoadingScreen";
 import {
     getTotalFuelAdded,
     getFuelAddedForAddress
 } from "../utils/volume-core";
+import {useWallet} from "use-wallet";
+
 const Big = require('big-js');
+
 
 const statsStyles = makeStyles((theme) => ({
     universeBackground: {
@@ -43,11 +46,15 @@ const statsStyles = makeStyles((theme) => ({
     },
     subtitle: {
         color: theme.palette.star.main
+    },
+    statsSub: {
+        color: '#480168'
     }
 }));
 
 const Stats = () => {
     const classes = statsStyles();
+    const wallet = useWallet();
 
     // Global stats
     const [loadingGlobalStats, setLoadingGlobalStats] = useState(false);
@@ -82,6 +89,32 @@ const Stats = () => {
         }
     }, [loadingGlobalStats]);
 
+    useEffect(() => {
+        if (wallet.status === 'connected') {
+            console.log('hi');
+            setLoadingUserStats(true);
+            setUserAddressError(false);
+            setUserRPCError(false);
+
+            // Fetch the user stats here
+            getFuelAddedForAddress(wallet.account).then((res) => {
+                setUserBlocks(res);
+                setUserSeconds(new Big(res).times(5).toString());
+                // Set loading stats to false & initStats to true
+                setLoadingUserStats(false);
+                setInitUserStats(true);
+            }).catch((err) => {
+                if (!err) {
+                    setUserAddressError(true);
+                } else {
+                    setUserRPCError(true);
+                }
+                setLoadingUserStats(false);
+                setInitUserStats(true);
+            });
+        }
+    }, [wallet.status]);
+
     return (
         <Container
             className={classes.universeBackground}
@@ -97,44 +130,21 @@ const Stats = () => {
             </Grid>
 
             <Grid container item justify={"center"} sm={12} direction={"row"}>
-                <TextField
-                    className={classes.walletField}
-                    label={"Wallet Address"}
-                    variant={"outlined"}
-                    color={"secondary"}
-                    onChange={(event) => {
-                        setUserAddress(event.target.value);
-                    }}
-                />
-
-                <Button
-                    variant={"outlined"}
-                    color={"secondary"}
-                    startIcon={<Search style={{marginLeft: '0.5em'}}/>}
-                    className={classes.submitButton}
-                    onClick={async () => {
-                        setLoadingUserStats(true);
-                        setUserAddressError(false);
-                        setUserRPCError(false);
-
-                        // Fetch the user stats here
-                        getFuelAddedForAddress(userAddress).then((res) => {
-                            setUserBlocks(res);
-                            setUserSeconds(new Big(res).times(5).toString());
-                            // Set loading stats to false & initStats to true
-                            setLoadingUserStats(false);
-                            setInitUserStats(true);
-                        }).catch((err) => {
-                            if (!err) {
-                                setUserAddressError(true);
-                            } else {
-                                setUserRPCError(true);
-                            }
-                            setLoadingUserStats(false);
-                            setInitUserStats(true);
-                        });
-                    }}
-                />
+                <Button onClick={() => {
+                    if (wallet.status === 'disconnected') {
+                        wallet.connect();
+                    } else {
+                        // TODO - view profile here
+                    }
+                }}
+                        variant={"outlined"}
+                        color={"secondary"}
+                        className={classes.submitButton}
+                >
+                    <Typography variant={"h4"}>
+                        {wallet.status !== 'connected' ? 'Connect Wallet' : wallet.account}
+                    </Typography>
+                </Button>
             </Grid>
 
             <Grid container item justify={"center"}>
@@ -146,58 +156,49 @@ const Stats = () => {
                             <LoadingScreen transparent/>
                         </Grid>
                     }
-                    {initGlobalStats && !loadingGlobalStats && !globalError &&
-                    <>
-                        <Grid container item sm={12} justify={"center"}>
-                            <Box className={classes.subtitle}>
-                                <Typography variant={"h3"}>
-                                    Global Stats
-                                </Typography>
-                            </Box>
-                        </Grid>
-
-                        <Grid container item sm={6} justify={"center"}>
-                            <Typography variant={"h3"} color={"secondary"}>
-                                Total fuel added (blocks):
+                    <Grid container item sm={12} justify={"center"}>
+                        <Box className={classes.subtitle}>
+                            <Typography variant={"h3"}>
+                                Global Stats
                             </Typography>
-                        </Grid>
+                        </Box>
+                    </Grid>
 
-                        <Grid container item sm={6} justify={"center"}>
-                            <Typography variant={"h3"} color={"primary"} sm={6}>
-                                {globalBlocks} blocks
-                            </Typography>
-                        </Grid>
-
-                        <Grid container item sm={6} justify={"center"}>
-                            <Typography variant={"h3"} color={"secondary"}>
-                                Est time added (seconds):
-                            </Typography>
-                        </Grid>
-
-                        <Grid container item sm={6} justify={"center"}>
-                            <Typography variant={"h3"} color={"primary"} sm={6}>
-                                {globalSeconds} seconds
-                            </Typography>
-                        </Grid>
-                    </>
-                    }
-
-                    {initGlobalStats && !loadingGlobalStats && globalError &&
+                    {
+                        initGlobalStats && !loadingGlobalStats && !globalError &&
                         <>
-                            <Grid container item sm={12} justify={"center"}>
-                                <Box className={classes.subtitle}>
-                                    <Typography variant={"h3"}>
-                                        Global Stats
-                                    </Typography>
-                                </Box>
+                            <Grid container item sm={6} justify={"center"}>
+                                <Typography variant={"h3"} color={"secondary"}>
+                                    Total fuel added (blocks):
+                                </Typography>
                             </Grid>
 
-                            <Grid container item sm={12} justify={"center"}>
-                                <Typography variant={"body1"} color={"primary"}>
-                                    Unknown Error - RPC node could possible be down. Try refreshing the page soon.
+                            <Grid container item sm={6} justify={"center"}>
+                                <Typography variant={"h3"} color={"primary"} sm={6}>
+                                    {globalBlocks} blocks
+                                </Typography>
+                            </Grid>
+
+                            <Grid container item sm={6} justify={"center"}>
+                                <Typography variant={"h3"} color={"secondary"}>
+                                    Est time added (seconds):
+                                </Typography>
+                            </Grid>
+
+                            <Grid container item sm={6} justify={"center"}>
+                                <Typography variant={"h3"} color={"primary"} sm={6}>
+                                    {globalSeconds} seconds
                                 </Typography>
                             </Grid>
                         </>
+                    }
+
+                    {initGlobalStats && !loadingGlobalStats && globalError &&
+                        <Grid container item sm={12} justify={"center"}>
+                            <Typography variant={"body1"} color={"primary"}>
+                                Unknown Error - RPC node could possible be down. Try refreshing the page soon.
+                            </Typography>
+                        </Grid>
                     }
 
                     {
@@ -208,13 +209,12 @@ const Stats = () => {
 
 
                     }
-                    {initUserStats && !loadingUserStats && !userAddressError && !userRPCError &&
+                    {initUserStats &&
                     <>
                         <Grid item sm={12}>
                             <Divider light={true}/>
                         </Grid>
 
-                        {/*User stats*/}
                         <Grid container item sm={12} justify={"center"}>
                             <Box className={classes.subtitle}>
                                 <Typography variant={"h3"}>
@@ -223,75 +223,53 @@ const Stats = () => {
                             </Box>
                         </Grid>
 
-                        <Grid container item sm={6} justify={"center"}>
-                            <Typography variant={"h3"} color={"secondary"}>
-                                Your fuel added (blocks):
-                            </Typography>
-                        </Grid>
-
-                        <Grid container item sm={6} justify={"center"}>
-                            <Typography variant={"h3"} color={"primary"} sm={6}>
-                                {userBlocks} blocks
-                            </Typography>
-                        </Grid>
-
-                        <Grid container item sm={6} justify={"center"}>
-                            <Typography variant={"h3"} color={"secondary"}>
-                                Est time added (seconds):
-                            </Typography>
-                        </Grid>
-
-                        <Grid container item sm={6} justify={"center"}>
-                            <Typography variant={"h3"} color={"primary"} sm={6}>
-                                {userSeconds} seconds
-                            </Typography>
-                        </Grid>
-                    </>
-                    }
-
-                    {initUserStats && !loadingUserStats && userAddressError &&
-                    <>
-                        <Grid item sm={12}>
-                            <Divider light={true}/>
-                        </Grid>
-
                         {/*User stats*/}
-                        <Grid container item sm={12} justify={"center"}>
-                            <Box className={classes.subtitle}>
-                                <Typography variant={"h3"}>
-                                    Personal Stats
+                        {
+                            !userAddressError && !userRPCError &&
+                                <>
+
+
+                                    <Grid container item sm={6} justify={"center"}>
+                                        <Typography variant={"h3"} color={"secondary"}>
+                                            Your fuel added (blocks):
+                                        </Typography>
+                                    </Grid>
+
+                                    <Grid container item sm={6} justify={"center"}>
+                                        <Typography variant={"h3"} color={"primary"} sm={6}>
+                                            {userBlocks} blocks
+                                        </Typography>
+                                    </Grid>
+
+                                    <Grid container item sm={6} justify={"center"}>
+                                        <Typography variant={"h3"} color={"secondary"}>
+                                            Est time added (seconds):
+                                        </Typography>
+                                    </Grid>
+
+                                    <Grid container item sm={6} justify={"center"}>
+                                        <Typography variant={"h3"} color={"primary"} sm={6}>
+                                            {userSeconds} seconds
+                                        </Typography>
+                                    </Grid>
+                                </>
+                        }
+                        {
+                            userAddressError &&
+                            <Grid container item sm={12} justify={"center"}>
+                                <Typography variant={"body1"} color={"primary"}>
+                                    You entered an invalid address, please try again.
                                 </Typography>
-                            </Box>
-                        </Grid>
-
-                        <Grid container item sm={12} justify={"center"}>
-                            <Typography variant={"body1"} color={"primary"}>
-                                You entered an invalid address, please try again.
-                            </Typography>
-                        </Grid>
-                    </>
-                    }
-
-                    {initUserStats && !loadingUserStats && userRPCError &&
-                    <>
-                        <Grid item sm={12}>
-                            <Divider light={true}/>
-                        </Grid>
-
-                        {/*User stats*/}
-                        <Grid container item sm={12} justify={"center"}>
-                            <Box className={classes.subtitle}>
-                                <Typography variant={"h3"}>
-                                    Personal Stats
+                            </Grid>
+                        }
+                        {
+                            userRPCError &&
+                            <Grid container item sm={12} justify={"center"}>
+                                <Typography variant={"body1"} color={"primary"}>
+                                    Unknown Error - RPC node could possibly be down. Try refreshing the page soon.
                                 </Typography>
-                            </Box>
-                        </Grid>
-
-                        <Grid container item sm={12} justify={"center"}>
-                            <Typography variant={"body1"} color={"primary"}>
-                                Unknown Error - RPC node could possibly be down. Try refreshing the page soon.
-                            </Typography>
-                        </Grid>
+                            </Grid>
+                        }
                     </>
                     }
                 </Grid>
