@@ -1,5 +1,27 @@
 import {makeStyles} from "@material-ui/core";
+import { useEffect } from "react";
 import Canvas from "./Canvas";
+
+function loadImages(pathsArray, callback) {
+    const images = {};
+    let loadedImageCount = 0;
+
+    // Make sure arr is actually an array and any other error checking
+    for (let i = 0; i < pathsArray.length; i++){
+        const image = new Image();
+        image.onload = imageLoaded;
+        image.src = pathsArray[i];
+        images[pathsArray[i]] = image;
+    }
+
+    function imageLoaded(e) {
+        loadedImageCount++;
+        if (loadedImageCount >= pathsArray.length) {
+            callback(images);
+        }
+    }
+}
+
 
 const landingStyles = makeStyles((theme) => ({
     universeBackground: {
@@ -7,25 +29,57 @@ const landingStyles = makeStyles((theme) => ({
     },
 }));
 
-const LandingPage = () => {
+const NewSpace = () => {
     const classes = landingStyles();
 
     let init = false;
-
+    let loaded = false;
     const elements = [];
+    let loadedImages;
+    
+    useEffect(() => {
+        if(!loaded)
+            loadImages([
+                '/spaceDust4x.png',
+                '/rock3.png',
+                '/blue_planet.png',
+                '/double_rock.png',
+                '/deep_red_planet.png',
+                '/rock1.png',
+                '/pink_planet.png',
+                '/red_planet.png',
+                '/orange_planet.png'
+            ], (images) => {
+                console.log('images loaded !' + JSON.stringify(images));
+                loadedImages = images;
+                loaded = true;
+            });
+    },[]);
+
+    let lastFrame = performance.now();
+    const wantedFps = 144
+
+    const getLastFrameTime = () => {
+        const elappsedTime = performance.now() - lastFrame;
+        if(elappsedTime > 1000/wantedFps)
+            lastFrame = performance.now();
+        return elappsedTime;
+    }
 
     const draw = (ctx, frameCount) => {
-
+        if(getLastFrameTime() < 1000/wantedFps || !loadedImages) // 60fsp
+            return;
+        ctx.mozImageSmoothingEnabled = false;
+        ctx.webkitImageSmoothingEnabled = false;
+        ctx.msImageSmoothingEnabled = false;
+        ctx.imageSmoothingEnabled = false;
         // Space Backdrop
-        let spaceDust = new Image();
-        spaceDust.width = window.innerWidth;
-        spaceDust.height = window.innerHeight * 2.75;
+        let spaceDust = loadedImages['/spaceDust4x.png'];
 
-        spaceDust.onload = () => {
-            ctx.imageSmoothingEnabled = false;
-            ctx.drawImage(spaceDust, 0, 0, spaceDust.width, spaceDust.height);
-        };
-        spaceDust.src = '/spaceDust4x.png';
+        spaceDust.width = window.innerWidth;
+        spaceDust.height = Math.floor(window.innerHeight * 2.75);
+
+        ctx.drawImage(spaceDust, 0, 0, spaceDust.width, spaceDust.height);
 
         // init
         if (!init) {
@@ -36,7 +90,7 @@ const LandingPage = () => {
             let planet4 = false;
             let planet5 = false;
 
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i <20; i++) {
                 const element = Math.floor(Math.random() * 6 + 1);
 
                 switch (element) {
@@ -110,6 +164,7 @@ const LandingPage = () => {
                 }
             }
         }
+        //ctx.restore();
     }
 
     const drawElement = (ctx, elementSrc, index, planet) => {
@@ -124,24 +179,16 @@ const LandingPage = () => {
             y: window.innerHeight * 0.05 * index * (planet ? 2 : 1),
             vx: Math.floor(planet ? speed * 0.5 : speed * 1.5),
             draw: function () {
-
-                let el = new Image();
-
-                el.onload = () => {
-                    ctx.imageSmoothingEnabled = false;
-
-                    ctx.drawImage(el,
+                let el = loadedImages[elementSrc];
+                ctx.drawImage(el,
                         Math.floor(this.x),
                         Math.floor(this.y),
                         Math.floor(el.width * (planet ? 0.6 : 0.4) * depth),
                         Math.floor(el.height * (planet ? 0.6 : 0.4) * depth)
-                    );
-                };
-                el.src = elementSrc;
+                )
             }
         }
         element.draw();
-
         return element;
     }
 
@@ -153,4 +200,4 @@ const LandingPage = () => {
     )
 }
 
-export default LandingPage;
+export default NewSpace;
