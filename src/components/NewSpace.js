@@ -1,7 +1,4 @@
-import {Container, makeStyles} from "@material-ui/core";
-import Anime from "react-anime";
-import {useEffect, useState} from "react";
-import {useTransition} from "react-spring";
+import {makeStyles} from "@material-ui/core";
 import Canvas from "./Canvas";
 
 const landingStyles = makeStyles((theme) => ({

@@ -1,7 +1,5 @@
 import Page from "../../components/Page";
-import {Container, Divider, makeStyles, Typography} from "@material-ui/core";
-import Anime from "react-anime";
-import {useEffect, useState} from "react";
+import {Container, makeStyles} from "@material-ui/core";
 import About from "../../components/About";
 import Stats from "../../components/Stats";
 import Footer from "../../components/Footer";

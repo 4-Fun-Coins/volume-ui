@@ -8,7 +8,6 @@ import {
 import React from "react";
 import DiscordIcon from "./CustomIcons/DiscordIcon";
 import TwitterIcon from "./CustomIcons/TwitterIcon";
-import {useHistory} from 'react-router-dom';
 import GitHubIcon from "./CustomIcons/GitHubIcon";
 
 const aboutStyles = makeStyles((theme) => ({
