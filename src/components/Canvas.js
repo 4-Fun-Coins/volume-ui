@@ -5,11 +5,22 @@ const Canvas = props => {
     const { draw, ...rest } = props;
     const canvasRef = useRef(null);
 
-    useEffect(() => {
+    let init = false;
 
+    useEffect(() => {
         const canvas = canvasRef.current;
-        canvas.height = window.innerHeight;
-        canvas.width = window.innerWidth;
+
+        const resizeCanvas = () => {
+            canvas.height = window.innerHeight;
+            canvas.width = window.innerWidth;
+        }
+
+        if (!init) {
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            init = true;
+        }
+
         const context = canvas.getContext('2d');
         let frameCount = 0;
         let animationFrameId;
