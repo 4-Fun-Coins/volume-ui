@@ -57,7 +57,7 @@ const LandingPage = () => {
             </Container>
 
             <Container
-                maxWidth={true}
+                maxWidth={false}
                 className={classes.contentBackground}
             >
                 <Footer/>
