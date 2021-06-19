@@ -5,11 +5,9 @@ import {
     Divider,
     Grid,
     makeStyles,
-    TextField,
     Typography,
 } from "@material-ui/core";
 import React, {useEffect, useState} from "react";
-import {Search} from "@material-ui/icons";
 import LoadingScreen from "./LoadingScreen";
 import {
     getTotalFuelAdded,
@@ -21,13 +19,6 @@ const Big = require('big-js');
 
 
 const statsStyles = makeStyles((theme) => ({
-    universeBackground: {
-        backgroundColor: theme.palette.background.default,
-        paddingBottom: 80,
-        paddingTop: 80,
-        height: '100vh',
-        overflow: "hidden",
-    },
     walletField: {
         width: '50%',
         marginTop: "2em",
@@ -44,11 +35,17 @@ const statsStyles = makeStyles((theme) => ({
         borderStyle: "solid",
         padding: "1em"
     },
-    subtitle: {
-        color: theme.palette.star.main
+    mainHeading: {
+        color: "#ef3e26"
     },
-    statsSub: {
-        color: '#480168'
+    subtitle: {
+        color: theme.palette.flame.main
+    },
+    globalStats: {
+        color: theme.palette.text.text,
+    },
+    userStats: {
+        color: theme.palette.text.subText
     }
 }));
 
@@ -69,7 +66,6 @@ const Stats = () => {
     const [initUserStats, setInitUserStats] = useState(false);
     const [userBlocks, setUserBlocks] = useState(0);
     const [userSeconds, setUserSeconds] = useState(new Big(0));
-    const [userAddressError, setUserAddressError] = useState(false);
     const [userRPCError, setUserRPCError] = useState(false);
 
     useEffect(() => {
@@ -91,9 +87,7 @@ const Stats = () => {
 
     useEffect(() => {
         if (wallet.status === 'connected') {
-            console.log('hi');
             setLoadingUserStats(true);
-            setUserAddressError(false);
             setUserRPCError(false);
 
             // Fetch the user stats here
@@ -104,11 +98,7 @@ const Stats = () => {
                 setLoadingUserStats(false);
                 setInitUserStats(true);
             }).catch((err) => {
-                if (!err) {
-                    setUserAddressError(true);
-                } else {
-                    setUserRPCError(true);
-                }
+                setUserRPCError(true);
                 setLoadingUserStats(false);
                 setInitUserStats(true);
             });
@@ -117,14 +107,13 @@ const Stats = () => {
 
     return (
         <Container
-            className={classes.universeBackground}
             maxWidth={false}
         >
             <Grid container>
 
                 <Grid container item justify={"center"}>
-                    <Typography variant={"h1"} style={{color: "white"}}>
-                        STATISTICS
+                    <Typography variant={"h1"} className={classes.mainHeading}>
+                        Statistics
                     </Typography>
                 </Grid>
             </Grid>
@@ -168,25 +157,25 @@ const Stats = () => {
                         initGlobalStats && !loadingGlobalStats && !globalError &&
                         <>
                             <Grid container item sm={6} justify={"center"}>
-                                <Typography variant={"h3"} color={"secondary"}>
+                                <Typography variant={"h3"} className={classes.globalStats}>
                                     Total fuel added (blocks):
                                 </Typography>
                             </Grid>
 
                             <Grid container item sm={6} justify={"center"}>
-                                <Typography variant={"h3"} color={"primary"} sm={6}>
+                                <Typography variant={"h3"} className={classes.globalStats} sm={6}>
                                     {globalBlocks} blocks
                                 </Typography>
                             </Grid>
 
                             <Grid container item sm={6} justify={"center"}>
-                                <Typography variant={"h3"} color={"secondary"}>
+                                <Typography variant={"h3"} className={classes.globalStats}>
                                     Est time added (seconds):
                                 </Typography>
                             </Grid>
 
                             <Grid container item sm={6} justify={"center"}>
-                                <Typography variant={"h3"} color={"primary"} sm={6}>
+                                <Typography variant={"h3"} className={classes.globalStats} sm={6}>
                                     {globalSeconds} seconds
                                 </Typography>
                             </Grid>
@@ -225,42 +214,34 @@ const Stats = () => {
 
                         {/*User stats*/}
                         {
-                            !userAddressError && !userRPCError &&
+                            !userRPCError &&
                                 <>
 
 
                                     <Grid container item sm={6} justify={"center"}>
-                                        <Typography variant={"h3"} color={"secondary"}>
+                                        <Typography variant={"h3"} className={classes.userStats}>
                                             Your fuel added (blocks):
                                         </Typography>
                                     </Grid>
 
                                     <Grid container item sm={6} justify={"center"}>
-                                        <Typography variant={"h3"} color={"primary"} sm={6}>
+                                        <Typography variant={"h3"} className={classes.userStats} sm={6}>
                                             {userBlocks} blocks
                                         </Typography>
                                     </Grid>
 
                                     <Grid container item sm={6} justify={"center"}>
-                                        <Typography variant={"h3"} color={"secondary"}>
+                                        <Typography variant={"h3"} className={classes.userStats}>
                                             Est time added (seconds):
                                         </Typography>
                                     </Grid>
 
                                     <Grid container item sm={6} justify={"center"}>
-                                        <Typography variant={"h3"} color={"primary"} sm={6}>
+                                        <Typography variant={"h3"} className={classes.userStats} sm={6}>
                                             {userSeconds} seconds
                                         </Typography>
                                     </Grid>
                                 </>
-                        }
-                        {
-                            userAddressError &&
-                            <Grid container item sm={12} justify={"center"}>
-                                <Typography variant={"body1"} color={"primary"}>
-                                    You entered an invalid address, please try again.
-                                </Typography>
-                            </Grid>
                         }
                         {
                             userRPCError &&

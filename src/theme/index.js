@@ -52,7 +52,10 @@ const themesOptions = [
                 main: "#D33E43"
             },
             secondary: {
-                main: "#F5BC00"
+                main: "#f18b2c"
+            },
+            flame: {
+                main: "#f18b2c"
             },
             star: {
                 main: "#F8F8F8"
@@ -63,12 +66,12 @@ const themesOptions = [
             rocket: {
                 main: '#A1A1A1'
             },
-            rocketTip: {
-                main: "#D33E43"
-            },
-            rocketDecal: {
-                main: "#017B8D",
-            },
+            text: {
+                subHeading: '#f1076e',
+                text: '#2f50b9',
+                subText: '#94cffa',
+                paragraph: '#e8c9ff'
+            }
         },
         shadows: softShadows
     }
