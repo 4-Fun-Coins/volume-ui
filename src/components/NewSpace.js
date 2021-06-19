@@ -22,7 +22,7 @@ const LandingPage = () => {
         spaceDust.height = window.innerHeight * 2.75;
 
         spaceDust.onload = () => {
-            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingEnabled = false;
             ctx.drawImage(spaceDust, 0, 0, spaceDust.width, spaceDust.height);
         };
         spaceDust.src = '/spaceDust.svg';
@@ -128,7 +128,7 @@ const LandingPage = () => {
                 let el = new Image();
 
                 el.onload = () => {
-                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingEnabled = false;
 
                     ctx.drawImage(el,
                         Math.floor(this.x),
