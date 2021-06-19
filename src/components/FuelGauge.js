@@ -1,15 +1,34 @@
 import {
-    Container, Grid,
+    Button,
+    Container, Grid, makeStyles, Typography,
 } from "@material-ui/core";
 import React, {useEffect, useState} from "react";
 import Gauge from "./Gauge";
 import {getFuel} from "../utils/volume-core";
 import LoadingScreen from "./LoadingScreen";
+import {useWallet} from "use-wallet";
 const Big = require('big-js');
 
-
+const fuelGaugeStyles = makeStyles((theme) => ({
+    connectButton: {
+        marginTop: '25em',
+        borderRadius: '50%',
+        height: '10em',
+        width: '100%',
+        backgroundColor: '#522d82',
+    },
+    buttonText: {
+        color: "#f9c501",
+        textOverflow: 'ellipsis',
+        whiteSpace: "nowrap",
+        overflow: "hidden"
+    }
+}));
 
 const FuelGauge = () => {
+    const classes = fuelGaugeStyles();
+    const wallet = useWallet();
+
     const initialFuel = 6307200;
 
     const [initFuel, setInitFuel] = useState(false);
@@ -29,10 +48,8 @@ const FuelGauge = () => {
     }, [initFuel]);
 
     return (
-        <Container
-            maxWidth={false}
-        >
-            <Grid container item xs={10}>
+        <Grid container item spacing={2}>
+            <Grid container item xs={12} sm={12} md={10}>
                 {/*    Fuel Gauge   */}
                 {
                     !initFuel &&
@@ -52,11 +69,21 @@ const FuelGauge = () => {
                 }
             </Grid>
 
-            <Grid container item xs={2}>
+            <Grid container item xs={12} sm={12} md={2} alignItems={"center"}>
                 {/*    Connect Button   */}
-
+                <Button className={classes.connectButton} onClick={() => { // TODO - fix button to be round at all times
+                    if (wallet.status === 'disconnected') {
+                        wallet.connect();
+                    } else {
+                        // TODO - view profile here
+                    }
+                }}>
+                    <Typography className={classes.buttonText}>
+                        {wallet.status !== 'connected' ? 'Connect' : `${wallet.account.slice(0, 6)}...${wallet.account.slice(wallet.account.length - 4, wallet.account.length)}`}
+                    </Typography>
+                </Button>
             </Grid>
-        </Container>
+        </Grid>
     );
 }
 
