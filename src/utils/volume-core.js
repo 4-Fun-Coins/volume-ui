@@ -84,7 +84,6 @@ export async function getFuelAddedForAddress(address) {
                     if (error)
                         reject(error);
 
-                    console.log(totalFuelForAddress);
                     resolve(web3.utils.fromWei(totalFuelForAddress));
                 });
             } else {
