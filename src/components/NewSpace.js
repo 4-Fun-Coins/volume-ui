@@ -25,7 +25,7 @@ const LandingPage = () => {
             ctx.imageSmoothingEnabled = false;
             ctx.drawImage(spaceDust, 0, 0, spaceDust.width, spaceDust.height);
         };
-        spaceDust.src = '/spaceDust.svg';
+        spaceDust.src = '/spaceDust4x.png';
 
         // init
         if (!init) {
@@ -122,7 +122,7 @@ const LandingPage = () => {
         let element = {
             x: window.innerWidth * 1.05 + delay,
             y: window.innerHeight * 0.05 * index * (planet ? 2 : 1),
-            vx: planet ? speed * 0.5 : speed * 1.5,
+            vx: Math.floor(planet ? speed * 0.5 : speed * 1.5),
             draw: function () {
 
                 let el = new Image();
