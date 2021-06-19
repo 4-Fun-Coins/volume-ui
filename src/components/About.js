@@ -2,9 +2,6 @@ import {Container, makeStyles, Grid, Paper, Typography, Box} from "@material-ui/
 import React from "react";
 
 const aboutStyles = makeStyles((theme) => ({
-    universeBackground: {
-        backgroundColor: theme.palette.background.default,
-    },
     paper: {
         backgroundColor: theme.palette.background.default,
         paddingLeft: "2.7em",
@@ -47,7 +44,6 @@ const About = () => {
 
     return (
         <Container
-            className={classes.universeBackground}
             maxWidth={false}
         >
             <Grid container spacing={3} alignItems={"center"} justify={"space-evenly"}>

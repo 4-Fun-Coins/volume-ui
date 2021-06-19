@@ -5,11 +5,9 @@ import {
     Divider,
     Grid,
     makeStyles,
-    TextField,
     Typography,
 } from "@material-ui/core";
 import React, {useEffect, useState} from "react";
-import {Search} from "@material-ui/icons";
 import LoadingScreen from "./LoadingScreen";
 import {
     getTotalFuelAdded,
@@ -21,13 +19,6 @@ const Big = require('big-js');
 
 
 const statsStyles = makeStyles((theme) => ({
-    universeBackground: {
-        backgroundColor: theme.palette.background.default,
-        paddingBottom: 80,
-        paddingTop: 80,
-        height: '100vh',
-        overflow: "hidden",
-    },
     walletField: {
         width: '50%',
         marginTop: "2em",
@@ -116,7 +107,6 @@ const Stats = () => {
 
     return (
         <Container
-            className={classes.universeBackground}
             maxWidth={false}
         >
             <Grid container>
