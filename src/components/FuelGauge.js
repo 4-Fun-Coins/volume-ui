@@ -6,7 +6,7 @@ import React, {useEffect, useState} from "react";
 import Gauge from "./Gauge";
 import {getFuel} from "../utils/volume-core";
 import LoadingScreen from "./LoadingScreen";
-import {useWallet} from "use-wallet";
+
 const Big = require('big-js');
 
 const fuelGaugeStyles = makeStyles((theme) => ({
@@ -29,7 +29,6 @@ const fuelGaugeStyles = makeStyles((theme) => ({
 
 const FuelGauge = () => {
     const classes = fuelGaugeStyles();
-    const wallet = useWallet();
 
     const initialFuel = 6307200;
 
@@ -50,8 +49,8 @@ const FuelGauge = () => {
     }, [initFuel]);
 
     return (
-        <Grid container item spacing={2}>
-            <Grid container item xs={12} sm={12} md={10}>
+        <Grid container item>
+            <Grid container item xs={12}>
                 {/*    Fuel Gauge   */}
                 {
                     !initFuel &&
@@ -71,23 +70,7 @@ const FuelGauge = () => {
                 }
             </Grid>
 
-            <Grid container item xs={12} sm={12} md={2} justify={"center"}>
-                <Grid item xs={12} className={classes.spacer} />
-                {/*    Connect Button   */}
-                <Grid item xs={12}>
-                    <Button className={classes.connectButton} onClick={() => {
-                        if (wallet.status === 'disconnected') {
-                            wallet.connect();
-                        } else {
-                            // TODO - view profile here
-                        }
-                    }}>
-                        <Typography className={classes.buttonText}>
-                            {wallet.status !== 'connected' ? 'Connect' : `${wallet.account.slice(0, 6)}...${wallet.account.slice(wallet.account.length - 4, wallet.account.length)}`}
-                        </Typography>
-                    </Button>
-                </Grid>
-            </Grid>
+
         </Grid>
     );
 }
