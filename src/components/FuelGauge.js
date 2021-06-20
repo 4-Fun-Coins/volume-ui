@@ -11,10 +11,9 @@ const Big = require('big-js');
 
 const fuelGaugeStyles = makeStyles((theme) => ({
     connectButton: {
-        marginTop: '25em',
-        borderRadius: '50%',
+        borderRadius: '5em',
         height: '10em',
-        width: '100%',
+        width: '10em',
         backgroundColor: '#522d82',
     },
     buttonText: {
@@ -22,6 +21,9 @@ const fuelGaugeStyles = makeStyles((theme) => ({
         textOverflow: 'ellipsis',
         whiteSpace: "nowrap",
         overflow: "hidden"
+    },
+    spacer: {
+        height: '10em',
     }
 }));
 
@@ -69,19 +71,22 @@ const FuelGauge = () => {
                 }
             </Grid>
 
-            <Grid container item xs={12} sm={12} md={2} alignItems={"center"}>
+            <Grid container item xs={12} sm={12} md={2} justify={"center"}>
+                <Grid item xs={12} className={classes.spacer} />
                 {/*    Connect Button   */}
-                <Button className={classes.connectButton} onClick={() => { // TODO - fix button to be round at all times
-                    if (wallet.status === 'disconnected') {
-                        wallet.connect();
-                    } else {
-                        // TODO - view profile here
-                    }
-                }}>
-                    <Typography className={classes.buttonText}>
-                        {wallet.status !== 'connected' ? 'Connect' : `${wallet.account.slice(0, 6)}...${wallet.account.slice(wallet.account.length - 4, wallet.account.length)}`}
-                    </Typography>
-                </Button>
+                <Grid item xs={12}>
+                    <Button className={classes.connectButton} onClick={() => {
+                        if (wallet.status === 'disconnected') {
+                            wallet.connect();
+                        } else {
+                            // TODO - view profile here
+                        }
+                    }}>
+                        <Typography className={classes.buttonText}>
+                            {wallet.status !== 'connected' ? 'Connect' : `${wallet.account.slice(0, 6)}...${wallet.account.slice(wallet.account.length - 4, wallet.account.length)}`}
+                        </Typography>
+                    </Button>
+                </Grid>
             </Grid>
         </Grid>
     );
