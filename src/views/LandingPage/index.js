@@ -4,6 +4,7 @@ import About from "../../components/About";
 import Stats from "../../components/Stats";
 import Footer from "../../components/Footer";
 import NewSpace from "../../components/NewSpace";
+import Dash from "../../components/Dash";
 
 const landingStyles = makeStyles((theme) => ({
     root: {
@@ -51,7 +52,8 @@ const LandingPage = () => {
                 maxWidth={false}
                 className={classes.contentBackground}
             >
-                <Stats/>
+                {/*<Stats/>*/}
+                <Dash/>
             </Container>
 
             <Container

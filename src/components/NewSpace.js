@@ -50,7 +50,6 @@ const NewSpace = () => {
                 '/red_planet.webp',
                 '/orange_planet.webp'
             ], (images) => {
-                console.log('images loaded !' + JSON.stringify(images));
                 loadedImages = images;
                 loaded = true;
             });
