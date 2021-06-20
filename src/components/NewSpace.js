@@ -57,7 +57,7 @@ const NewSpace = () => {
     },[]);
 
     let lastFrame = performance.now();
-    const wantedFps = 60
+    const wantedFps = 144
 
     const getLastFrameTime = () => {
         const elappsedTime = performance.now() - lastFrame;
