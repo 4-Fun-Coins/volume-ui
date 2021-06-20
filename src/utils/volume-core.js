@@ -1,7 +1,7 @@
 const Web3 = require('web3');
-const {volumeAddress, mainNetUrl} = require('./config.js');
+const {testVolumeAddress, testNetUrl} = require('./config.js');
 
-let web3 = new Web3(mainNetUrl);
+let web3 = new Web3(testNetUrl);
 
 let volumeABI = [
     {
@@ -53,7 +53,7 @@ let volumeABI = [
 
 export async function getFuel() {
     return new Promise((resolve, reject) => {
-        const volume = new web3.eth.Contract(volumeABI, volumeAddress);
+        const volume = new web3.eth.Contract(volumeABI, testVolumeAddress);
         volume.methods.getFuel().call((error, fuel) => {
             if (error)
                 reject(error);
@@ -65,7 +65,7 @@ export async function getFuel() {
 
 export async function getTotalFuelAdded() {
     return new Promise((resolve, reject) => {
-        const volume = new web3.eth.Contract(volumeABI, volumeAddress);
+        const volume = new web3.eth.Contract(volumeABI, testVolumeAddress);
         volume.methods.getTotalFuelAdded().call((error, totalFuel) => {
             if (error)
                 reject(error);
@@ -79,7 +79,7 @@ export async function getFuelAddedForAddress(address) {
     return new Promise((resolve, reject) => {
         if (web3.utils.isAddress(address)) {
             if (web3.utils.checkAddressChecksum(address)) {
-                const volume = new web3.eth.Contract(volumeABI, volumeAddress);
+                const volume = new web3.eth.Contract(volumeABI, testVolumeAddress);
                 volume.methods.getUserFuelAdded(address).call((error, totalFuelForAddress) => {
                     if (error)
                         reject(error);

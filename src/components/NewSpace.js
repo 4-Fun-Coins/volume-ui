@@ -50,7 +50,6 @@ const NewSpace = () => {
                 '/red_planet.png',
                 '/orange_planet.png'
             ], (images) => {
-                console.log('images loaded !' + JSON.stringify(images));
                 loadedImages = images;
                 loaded = true;
             });
