@@ -14,7 +14,7 @@ const Dash = () => {
             maxWidth={false}
         >
             <Grid container direction={"row"} justify={"center"} spacing={2}>
-                <Grid container item direction={"column"} xs={6} spacing={2}>
+                <Grid container item xs={12} sm={12} md={6} spacing={2}>
                     <Grid container item xs={12}>
                         <FuelGauge/>
                     </Grid>
@@ -24,7 +24,7 @@ const Dash = () => {
                     </Grid>
                 </Grid>
 
-                <Grid container item xs={6}>
+                <Grid container item xs={12} sm={12} md={6}>
                     <Leaderboard/>
                 </Grid>
             </Grid>

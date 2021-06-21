@@ -1,24 +1,29 @@
 import {
-    Divider,
     Grid, makeStyles, Typography,
 } from "@material-ui/core";
-import React, {useEffect, useState} from "react";
+import React from "react";
 
 const leaderboardEntryStyles = makeStyles((theme) => ({
     lbeText: {
         color: "#46adef",
         fontSize: 28,
-        marginLeft: '0.2em'
+        marginLeft: '0.2em',
+        overflow: "hidden",
+        whiteSpace: "nowrap",
+        textOverflow: "ellipsis"
     },
     lbeThisUserText: {
         color: "#8fdbfc",
         fontSize: 30,
         fontWeight: "bold",
-        marginLeft: '0.2em'
-    }
+        marginLeft: '0.2em',
+        overflow: "hidden",
+        whiteSpace: "nowrap",
+        textOverflow: "ellipsis"
+    },
 }));
 
-const Leaderboard = ({number, name, fuelAdded, thisUser}) => {
+const Leaderboard = ({number, name, fuelAdded, thisUser = false}) => {
     const classes = leaderboardEntryStyles();
 
     return (
