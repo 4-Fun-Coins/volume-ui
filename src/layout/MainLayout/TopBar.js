@@ -3,6 +3,8 @@ import clsx from "clsx";
 import React, {useEffect} from "react";
 import Typography from "@material-ui/core/Typography";
 import {useWallet} from "use-wallet";
+import {useHistory} from 'react-router-dom';
+import {ROUTES_NAMES} from "../../constants";
 
 const topBarStyles = makeStyles((theme) => ({
     root: {
@@ -18,12 +20,16 @@ const topBarStyles = makeStyles((theme) => ({
         color: theme.palette.twinkle.main,
         fontWeight: "bold",
         textDecoration: "underline"
+    },
+    button: {
+        padding: '1em'
     }
 }));
 
 const TopBar = ({className, changeNetwork, network, ...rest}) => {
     const classes = topBarStyles();
     const wallet = useWallet();
+    const history = useHistory();
 
     useEffect(() => {
         console.log(wallet.status);
@@ -45,30 +51,42 @@ const TopBar = ({className, changeNetwork, network, ...rest}) => {
         >
             <Toolbar className={classes.toolBar}>
                 <Grid container justify={"flex-start"} xs={3}>
-                    <Typography variant={"h2"} className={classes.volText}>
-                        VOLUME
-                    </Typography>
+                    <Button onClick={() => {
+                        history.push(ROUTES_NAMES.HOME);
+                    }}>
+                        <Typography variant={"h2"} className={classes.volText}>
+                            Volume
+                        </Typography>
+                    </Button>
                 </Grid>
 
                 <Grid container xs={7} alignItems={"center"} justify={"flex-start"} spacing={4}>
                     {/*Journey*/}
-                    <Grid container item xs={6}>
-                        <Typography variant={"h4"} className={classes.volText}>
-                            The Journey
-                        </Typography>
+                    <Grid className={classes.button} container item xs={6}>
+                        <Button onClick={() => {
+                            history.push(ROUTES_NAMES.JOURNEY);
+                        }}>
+                            <Typography variant={"h4"} className={classes.volText}>
+                                The Journey
+                            </Typography>
+                        </Button>
                     </Grid>
 
                     {/*Details*/}
                     <Grid container item xs={6}>
-                        <Typography variant={"h4"} className={classes.volText}>
-                            More Details
-                        </Typography>
+                        <Button className={classes.button} onClick={() => {
+                            history.push(ROUTES_NAMES.INFO);
+                        }}>
+                            <Typography variant={"h4"} className={classes.volText}>
+                                More Info
+                            </Typography>
+                        </Button>
                     </Grid>
                 </Grid>
 
                 <Grid container item justify={"flex-end"} xs={12}>
                     <Grid container item xs={6} justify={"flex-end"}>
-                        <Button variant={"text"} style={{padding: '1em'}} onClick={() => {
+                        <Button variant={"text"} className={classes.button} onClick={() => {
                             newNetwork(56);
                         }}>
                             <Typography variant={"h4"} className={network === 56 ? classes.boldText : classes.volText}>
@@ -78,7 +96,7 @@ const TopBar = ({className, changeNetwork, network, ...rest}) => {
 
                         <Divider orientation={"vertical"} variant={"fullWidth"} style={{width: '1px',backgroundColor: "grey"}}/>
 
-                        <Button variant={"text"} style={{padding: '1em'}} onClick={() => {
+                        <Button variant={"text"} className={classes.button} onClick={() => {
                             newNetwork(42);
                         }}>
                             <Typography variant={"h4"} className={network === 42 ? classes.boldText : classes.volText}>
@@ -88,7 +106,7 @@ const TopBar = ({className, changeNetwork, network, ...rest}) => {
                     </Grid>
 
                     <Grid container item xs={2} justify={"flex-end"}>
-                        <Button variant={"text"} style={{padding: '1em'}} onClick={() => {
+                        <Button variant={"text"} className={classes.button} onClick={() => {
                             if (wallet.status !== 'connected')
                                 wallet.connect();
                         }}>
