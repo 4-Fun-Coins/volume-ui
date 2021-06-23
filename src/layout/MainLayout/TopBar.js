@@ -1,66 +1,47 @@
-import {AppBar, makeStyles, Toolbar, Typography, Box, Grid, CircularProgress} from "@material-ui/core";
+import {AppBar, Button, Divider, Grid, makeStyles, Toolbar} from "@material-ui/core";
 import clsx from "clsx";
-import React, {useEffect, useState} from "react";
-import Countdown from "react-countdown";
-
-const Big = require('big-js');
-const {getFuel} = require('../../utils/volume-core');
+import React, {useEffect} from "react";
+import Typography from "@material-ui/core/Typography";
+import {useWallet} from "use-wallet";
+import {useHistory} from 'react-router-dom';
+import {ROUTES_NAMES} from "../../constants";
 
 const topBarStyles = makeStyles((theme) => ({
     root: {
-        backgroundColor: theme.palette.background.default
+        backgroundColor: "#1d0134"
     },
     toolBar: {
         height: 72
     },
-    logo: {
-        marginRight: theme.spacing(2)
+    volText: {
+        color: theme.palette.twinkle.main
     },
-    topBarText: {
+    boldText: {
         color: theme.palette.twinkle.main,
-        mixBlendMode: "difference",
-        padding: '0.6em'
+        fontWeight: "bold",
+        textDecoration: "underline"
     },
-    buttonText: {
-        color: theme.palette.twinkle.main,
-        mixBlendMode: "difference",
-    },
-    priceContainer: {
-        display: "flex",
-        justifyContent: "flex-end"
-    },
+    button: {
+        padding: '1em'
+    }
 }));
 
-const TopBar = ({className, ...rest}) => {
+const TopBar = ({className, changeNetwork, network, ...rest}) => {
     const classes = topBarStyles();
-
-    const [initFuel, setInitFuel] = useState(false);
-    const [fuel, setFuel] = useState(new Big(0));
-    const [milliseconds, setMilliseconds] = useState(new Big(0));
-
-    const [initialFuel, setInitialFuel] = useState(6307200);
-
-    const [initPercentage, setInitPercentage] = useState(false);
-    const [fuelPercentage, setFuelPercentage] = useState(new Big(0));
+    const wallet = useWallet();
+    const history = useHistory();
 
     useEffect(() => {
-        if (!initFuel) {
-            getFuel().then((res, rej) => {
-                if (!rej) {
-                    setFuel(new Big(res));
-                    setMilliseconds(new Big(res).times(5000));
-                    setInitFuel(true);
-                }
-            });
-        }
-    }, [initFuel]);
+        console.log(wallet.status);
+        console.log(wallet.error);
+    }, [wallet.status]);
 
-    useEffect(() => {
-        if (initFuel) {
-            setFuelPercentage(new Big(fuel).div(initialFuel).times(100));
-            setInitPercentage(true);
+    const newNetwork = (netId) => {
+        if (network !== netId) {
+            changeNetwork(netId);
+            wallet.connect();
         }
-    }, [initFuel, initPercentage]);
+    }
 
     return (
         <AppBar
@@ -69,40 +50,75 @@ const TopBar = ({className, ...rest}) => {
             {...rest}
         >
             <Toolbar className={classes.toolBar}>
-                <Grid container
-                      alignItems={"center"}
-                      justify={"space-between"}
-                      style={{
-                          background: `linear-gradient(to right, #F5BC00 ${initFuel ? fuelPercentage : 100}%, #0A0A0A ${initFuel ? fuelPercentage : 0}%)`,
-                          borderRadius: 20
-                      }}>
-                    {/*<Logo className={classes.logo}/>*/}
-
-                    <Grid item>
-                        <Typography variant={"h4"} className={classes.topBarText}>
-                            VOLUME
+                <Grid container justify={"flex-start"} xs={3}>
+                    <Button onClick={() => {
+                        history.push(ROUTES_NAMES.HOME);
+                    }}>
+                        <Typography variant={"h2"} className={classes.volText}>
+                            Volume
                         </Typography>
-                    </Grid>
+                    </Button>
+                </Grid>
 
-                    <Grid item>
-                        {
-                            !initPercentage &&
-                            <CircularProgress style={{color: "#0A0A0A", padding: '0.3em'}}/>
-                        }
-                        {
-                            initPercentage &&
-                            <Countdown className={classes.topBarText} date={Date.now() + Number(milliseconds)} />
-                        }
-                    </Grid>
-
-                    <Grid item>
-                        <Box flexGrow={1} className={classes.priceContainer}>
-                            <Typography variant={"h4"} className={classes.topBarText}>
-                                {/*Price: $*/}
+                <Grid container xs={7} alignItems={"center"} justify={"flex-start"} spacing={4}>
+                    {/*Journey*/}
+                    <Grid className={classes.button} container item xs={6}>
+                        <Button onClick={() => {
+                            // history.push(ROUTES_NAMES.JOURNEY);
+                        }}>
+                            <Typography variant={"h4"} className={classes.volText}>
+                                The Journey
                             </Typography>
-                        </Box>
+                        </Button>
                     </Grid>
 
+                    {/*Details*/}
+                    <Grid container item xs={6}>
+                        <Button className={classes.button} onClick={() => {
+                            // history.push(ROUTES_NAMES.INFO);
+                        }}>
+                            <Typography variant={"h4"} className={classes.volText}>
+                                More Info
+                            </Typography>
+                        </Button>
+                    </Grid>
+                </Grid>
+
+                <Grid container item justify={"flex-end"} xs={12}>
+                    <Grid container item xs={6} justify={"flex-end"}>
+                        <Button variant={"text"} className={classes.button} onClick={() => {
+                            newNetwork(56);
+                        }}>
+                            <Typography variant={"h4"} className={network === 56 ? classes.boldText : classes.volText}>
+                                BSC
+                            </Typography>
+                        </Button>
+
+                        <Divider orientation={"vertical"} variant={"fullWidth"} style={{width: '1px',backgroundColor: "grey"}}/>
+
+                        <Button variant={"text"} className={classes.button} onClick={() => {
+                            newNetwork(42);
+                        }}>
+                            <Typography variant={"h4"} className={network === 42 ? classes.boldText : classes.volText}>
+                                Kovan
+                            </Typography>
+                        </Button>
+                    </Grid>
+
+                    <Grid container item xs={2} justify={"flex-end"}>
+                        <Button variant={"text"} className={classes.button} onClick={() => {
+                            if (wallet.status !== 'connected')
+                                wallet.connect();
+                        }}>
+                            <Typography variant={"h4"} className={classes.volText}>
+                                {
+                                    wallet.status === 'connected'
+                                        ? `${wallet.account.slice(0, 6)}...${wallet.account.slice(wallet.account.length-4, wallet.account.length)}`
+                                        : 'Connect'
+                                }
+                            </Typography>
+                        </Button>
+                    </Grid>
                 </Grid>
             </Toolbar>
         </AppBar>
