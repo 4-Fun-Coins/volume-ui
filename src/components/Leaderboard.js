@@ -119,7 +119,7 @@ const Leaderboard = () => {
                                 number={i + 1}
                                 name={entry.nickname ? entry.nickname : entry.user}
                                 fuelAdded={utils.fromWei(entry.fuelAdded)}
-                                thisUser={wallet.status === 'connected' ? wallet.address === entry.user : false}
+                                thisUser={wallet.status === 'connected' ? wallet.account === entry.user : false}
                             />
                         )
                     })

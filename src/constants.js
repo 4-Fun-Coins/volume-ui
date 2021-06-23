@@ -4,5 +4,7 @@ export const THEMES = {
 };
 
 export const ROUTES_NAMES = {
-    HOME: "/landing"
+    HOME: "/landing",
+    JOURNEY: "/journey",
+    INFO: '/more-info'
 }

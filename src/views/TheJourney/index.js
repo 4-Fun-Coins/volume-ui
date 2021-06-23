@@ -1,6 +1,7 @@
 import Page from "../../components/Page";
 import {Container, makeStyles} from "@material-ui/core";
 import About from "../../components/About";
+import Stats from "../../components/Stats";
 import Footer from "../../components/Footer";
 import NewSpace from "../../components/NewSpace";
 import Dash from "../../components/Dash";
@@ -40,26 +41,7 @@ const LandingPage = () => {
                 <NewSpace />
             </div>
 
-            <Container
-                maxWidth={false}
-                className={classes.contentBackground}
-            >
-                <About/>
-            </Container>
 
-            <Container
-                maxWidth={false}
-                className={classes.contentBackground}
-            >
-                <Dash/>
-            </Container>
-
-            <Container
-                maxWidth={false}
-                className={classes.contentBackground}
-            >
-                <Footer/>
-            </Container>
         </Page>
     )
 }

@@ -48,6 +48,18 @@ const routes = [
         component: lazy(() => import("./views/LandingPage"))
     },
     {
+        path: ROUTES_NAMES.JOURNEY,
+        exact: true,
+        layout: MainLayout,
+        component: lazy(() => import("./views/TheJourney"))
+    },
+    {
+        path: ROUTES_NAMES.INFO,
+        exact: true,
+        layout: MainLayout,
+        component: lazy(() => import("./views/Info"))
+    },
+    {
         path: "/",
         exact: true,
         component: () => <Redirect to={ROUTES_NAMES.HOME}/>
