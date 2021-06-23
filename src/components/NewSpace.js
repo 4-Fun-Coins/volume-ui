@@ -40,15 +40,15 @@ const NewSpace = () => {
     useEffect(() => {
         if(!loaded)
             loadImages([
-                '/spaceDust4x.png',
-                '/rock3.png',
-                '/blue_planet.png',
-                '/double_rock.png',
-                '/deep_red_planet.png',
-                '/rock1.png',
-                '/pink_planet.png',
-                '/red_planet.png',
-                '/orange_planet.png'
+                '/spaceDust4x.webp',
+                '/rock3.webp',
+                '/blue_planet.webp',
+                '/double_rock.webp',
+                '/deep_red_planet.webp',
+                '/rock1.webp',
+                '/pink_planet.webp',
+                '/red_planet.webp',
+                '/orange_planet.webp'
             ], (images) => {
                 loadedImages = images;
                 loaded = true;
@@ -73,7 +73,7 @@ const NewSpace = () => {
         ctx.msImageSmoothingEnabled = false;
         ctx.imageSmoothingEnabled = false;
         // Space Backdrop
-        let spaceDust = loadedImages['/spaceDust4x.png'];
+        let spaceDust = loadedImages['/spaceDust4x.webp'];
 
         spaceDust.width = window.innerWidth;
         spaceDust.height = Math.floor(window.innerHeight * 2.75);
@@ -95,57 +95,57 @@ const NewSpace = () => {
                 switch (element) {
                     case 1: {
                         // rock
-                        elements.push(drawElement(ctx, '/rock3.png', i, false));
+                        elements.push(drawElement(ctx, '/rock3.webp', i, false));
                         break;
                     }
 
                     case 2: {
                         // planet1
                         if (!planet1) {
-                            elements.push(drawElement(ctx, '/blue_planet.png', i, true));
+                            elements.push(drawElement(ctx, '/blue_planet.webp', i, true));
                             planet1 = true;
                         } else
-                            elements.push(drawElement(ctx, '/double_rock.png', i, false));
+                            elements.push(drawElement(ctx, '/double_rock.webp', i, false));
                         break;
                     }
 
                     case 3: {
                         // planet2
                         if (!planet2) {
-                            elements.push(drawElement(ctx, '/deep_red_planet.png', i, true));
+                            elements.push(drawElement(ctx, '/deep_red_planet.webp', i, true));
                             planet2 = true;
                         } else
-                            elements.push(drawElement(ctx, '/rock1.png', i, false));
+                            elements.push(drawElement(ctx, '/rock1.webp', i, false));
                         break;
                     }
 
                     case 4: {
                         // planet3
                         if (!planet3) {
-                            elements.push(drawElement(ctx, '/orange_planet.png', i, true));
+                            elements.push(drawElement(ctx, '/orange_planet.webp', i, true));
                             planet3 = true;
                         } else
-                            elements.push(drawElement(ctx, '/rock1.png', i, false));
+                            elements.push(drawElement(ctx, '/rock1.webp', i, false));
                         break;
                     }
 
                     case 5: {
                         // planet4
                         if (!planet4) {
-                            elements.push(drawElement(ctx, '/pink_planet.png', i, true));
+                            elements.push(drawElement(ctx, '/pink_planet.webp', i, true));
                             planet4 = true;
                         } else
-                            elements.push(drawElement(ctx, '/double_rock.png', i, false));
+                            elements.push(drawElement(ctx, '/double_rock.webp', i, false));
                         break;
                     }
 
                     case 6: {
                         // planet5
                         if (!planet5) {
-                            elements.push(drawElement(ctx, '/red_planet.png', i, true));
+                            elements.push(drawElement(ctx, '/red_planet.webp', i, true));
                             planet5 = true;
                         } else
-                            elements.push(drawElement(ctx, '/rock1.png', i, false));
+                            elements.push(drawElement(ctx, '/rock1.webp', i, false));
                         break;
                     }
                 }
