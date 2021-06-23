@@ -61,6 +61,8 @@ const Stats = () => {
                 // Set loading stats to false & initStats to true
             }).catch((err) => {
                 setUserError(true);
+            }).finally(() => {
+                setInitUserStats(true);
             });
         }
     }, [wallet.status]);

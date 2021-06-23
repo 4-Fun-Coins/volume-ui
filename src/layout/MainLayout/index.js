@@ -1,6 +1,8 @@
 import {makeStyles} from "@material-ui/core";
 import PropTypes from "prop-types";
 import {UseWalletProvider} from "use-wallet";
+import TopBar from "./TopBar";
+import {useState} from "react";
 
 const mainLayoutStyle = makeStyles((theme) => ({
     root: {
@@ -30,14 +32,17 @@ const mainLayoutStyle = makeStyles((theme) => ({
 const MainLayout = ({children}) => {
     const classes = mainLayoutStyle();
 
+    const [netId, setNetId] = useState(56);
+
     return (
         <div>
             <UseWalletProvider
-                chainId={56}
+                chainId={netId}
                 connectors={{}}
                 pollBalanceInterval={2000}
                 pollBlockNumberInterval={5000}
             >
+                <TopBar changeNetwork={setNetId} network={netId}/>
                 <div className={classes.wrapper}>
                     <div className={classes.contentContainer}>
                         <div className={classes.content}>
