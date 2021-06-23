@@ -64,7 +64,7 @@ const TopBar = ({className, changeNetwork, network, ...rest}) => {
                     {/*Journey*/}
                     <Grid className={classes.button} container item xs={6}>
                         <Button onClick={() => {
-                            history.push(ROUTES_NAMES.JOURNEY);
+                            // history.push(ROUTES_NAMES.JOURNEY);
                         }}>
                             <Typography variant={"h4"} className={classes.volText}>
                                 The Journey
@@ -75,7 +75,7 @@ const TopBar = ({className, changeNetwork, network, ...rest}) => {
                     {/*Details*/}
                     <Grid container item xs={6}>
                         <Button className={classes.button} onClick={() => {
-                            history.push(ROUTES_NAMES.INFO);
+                            // history.push(ROUTES_NAMES.INFO);
                         }}>
                             <Typography variant={"h4"} className={classes.volText}>
                                 More Info
