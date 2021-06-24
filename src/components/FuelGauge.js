@@ -61,7 +61,7 @@ const FuelGauge = () => {
                 {   initFuel &&
                     <Gauge
                         min={0}
-                        max={initFuel}
+                        max={initialFuel}
                         value={fuel}
                         units={"(blocks)"}
                         label={"Fuel Tank"}
