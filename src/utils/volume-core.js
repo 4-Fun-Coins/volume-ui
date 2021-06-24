@@ -71,6 +71,18 @@ export async function getSortedLeaderboard() {
     });
 }
 
+export async function getBalanceForAddress(address) {
+    return new Promise((resolve, reject) => {
+        const volume = new web3.eth.Contract(volumeABI, testVolumeAddress);
+        volume.methods.balanceOf(address).call((error, balance) => {
+            if (error)
+                reject(error);
+
+            resolve(web3.utils.fromWei(balance));
+        });
+    });
+}
+
 const sortFunction = (a, b) => {
     if (a.fuelAdded === b.fuelAdded) {
         return 0;

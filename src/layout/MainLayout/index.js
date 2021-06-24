@@ -3,11 +3,13 @@ import PropTypes from "prop-types";
 import {UseWalletProvider} from "use-wallet";
 import TopBar from "./TopBar";
 import {useState} from "react";
+import NewSpace from "../../components/NewSpace";
 
 const mainLayoutStyle = makeStyles((theme) => ({
     root: {
         backgroundColor: theme.palette.background.default,
         display: "flex",
+        flexDirection: "column",
         height: "100%",
         overflow: "hidden",
         width: "100%"
@@ -26,25 +28,32 @@ const mainLayoutStyle = makeStyles((theme) => ({
         flex: "1 1 auto",
         height: "100%",
         overflow: "auto"
-    }
+    },
+    universeBackground: {
+        position: "fixed",
+        zIndex: -1,
+        filter: 'blur(3px)'
+    },
 }));
 
 const MainLayout = ({children}) => {
     const classes = mainLayoutStyle();
 
-    const [netId, setNetId] = useState(56);
-
     return (
         <div>
             <UseWalletProvider
-                chainId={netId}
+                chainId={42}
                 connectors={{}}
                 pollBalanceInterval={2000}
                 pollBlockNumberInterval={5000}
             >
-                <TopBar changeNetwork={setNetId} network={netId}/>
+                <TopBar />
                 <div className={classes.wrapper}>
+
                     <div className={classes.contentContainer}>
+                        <div className={classes.universeBackground}>
+                            <NewSpace />
+                        </div>
                         <div className={classes.content}>
                             {children}
                         </div>

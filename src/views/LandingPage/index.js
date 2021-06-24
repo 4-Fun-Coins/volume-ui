@@ -36,9 +36,9 @@ const LandingPage = () => {
             className={classes.root}
             title={'Home'}
         >
-            <div className={classes.universeBackground}>
-                <NewSpace />
-            </div>
+            {/*<div className={classes.universeBackground}>*/}
+            {/*    <NewSpace />*/}
+            {/*</div>*/}
 
             <Container
                 maxWidth={false}

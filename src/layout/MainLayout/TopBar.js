@@ -21,7 +21,7 @@ const drawerWidth = 240;
 
 const topBarStyles = makeStyles((theme) => ({
     root: {
-        backgroundColor: "#1d0134"
+        backgroundColor: "#1d0134",
     },
     toolBar: {
         height: 72
@@ -49,7 +49,7 @@ const topBarStyles = makeStyles((theme) => ({
     }
 }));
 
-const TopBar = ({className, changeNetwork, network, ...rest}) => {
+const TopBar = ({className, ...rest}) => {
     const classes = topBarStyles();
     const wallet = useWallet();
     const history = useHistory();
@@ -64,13 +64,6 @@ const TopBar = ({className, changeNetwork, network, ...rest}) => {
 
     const toRefuel = () => {
         history.push(ROUTES_NAMES.REFUEL);
-    }
-
-    const newNetwork = (netId) => {
-        if (network !== netId) {
-            changeNetwork(netId);
-            wallet.connect();
-        }
     }
 
     // ========================== Mobile optimization
@@ -107,26 +100,6 @@ const TopBar = ({className, changeNetwork, network, ...rest}) => {
                                     ? `${wallet.account.slice(0, 6)}...${wallet.account.slice(wallet.account.length-4, wallet.account.length)}`
                                     : 'Connect'
                             }
-                        </Typography>
-                    </Button>
-                </Grid>
-
-                <Grid container item xs={6} justify={"center"}>
-                    <Button variant={"text"} className={classes.button} onClick={() => {
-                        newNetwork(56);
-                    }}>
-                        <Typography variant={"h4"} className={network === 56 ? classes.boldText : classes.volText}>
-                            BSC
-                        </Typography>
-                    </Button>
-                </Grid>
-
-                <Grid container item xs={6} justify={"center"}>
-                    <Button variant={"text"} className={classes.button} onClick={() => {
-                        newNetwork(42);
-                    }}>
-                        <Typography variant={"h4"} className={network === 42 ? classes.boldText : classes.volText}>
-                            Kovan
                         </Typography>
                     </Button>
                 </Grid>
@@ -182,26 +155,6 @@ const TopBar = ({className, changeNetwork, network, ...rest}) => {
                         </Grid>
 
                         <Grid container item justify={"flex-end"} xs={12}>
-                            <Grid container item xs={6} justify={"flex-end"}>
-                                <Button variant={"text"} className={classes.button} onClick={() => {
-                                    newNetwork(56);
-                                }}>
-                                    <Typography variant={"h4"} className={network === 56 ? classes.boldText : classes.volText}>
-                                        BSC
-                                    </Typography>
-                                </Button>
-
-                                <Divider orientation={"vertical"} variant={"fullWidth"} style={{width: '1px',backgroundColor: "grey"}}/>
-
-                                <Button variant={"text"} className={classes.button} onClick={() => {
-                                    newNetwork(42);
-                                }}>
-                                    <Typography variant={"h4"} className={network === 42 ? classes.boldText : classes.volText}>
-                                        Kovan
-                                    </Typography>
-                                </Button>
-                            </Grid>
-
                             <Grid container item xs={2} justify={"flex-end"}>
                                 <Button variant={"text"} className={classes.button} onClick={() => {
                                     if (wallet.status !== 'connected')
@@ -218,7 +171,6 @@ const TopBar = ({className, changeNetwork, network, ...rest}) => {
                             </Grid>
                         </Grid>
                     </Hidden>
-
                 </Toolbar>
             </AppBar>
 
