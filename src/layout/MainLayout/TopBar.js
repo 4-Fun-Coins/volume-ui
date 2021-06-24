@@ -1,17 +1,16 @@
 import {
     AppBar,
-    Button, CssBaseline,
+    Button,
     Divider, Drawer,
     Grid, Hidden, IconButton,
     List,
     ListItem,
-    ListItemIcon,
     ListItemText,
     makeStyles,
     Toolbar
 } from "@material-ui/core";
 import clsx from "clsx";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import Typography from "@material-ui/core/Typography";
 import {useWallet} from "use-wallet";
 import {useHistory} from 'react-router-dom';
