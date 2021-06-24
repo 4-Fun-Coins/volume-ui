@@ -54,10 +54,10 @@ const routes = [
         component: lazy(() => import("./views/TheJourney"))
     },
     {
-        path: ROUTES_NAMES.INFO,
+        path: ROUTES_NAMES.REFUEL,
         exact: true,
         layout: MainLayout,
-        component: lazy(() => import("./views/Info"))
+        component: lazy(() => import("./views/Refuel"))
     },
     {
         path: "/",
