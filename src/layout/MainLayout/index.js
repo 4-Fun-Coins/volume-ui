@@ -29,11 +29,6 @@ const mainLayoutStyle = makeStyles((theme) => ({
         height: "100%",
         overflow: "auto"
     },
-    universeBackground: {
-        position: "fixed",
-        zIndex: -1,
-        filter: 'blur(3px)'
-    },
 }));
 
 const MainLayout = ({children}) => {
@@ -51,9 +46,6 @@ const MainLayout = ({children}) => {
                 <div className={classes.wrapper}>
 
                     <div className={classes.contentContainer}>
-                        <div className={classes.universeBackground}>
-                            <NewSpace />
-                        </div>
                         <div className={classes.content}>
                             {children}
                         </div>
