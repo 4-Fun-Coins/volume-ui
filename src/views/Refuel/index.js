@@ -1,6 +1,5 @@
 import Page from "../../components/Page";
 import {Button, Card, Container, Grid, makeStyles, TextField} from "@material-ui/core";
-import NewSpace from "../../components/NewSpace";
 import Typography from "@material-ui/core/Typography";
 import {useWallet} from "use-wallet";
 import {useEffect, useState} from "react";
@@ -36,11 +35,14 @@ const landingStyles = makeStyles((theme) => ({
         padding: '1em',
         textAlign: "center",
         color: theme.palette.twinkle.main,
-        fontSize: 20
+        fontSize: 20,
     },
     balanceText: {
         fontSize: 16,
         color: theme.palette.twinkle.main
+    },
+    rocketBackground: {
+
     }
 }));
 
@@ -57,12 +59,12 @@ const Refuel = () => {
             getBalanceForAddress(wallet.account).then((res) => {
                 if (res)
                     setBalance(new Big(res));
-
             });
         }
     }
 
     const refuel = () => {
+        // TODO - send to that function
 
     }
 
@@ -104,13 +106,13 @@ const Refuel = () => {
                                     </Grid>
 
                                     <Grid container item xs={10} justify={"flex-start"} style={{paddingTop: '2em'}}>
-                                        <Button fullWidth color={"secondary"} variant={"contained"} onClick={}>
+                                        <Button fullWidth color={"secondary"} variant={"contained"} onClick={refuel}>
                                             Refuel
                                         </Button>
                                     </Grid>
                                 </Grid>
 
-                                <Grid container item xs={6} justify={"center"} alignItems={"center"}>
+                                <Grid container item xs={6} justify={"center"} alignItems={"center"} className={classes.rocketBackground}>
                                     <img src={'./rocket_tilted.svg'} alt={'rocket'}/>
                                 </Grid>
                             </Grid>
