@@ -5,14 +5,10 @@ import {useWallet} from "use-wallet";
 import {useEffect, useState} from "react";
 import {
     estimateGasForRefuel,
-    getABIForFunction,
     getBalanceForAddress, getDataForRefuel,
-    getEncodedABIForFunction,
-    getGasPrice
 } from "../../utils/volume-core";
 const {volumeAddress} = require('../../utils/config.js');
 const Big = require('big-js');
-const web3 = require('web3');
 
 const landingStyles = makeStyles((theme) => ({
     root: {
@@ -61,6 +57,8 @@ const Refuel = () => {
 
     const [balance, setBalance] = useState(new Big(0));
     const [amount, setAmount] = useState(new Big(0));
+    const [message, setMessage] = useState("");
+    const [enabled, setEnabled] = useState(false);
 
     const fetchBalance = () => {
         if (wallet.status === 'connected') {
@@ -72,13 +70,14 @@ const Refuel = () => {
         }
     }
 
-    const refuel = () => {
-        console.log(amount);
+    const refuel = async () => {
         // Calculate expected gas
         if (wallet.status === 'connected') {
-            if (true) { // if amount is < balance
+            // Get balance for user
+            const currentBalance = new Big(await getBalanceForAddress(wallet.account));
+
+            if (currentBalance.gte(amount)) { // if amount is < balance
                 estimateGasForRefuel(wallet.account, amount).then((estGas) => {
-                    // TODO - send to that function
                     const transactionParams = {
                         nonce: '0x00',
                         gas: estGas.toString(),
@@ -97,6 +96,8 @@ const Refuel = () => {
                         console.log(err);
                     });
                 });
+            } else {
+                setBalance(currentBalance);
             }
         }
     }
@@ -105,8 +106,27 @@ const Refuel = () => {
         fetchBalance();
     }, [wallet.status]);
 
+    useEffect(() => {
+        if (amount.toString() === '' || new Big(amount).eq(0)) {
+            // empty
+            setMessage("Enter an amount");
+            setEnabled(false);
+        } else if (new Big(amount).lte(balance)) {
+            // insufficient
+            setMessage("Refuel");
+            setEnabled(true);
+        } else {
+            setMessage("Insufficient balance");
+            setEnabled(false);
+        }
+    }, [amount, balance]);
+
     const handleChange = (event) => {
-        setAmount(event.target.value);
+        const regex = /^[0-9]*\.?[0-9]*$/;
+
+        if (regex.test(event.target.value)){
+            setAmount(event.target.value);
+        }
     }
 
     return (
@@ -139,12 +159,12 @@ const Refuel = () => {
                                     </Grid>
 
                                     <Grid container item xs={10} justify={"flex-start"}>
-                                        <TextField fullWidth variant={"outlined"} color={"secondary"} onChange={handleChange}/>
+                                        <TextField fullWidth variant={"outlined"} color={"secondary"} onChange={handleChange} value={amount}/>
                                     </Grid>
 
                                     <Grid container item xs={10} justify={"flex-start"} style={{paddingTop: '2em'}}>
-                                        <Button fullWidth color={"secondary"} variant={"contained"} onClick={refuel}>
-                                            Refuel
+                                        <Button fullWidth color={"secondary"} variant={"contained"} onClick={refuel} disabled={!enabled}>
+                                            {message}
                                         </Button>
                                     </Grid>
                                 </Grid>
