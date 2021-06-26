@@ -74,6 +74,12 @@ const Stats = () => {
             spacing={1}
             xs={12}
         >
+            {
+                !initGlobalStats &&
+                <Grid container item justify={"center"}>
+                    <LoadingScreen transparent/>
+                </Grid>
+            }
             {initGlobalStats &&
             <>
                 <Grid container item xs={12} justify={"center"}>
