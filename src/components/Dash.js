@@ -12,6 +12,7 @@ const Dash = () => {
     return (
         <Container
             maxWidth={false}
+            style={{paddingTop: '2em'}}
         >
             <Grid container direction={"row"} justify={"center"} spacing={2}>
                 <Grid container item xs={12} sm={12} md={6} spacing={2}>
