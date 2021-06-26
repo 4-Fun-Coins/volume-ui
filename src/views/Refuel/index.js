@@ -1,5 +1,5 @@
 import Page from "../../components/Page";
-import {Button, Card, Container, Grid, makeStyles, TextField} from "@material-ui/core";
+import {Button, Card, Container, Grid, Hidden, makeStyles, TextField} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import {useWallet} from "use-wallet";
 import {useEffect, useState} from "react";
@@ -27,13 +27,10 @@ const landingStyles = makeStyles((theme) => ({
         width: '100%',
     },
     card: {
-        width: '50%',
+        width: '60%',
         height: '50vh',
         backgroundColor: "#1d0134",
         borderRadius: 12,
-        backgroundImage: 'url(/planet_blue.svg)',
-        backgroundPosition: "right",
-        backgroundRepeat: "no-repeat"
     },
     text: {
         padding: '1em',
@@ -46,7 +43,14 @@ const landingStyles = makeStyles((theme) => ({
         color: theme.palette.twinkle.main
     },
     rocketBackground: {
-
+        backgroundImage: 'url(/planet_blue.svg)',
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "auto",
+    },
+    rocket: {
+        height: '600',
+        width: '600'
     }
 }));
 
@@ -138,9 +142,8 @@ const Refuel = () => {
                 <Grid container item xs={12} className={classes.cardWrapper}>
                     <Grid container item justify={"center"}>
                         <Card className={classes.card}>
-                            <Grid container>
-
-                                <Grid container item xs={6} justify={"center"}>
+                            <Grid container style={{display: "flex", width: '100%', height: '100%'}}>
+                                <Grid container item xs={12} md={6} justify={"center"} alignItems={"flex-start"} style={{backgroundColor: "transparent"}}>
                                     <Grid item xs={12}>
                                         <Typography className={classes.text}>
                                             Direct refueling burns the total amount submitted for fuel. Please do not send
@@ -148,7 +151,7 @@ const Refuel = () => {
                                         </Typography>
                                     </Grid>
 
-                                    <Grid container item xs={10} justify={"space-between"} alignItems={"flex-end"}>
+                                    <Grid container item xs={10} justify={"space-between"}>
                                         <Typography className={classes.balanceText}>
                                             Amount
                                         </Typography>
@@ -156,22 +159,20 @@ const Refuel = () => {
                                         <Typography className={classes.balanceText}>
                                             Balance: {balance.toFixed(2)}
                                         </Typography>
-                                    </Grid>
 
-                                    <Grid container item xs={10} justify={"flex-start"}>
                                         <TextField fullWidth variant={"outlined"} color={"secondary"} onChange={handleChange} value={amount}/>
-                                    </Grid>
 
-                                    <Grid container item xs={10} justify={"flex-start"} style={{paddingTop: '2em'}}>
-                                        <Button fullWidth color={"secondary"} variant={"contained"} onClick={refuel} disabled={!enabled}>
+                                        <Button fullWidth color={"secondary"} variant={"contained"} onClick={refuel} disabled={!enabled} style={{marginTop: '1em'}}>
                                             {message}
                                         </Button>
                                     </Grid>
                                 </Grid>
 
-                                <Grid container item xs={6} justify={"center"} alignItems={"center"} className={classes.rocketBackground}>
-                                    <img src={'./rocket_tilted.svg'} alt={'rocket'}/>
-                                </Grid>
+                                <Hidden smDown>
+                                    <Grid container item xs={6} className={classes.rocketBackground}>
+                                        <img src={'./rocket_tilted.svg'} alt={'rocket'} className={classes.rocket}/>
+                                    </Grid>
+                                </Hidden>
                             </Grid>
                         </Card>
                     </Grid>
