@@ -1,7 +1,7 @@
 const Web3 = require('web3');
-const {volumeAddress, testNetUrl} = require('./config.js');
+const {volumeAddress, rpcUrl} = require('./config.js');
 const Big = require('big.js');
-let web3 = new Web3(testNetUrl);
+let web3 = new Web3(rpcUrl);
 let {volumeABI} = require('./volume-abi');
 
 export async function getFuel() {
