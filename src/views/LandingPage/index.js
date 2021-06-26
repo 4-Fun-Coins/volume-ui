@@ -3,6 +3,7 @@ import {Container, makeStyles} from "@material-ui/core";
 import About from "../../components/About";
 import Footer from "../../components/Footer";
 import Dash from "../../components/Dash";
+import {useEffect, useState} from "react";
 
 const landingStyles = makeStyles((theme) => ({
     root: {
@@ -30,6 +31,13 @@ const landingStyles = makeStyles((theme) => ({
 const LandingPage = () => {
     const classes = landingStyles();
 
+    const [visited, setVisited] = useState(false);
+
+    useEffect(() => {
+        setVisited(localStorage.getItem('visited') === 'true');
+        localStorage.setItem('visited', "true");
+    }, [visited]);
+
     return (
         <Page
             className={classes.root}
@@ -39,14 +47,14 @@ const LandingPage = () => {
                 maxWidth={false}
                 className={classes.contentBackground}
             >
-                <About/>
+                {!visited ? <About/> : <Dash/>}
             </Container>
 
             <Container
                 maxWidth={false}
                 className={classes.contentBackground}
             >
-                <Dash/>
+                {!visited ? <Dash/>: <About/>}
             </Container>
 
             <Container
