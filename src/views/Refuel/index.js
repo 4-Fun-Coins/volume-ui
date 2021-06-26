@@ -56,7 +56,7 @@ const Refuel = () => {
     const wallet = useWallet();
 
     const [balance, setBalance] = useState(new Big(0));
-    const [amount, setAmount] = useState(new Big(0));
+    const [amount, setAmount] = useState("");
     const [message, setMessage] = useState("");
     const [enabled, setEnabled] = useState(false);
 
@@ -107,7 +107,7 @@ const Refuel = () => {
     }, [wallet.status]);
 
     useEffect(() => {
-        if (amount.toString() === '' || new Big(amount).eq(0)) {
+        if (amount.toString() === '' || amount === '.' || new Big(amount).eq(0)) {
             // empty
             setMessage("Enter an amount");
             setEnabled(false);
