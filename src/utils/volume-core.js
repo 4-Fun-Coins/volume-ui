@@ -1,12 +1,12 @@
 const Web3 = require('web3');
-const {testVolumeAddress, testNetUrl} = require('./config.js');
+const {volumeAddress, testNetUrl} = require('./config.js');
 const Big = require('big.js');
 let web3 = new Web3(testNetUrl);
 let {volumeABI} = require('./volume-abi');
 
 export async function getFuel() {
     return new Promise((resolve, reject) => {
-        const volume = new web3.eth.Contract(volumeABI, testVolumeAddress);
+        const volume = new web3.eth.Contract(volumeABI, volumeAddress);
         volume.methods.getFuel().call((error, fuel) => {
             if (error)
                 reject(error);
@@ -18,7 +18,7 @@ export async function getFuel() {
 
 export async function getTotalFuelAdded() {
     return new Promise((resolve, reject) => {
-        const volume = new web3.eth.Contract(volumeABI, testVolumeAddress);
+        const volume = new web3.eth.Contract(volumeABI, volumeAddress);
         volume.methods.getTotalFuelAdded().call((error, totalFuel) => {
             if (error)
                 reject(error);
@@ -32,7 +32,7 @@ export async function getFuelAddedForAddress(address) {
     return new Promise((resolve, reject) => {
         if (web3.utils.isAddress(address)) {
             if (web3.utils.checkAddressChecksum(address)) {
-                const volume = new web3.eth.Contract(volumeABI, testVolumeAddress);
+                const volume = new web3.eth.Contract(volumeABI, volumeAddress);
                 volume.methods.getUserFuelAdded(address).call((error, totalFuelForAddress) => {
                     if (error)
                         reject(error);
@@ -50,7 +50,7 @@ export async function getFuelAddedForAddress(address) {
 
 export async function getSortedLeaderboard() {
     return new Promise((resolve, reject) => {
-        const volume = new web3.eth.Contract(volumeABI, testVolumeAddress);
+        const volume = new web3.eth.Contract(volumeABI, volumeAddress);
         volume.methods.getAllUsersLength().call((err, len) => {
             if (err)
                 reject(err);
@@ -73,7 +73,7 @@ export async function getSortedLeaderboard() {
 
 export async function getBalanceForAddress(address) {
     return new Promise((resolve, reject) => {
-        const volume = new web3.eth.Contract(volumeABI, testVolumeAddress);
+        const volume = new web3.eth.Contract(volumeABI, volumeAddress);
         volume.methods.balanceOf(address).call((error, balance) => {
             if (error)
                 reject(error);
@@ -82,6 +82,41 @@ export async function getBalanceForAddress(address) {
         });
     });
 }
+
+export async function estimateGasForRefuel(_from, amount) {
+    return new Promise((resolve, reject) => {
+        const volume = new web3.eth.Contract(volumeABI, volumeAddress);
+        web3.eth.getGasPrice().then((_gasPrice) => {
+            volume.methods.directRefuel(web3.utils.toWei(new Big(amount).toString())).estimateGas({
+                from: _from,
+                gasPrice: _gasPrice
+            }, (error, estPrice) => {
+                if (error)
+                    reject(error);
+
+                resolve(estPrice);
+            });
+        });
+    });
+}
+
+export async function getGasPrice() {
+    return new Promise((resolve, reject) => {
+        web3.eth.getGasPrice((err, gasPrice) => {
+            if (err)
+                reject(err);
+
+            resolve(gasPrice);
+        });
+    });
+}
+
+export function getDataForRefuel(amount) {
+    const volume = new web3.eth.Contract(volumeABI, volumeAddress);
+    return volume.methods.directRefuel(web3.utils.toWei(new Big(amount).toString())).encodeABI();
+}
+
+// === HELPER FUNCTIONS === //
 
 const sortFunction = (a, b) => {
     if (a.fuelAdded === b.fuelAdded) {

@@ -3,8 +3,16 @@ import {Button, Card, Container, Grid, makeStyles, TextField} from "@material-ui
 import Typography from "@material-ui/core/Typography";
 import {useWallet} from "use-wallet";
 import {useEffect, useState} from "react";
-import {getBalanceForAddress} from "../../utils/volume-core";
+import {
+    estimateGasForRefuel,
+    getABIForFunction,
+    getBalanceForAddress, getDataForRefuel,
+    getEncodedABIForFunction,
+    getGasPrice
+} from "../../utils/volume-core";
+const {volumeAddress} = require('../../utils/config.js');
 const Big = require('big-js');
+const web3 = require('web3');
 
 const landingStyles = makeStyles((theme) => ({
     root: {
@@ -52,6 +60,7 @@ const Refuel = () => {
     const wallet = useWallet();
 
     const [balance, setBalance] = useState(new Big(0));
+    const [amount, setAmount] = useState(new Big(0));
 
     const fetchBalance = () => {
         if (wallet.status === 'connected') {
@@ -64,13 +73,41 @@ const Refuel = () => {
     }
 
     const refuel = () => {
-        // TODO - send to that function
+        console.log(amount);
+        // Calculate expected gas
+        if (wallet.status === 'connected') {
+            if (true) { // if amount is < balance
+                estimateGasForRefuel(wallet.account, amount).then((estGas) => {
+                    // TODO - send to that function
+                    const transactionParams = {
+                        nonce: '0x00',
+                        gas: estGas.toString(),
+                        to: volumeAddress,
+                        from: wallet.account,
+                        data: getDataForRefuel(amount),
+                        chainId: 42
+                    }
 
+                    wallet.ethereum.request({
+                        method: 'eth_sendTransaction',
+                        params: [transactionParams]
+                    }).then((txHash) => {
+                        console.log(txHash);
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                });
+            }
+        }
     }
 
     useEffect(() => {
         fetchBalance();
     }, [wallet.status]);
+
+    const handleChange = (event) => {
+        setAmount(event.target.value);
+    }
 
     return (
         <Page
@@ -102,7 +139,7 @@ const Refuel = () => {
                                     </Grid>
 
                                     <Grid container item xs={10} justify={"flex-start"}>
-                                        <TextField fullWidth variant={"outlined"} color={"secondary"}/>
+                                        <TextField fullWidth variant={"outlined"} color={"secondary"} onChange={handleChange}/>
                                     </Grid>
 
                                     <Grid container item xs={10} justify={"flex-start"} style={{paddingTop: '2em'}}>
