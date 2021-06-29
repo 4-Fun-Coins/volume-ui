@@ -126,7 +126,7 @@ const TopBar = ({className, ...rest}) => {
                     </Hidden>
 
                     <Hidden smDown>
-                        <Grid container justify={"flex-start"} xs={3}>
+                        <Grid container justify={"flex-start"}>
                             <Button onClick={toHome}>
                                 <Typography variant={"h2"} className={classes.volText}>
                                     Volume
@@ -134,7 +134,7 @@ const TopBar = ({className, ...rest}) => {
                             </Button>
                         </Grid>
 
-                        <Grid container xs={7} alignItems={"center"} justify={"flex-start"} spacing={4}>
+                        <Grid container alignItems={"center"} justify={"flex-start"} spacing={4}>
                             {/*Journey*/}
                             <Grid container item xs={6}>
                                 <Button className={classes.button} onClick={toJourney}>
