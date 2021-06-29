@@ -1,5 +1,5 @@
 import Page from "../../components/Page";
-import {Container, makeStyles} from "@material-ui/core";
+import {Container, Grid, makeStyles} from "@material-ui/core";
 import About from "../../components/About";
 import Footer from "../../components/Footer";
 import Dash from "../../components/Dash";
@@ -43,19 +43,21 @@ const LandingPage = () => {
             className={classes.root}
             title={'Home'}
         >
-            <Container
-                maxWidth={false}
-                className={classes.contentBackground}
-            >
-                {!visited ? <About/> : <Dash/>}
-            </Container>
+            <Grid container item direction={visited ? "column-reverse" : "column"}>
+                <Container
+                    maxWidth={false}
+                    className={classes.contentBackground}
+                >
+                    <About/>
+                </Container>
 
-            <Container
-                maxWidth={false}
-                className={classes.contentBackground}
-            >
-                {!visited ? <Dash/>: <About/>}
-            </Container>
+                <Container
+                    maxWidth={false}
+                    className={classes.contentBackground}
+                >
+                    <Dash/>
+                </Container>
+            </Grid>
 
             <Container
                 maxWidth={false}
