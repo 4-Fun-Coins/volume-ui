@@ -64,8 +64,8 @@ export async function getSortedLeaderboard() {
                 for (let i = 0; i < allUsersFuel.length; i++) {
                     dumArr.push(allUsersFuel[i]);
                 }
-                dumArr.sort(sortFunction);
-                resolve(dumArr.slice(1, dumArr.length));
+                dumArr = dumArr.sort(sortFunction);
+                resolve(dumArr.slice(0, dumArr.length - 1));
             });
         });
     });
@@ -119,10 +119,6 @@ export function getDataForRefuel(amount) {
 // === HELPER FUNCTIONS === //
 
 const sortFunction = (a, b) => {
-    if (a.fuelAdded === b.fuelAdded) {
-        return 0;
-    }
-    else {
-        return (a.fuelAdded > b.functions) ? -1 : 1;
-    }
+    return new Big(b.fuelAdded).minus(a.fuelAdded);
+
 }
