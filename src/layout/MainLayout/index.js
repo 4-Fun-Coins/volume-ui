@@ -1,8 +1,6 @@
 import {makeStyles} from "@material-ui/core";
 import PropTypes from "prop-types";
-import {UseWalletProvider} from "use-wallet";
 import TopBar from "./TopBar";
-import {chainId} from "../../utils/config";
 
 const mainLayoutStyle = makeStyles((theme) => ({
     root: {
@@ -35,12 +33,6 @@ const MainLayout = ({children}) => {
 
     return (
         <div>
-            <UseWalletProvider
-                chainId={chainId}
-                connectors={{}}
-                pollBalanceInterval={2000}
-                pollBlockNumberInterval={5000}
-            >
                 <TopBar />
                 <div className={classes.wrapper}>
 
@@ -50,8 +42,6 @@ const MainLayout = ({children}) => {
                         </div>
                     </div>
                 </div>
-            </UseWalletProvider>
-
         </div>
     );
 }
