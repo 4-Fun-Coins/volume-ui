@@ -16,6 +16,7 @@ import {useWallet} from "use-wallet";
 import {useHistory} from 'react-router-dom';
 import {ROUTES_NAMES} from "../../constants";
 import MenuIcon from "@material-ui/icons/Menu";
+import ProfileDialog from "../../components/ProfileDialog";
 
 const drawerWidth = 240;
 
@@ -53,6 +54,9 @@ const TopBar = ({className, ...rest}) => {
     const classes = topBarStyles();
     const wallet = useWallet();
     const history = useHistory();
+
+    // ========================== Profile
+    const [openProfile, setOpenProfile] = useState(false);
 
     const toHome = () => {
         history.push(ROUTES_NAMES.HOME);
@@ -159,6 +163,10 @@ const TopBar = ({className, ...rest}) => {
                                 <Button variant={"text"} className={classes.button} onClick={() => {
                                     if (wallet.status !== 'connected')
                                         wallet.connect();
+                                    else {
+                                        // open profile
+                                        setOpenProfile(true);
+                                    }
                                 }}>
                                     <Typography variant={"h4"} className={classes.volText}>
                                         {
@@ -173,6 +181,8 @@ const TopBar = ({className, ...rest}) => {
                     </Hidden>
                 </Toolbar>
             </AppBar>
+
+            <ProfileDialog open={openProfile} setOpen={setOpenProfile}/>
 
             <Hidden mdUp>
                 <Drawer

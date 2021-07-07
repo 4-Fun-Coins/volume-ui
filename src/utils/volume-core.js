@@ -116,6 +116,14 @@ export function getDataForRefuel(amount) {
     return volume.methods.directRefuel(web3.utils.toWei(new Big(amount).toString())).encodeABI();
 }
 
+export async function getNickname(address) {
+    return "d";
+}
+
+export async function checkNickname(nickname) {
+    return true;
+}
+
 // === HELPER FUNCTIONS === //
 
 const sortFunction = (a, b) => {
