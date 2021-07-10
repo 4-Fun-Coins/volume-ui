@@ -38,6 +38,7 @@ const Leaderboard = () => {
         if (!lbInit) {
             // Load leaderboard here
             getSortedLeaderboard().then((sortedLeaderboard) => {
+                console.log("Leaderboard: ", sortedLeaderboard);
                 const tempArr = [];
                 if (sortedLeaderboard.length < 10) {
                     for (let i = 0; i < 10 - sortedLeaderboard.length; i++) {
@@ -75,8 +76,12 @@ const Leaderboard = () => {
                             }
                         }
                     }
+
+                    setLeaderboard(tempArr);
                 }
                 setLbInit(true);
+            }).catch((err) => {
+                console.log(err);
             });
         }
     }, [lbInit]);
