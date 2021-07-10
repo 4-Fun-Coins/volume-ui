@@ -67,7 +67,7 @@ const Leaderboard = () => {
                     let foundUser = false;
                     for (let i = 0; i < 10; i++) {
                         tempArr.push(sortedLeaderboard[i]);
-                        if (wallet.status === 'connected' && sortedLeaderboard[i].user === wallet.address) {
+                        if (wallet.status === 'connected' && sortedLeaderboard[i].user === wallet.account) {
                             foundUser = true;
                         }
                     }
