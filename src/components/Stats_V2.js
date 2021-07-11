@@ -28,12 +28,12 @@ const Stats = () => {
     const wallet = useWallet();
 
     const [initGlobalStats, setInitGlobalStats] = useState(false);
-    const [globalBlocks, setGlobalBlocks] = useState(0);
+    const [globalBlocks, setGlobalBlocks] = useState(new Big(0));
     const [globalSeconds, setGlobalSeconds] = useState(new Big(0));
     const [globalError, setGlobalError] = useState(false);
 
     const [initUserStats, setInitUserStats] = useState(false);
-    const [userBlocks, setUserBlocks] = useState(0);
+    const [userBlocks, setUserBlocks] = useState(new Big(0));
     const [userSeconds, setUserSeconds] = useState(new Big(0));
     const [userError, setUserError] = useState(false);
 
@@ -41,8 +41,8 @@ const Stats = () => {
         if (!initGlobalStats) {
             // Fetch global stats
             getTotalFuelAdded().then((res) => {
-                setGlobalBlocks(res);
-                setGlobalSeconds(new Big(res).times(5).toString());
+                setGlobalBlocks(new Big(res));
+                setGlobalSeconds(new Big(res).times(5).toFixed(0).toString());
                 //
             }).catch((err) => {
                 setGlobalError(true);
@@ -56,8 +56,8 @@ const Stats = () => {
         if (wallet.status === 'connected') {
             // Fetch the user stats here
             getFuelAddedForAddress(wallet.account).then((res) => {
-                setUserBlocks(res);
-                setUserSeconds(new Big(res).times(5).toString());
+                setUserBlocks(new Big(res));
+                setUserSeconds(new Big(res).times(5).toFixed(0).toString());
                 // Set loading stats to false & initStats to true
             }).catch((err) => {
                 setUserError(true);
@@ -102,7 +102,7 @@ const Stats = () => {
 
                     <Grid item>
                         <Typography className={classes.globalText}>
-                            {globalError ? "Could not load stats" : `${globalBlocks} blocks`}
+                            {globalError ? "Could not load stats" : `${globalBlocks.toFixed(2)} blocks`}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -145,7 +145,7 @@ const Stats = () => {
 
                     <Grid item>
                         <Typography className={classes.globalText}>
-                            {userError ? "Could not load stats" : `${userBlocks} blocks`}
+                            {userError ? "Could not load stats" : `${userBlocks.toFixed(2)} blocks`}
                         </Typography>
                     </Grid>
                 </Grid>
