@@ -154,6 +154,7 @@ export function getDataForClaimNickname(nickname) {
 }
 
 export async function estimateGasForClaim(_from, nickname) {
+    console.log(nickname);
     return new Promise((resolve, reject) => {
         const volume = new web3.eth.Contract(volumeABI, volumeAddress);
         web3.eth.getGasPrice().then((_gasPrice) => {
