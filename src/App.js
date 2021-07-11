@@ -11,7 +11,7 @@ import {makeStyles} from "@material-ui/core";
 import useSettings from './hooks/useSettings';
 import {createTheme} from './theme';
 import routes, {renderRoutes} from './routes';
-import {BrowserRouter} from 'react-router-dom';
+import {HashRouter} from 'react-router-dom';
 import CookiesNotification from "./components/CookiesNotification";
 import NewSpace from "./components/NewSpace";
 
@@ -46,14 +46,14 @@ const App = () => {
                 dense
                 maxSnack={3}
             >
-              <BrowserRouter history={history}>
+              <HashRouter history={history}>
                 <GlobalStyles/>
                 <CookiesNotification/>
                 <div className={classes.universeBackground}>
                             <NewSpace />
                 </div>
                 {renderRoutes(routes)}
-              </BrowserRouter>
+              </HashRouter>
             </SnackbarProvider>
           </MuiPickersUtilsProvider>
         </StylesProvider>
