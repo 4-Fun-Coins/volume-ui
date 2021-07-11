@@ -60,6 +60,12 @@ const routes = [
         component: lazy(() => import("./views/Refuel"))
     },
     {
+        path: ROUTES_NAMES.USER_PROFILE,
+        exact: true,
+        layout: MainLayout,
+        component: lazy(() => import("./views/Profile"))
+    },
+    {
         path: "/",
         exact: true,
         component: () => <Redirect to={ROUTES_NAMES.HOME}/>
