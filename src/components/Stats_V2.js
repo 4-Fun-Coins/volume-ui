@@ -41,7 +41,7 @@ const Stats = () => {
         if (!initGlobalStats) {
             // Fetch global stats
             getTotalFuelAdded().then((res) => {
-                setGlobalBlocks(new Big(res));
+                setGlobalBlocks(new Big(res).toFixed(4));
                 setGlobalSeconds(new Big(res).times(5).toFixed(0).toString());
                 //
             }).catch((err) => {
@@ -56,7 +56,7 @@ const Stats = () => {
         if (wallet.status === 'connected') {
             // Fetch the user stats here
             getFuelAddedForAddress(wallet.account).then((res) => {
-                setUserBlocks(new Big(res));
+                setUserBlocks(new Big(res).toFixed(4));
                 setUserSeconds(new Big(res).times(5).toFixed(0).toString());
                 // Set loading stats to false & initStats to true
             }).catch((err) => {
@@ -102,7 +102,7 @@ const Stats = () => {
 
                     <Grid item>
                         <Typography className={classes.globalText}>
-                            {globalError ? "Could not load stats" : `${globalBlocks.toFixed(2)} blocks`}
+                            {globalError ? "Could not load stats" : `${globalBlocks} blocks`}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -145,7 +145,7 @@ const Stats = () => {
 
                     <Grid item>
                         <Typography className={classes.globalText}>
-                            {userError ? "Could not load stats" : `${userBlocks.toFixed(2)} blocks`}
+                            {userError ? "Could not load stats" : `${userBlocks} blocks`}
                         </Typography>
                     </Grid>
                 </Grid>
