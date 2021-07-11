@@ -34,11 +34,25 @@ const Leaderboard = () => {
 
     const [userLbPosition, setUserLbPosition] = useState(undefined);
 
+    const findUser = (address, lb) => {
+        for (let i = 0; i < lb.length; i++) {
+            if (lb[i].user === address) {
+                return {
+                    nickname: lb[i].nickname,
+                    user: lb[i].user,
+                    fuelAdded: lb[i].fuelAdded,
+                    position: i+1
+                };
+            }
+        }
+
+        return undefined;
+    }
+
     useEffect(() => {
         if (!lbInit) {
             // Load leaderboard here
             getSortedLeaderboard().then((sortedLeaderboard) => {
-                console.log("Leaderboard: ", sortedLeaderboard);
                 const tempArr = [];
                 if (sortedLeaderboard.length < 10) {
                     for (let i = 0; i < 10 - sortedLeaderboard.length; i++) {
@@ -53,7 +67,7 @@ const Leaderboard = () => {
                     let foundUser = false;
                     for (let i = 0; i < 10; i++) {
                         tempArr.push(sortedLeaderboard[i]);
-                        if (wallet.status === 'connected' && sortedLeaderboard[i].user === wallet.address) {
+                        if (wallet.status === 'connected' && sortedLeaderboard[i].user === wallet.account) {
                             foundUser = true;
                         }
                     }
@@ -61,19 +75,14 @@ const Leaderboard = () => {
                     // if we still did not find the user address, it might be somewhere else in the array
                     if (!foundUser) {
                         // Make sure it is in the array
-                        if (wallet.status === 'connected' && sortedLeaderboard.find(entry => {
-                            return entry.user === wallet.address
-                        })) {
-                            for (let i = 10; i < sortedLeaderboard.length; i++) {
-                                if (sortedLeaderboard[i].user === wallet.address) {
-                                    setUserLbPosition({
-                                        nickname: sortedLeaderboard[i].nickname,
-                                        user: sortedLeaderboard[i].user,
-                                        fuelAdded: sortedLeaderboard[i].fuelAdded,
-                                        number: i + 1
-                                    });
-                                }
-                            }
+                        let user = findUser(wallet.account, sortedLeaderboard);
+                        if (wallet.status === 'connected' && user !== undefined) {
+                            setUserLbPosition({
+                                nickname: user.nickname,
+                                user: user.user,
+                                fuelAdded: user.fuelAdded,
+                                number: user.position
+                            });
                         }
                     }
 
@@ -129,34 +138,39 @@ const Leaderboard = () => {
             }
 
             {lbInit &&
-            leaderboard.map((entry, i) => {
-                return (
-                    <LeaderboardEntry
-                        key={i}
-                        number={i + 1}
-                        name={entry.nickname ? entry.nickname : entry.user}
-                        fuelAdded={utils.fromWei(entry.fuelAdded)}
-                        thisUser={wallet.status === 'connected' ? wallet.account === entry.user : false}
-                    />
-                )
-            })
-            }
+                <>
+                    {
+                        leaderboard.map((entry, i) => {
+                            return (
+                                <LeaderboardEntry
+                                    key={i}
+                                    number={i + 1}
+                                    name={entry.nickname ? entry.nickname : entry.user}
+                                    fuelAdded={utils.fromWei(entry.fuelAdded)}
+                                    thisUser={wallet.status === 'connected' ? wallet.account === entry.user : false}
+                                />
+                            )
+                        })
+                    }
 
-            {userLbPosition &&
-            <>
-                <LeaderboardEntry
-                    key={"emptyUser"}
-                    number={".."}
-                    name={"..."}
-                    fuelAdded={"..."}
-                />
-                <LeaderboardEntry
-                    key={"thisUser"}
-                    number={userLbPosition.number}
-                    name={userLbPosition.nickname !== "" ? userLbPosition.nickname : userLbPosition.user}
-                    fuelAdded={userLbPosition.fuelAdded}
-                />
-            </>
+                    {userLbPosition &&
+                    <>
+                        <LeaderboardEntry
+                            key={"emptyUser"}
+                            number={".."}
+                            name={"..."}
+                            fuelAdded={"..."}
+                        />
+                        <LeaderboardEntry
+                            key={"thisUser"}
+                            number={userLbPosition.number}
+                            name={userLbPosition.nickname ? userLbPosition.nickname : userLbPosition.user}
+                            fuelAdded={utils.fromWei(userLbPosition.fuelAdded)}
+                            thisUser={wallet.status === 'connected' ? wallet.account === userLbPosition.user : false}
+                        />
+                    </>
+                    }
+                </>
             }
         </Grid>
     )

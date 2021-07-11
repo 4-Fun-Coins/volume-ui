@@ -41,7 +41,7 @@ const FuelGauge = () => {
             getFuel().then((res, rej) => {
                 if (!rej) {
                     setFuel(new Big(res));
-                    setMilliseconds(new Big(res).times(5000));
+                    setMilliseconds(new Big(res).times(3000));
                     setInitFuel(true);
                 }
             });
