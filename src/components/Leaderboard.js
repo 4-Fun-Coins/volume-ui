@@ -8,6 +8,7 @@ import {getSortedLeaderboard} from "../utils/volume-core";
 import {useWallet} from "use-wallet";
 import {utils} from "web3";
 import LoadingScreen from "./LoadingScreen";
+const Big = require('big.js');
 
 const leaderboardStyles = makeStyles((theme) => ({
     lbWrapper: {
@@ -146,7 +147,7 @@ const Leaderboard = () => {
                                     key={i}
                                     number={i + 1}
                                     name={entry.nickname ? entry.nickname : entry.user}
-                                    fuelAdded={utils.fromWei(entry.fuelAdded)}
+                                    fuelAdded={new Big(utils.fromWei(entry.fuelAdded)).toFixed(4)}
                                     thisUser={wallet.status === 'connected' ? wallet.account === entry.user : false}
                                 />
                             )

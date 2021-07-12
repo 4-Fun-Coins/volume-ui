@@ -55,15 +55,23 @@ export async function getSortedLeaderboard() {
             if (err)
                 reject(err);
 
-            volume.methods.getAllUsersFuelAdded(0, web3.utils.toWei(len)).call((error, allUsersFuel) => {
+            volume.methods.getAllUsersFuelAdded(0, web3.utils.toWei(len)).call(async (error, allUsersFuel) => {
                 if (error)
                     reject(error);
 
-                // copy arr
-                let dumArr = [];
-                for (let i = 0; i < allUsersFuel.length; i++) {
-                    dumArr.push(allUsersFuel[i]);
-                }
+                // promise mapping
+                let dumArr = await Promise.all(
+                    allUsersFuel.map(async (user) => {
+                        const userNickname = await volume.methods.getNicknameForAddress(user.user).call();
+
+                        return {
+                            user: user.user,
+                            fuelAdded: user.fuelAdded,
+                            nickname: userNickname
+                        }
+                    })
+                );
+
                 dumArr = dumArr.sort(sortFunction);
                 resolve(dumArr.slice(0, dumArr.length - 1));
             });
@@ -117,11 +125,50 @@ export function getDataForRefuel(amount) {
 }
 
 export async function getNickname(address) {
-    return "d";
+    const volume = new web3.eth.Contract(volumeABI, volumeAddress);
+    return new Promise((resolve, reject) => {
+        volume.methods.getNicknameForAddress(address).call((err, nickname) => {
+            if (err)
+                reject(err);
+
+            resolve(nickname);
+        });
+    });
 }
 
 export async function checkNickname(nickname) {
-    return true;
+    const volume = new web3.eth.Contract(volumeABI, volumeAddress);
+    return new Promise((resolve, reject) => {
+        volume.methods.canClaimNickname(nickname).call((err, canClaim) => {
+            if (err)
+                reject(err);
+
+            resolve(canClaim);
+        });
+    });
+}
+
+export function getDataForClaimNickname(nickname) {
+    const volume = new web3.eth.Contract(volumeABI, volumeAddress);
+    return volume.methods.claimNickname(nickname).encodeABI();
+}
+
+export async function estimateGasForClaim(_from, nickname) {
+    console.log(nickname);
+    return new Promise((resolve, reject) => {
+        const volume = new web3.eth.Contract(volumeABI, volumeAddress);
+        web3.eth.getGasPrice().then((_gasPrice) => {
+            volume.methods.claimNickname(nickname).estimateGas({
+                from: _from,
+                gasPrice: _gasPrice
+            }, (error, estPrice) => {
+                if (error)
+                    reject(error);
+
+                resolve(estPrice);
+            });
+        });
+    });
 }
 
 // === HELPER FUNCTIONS === //
