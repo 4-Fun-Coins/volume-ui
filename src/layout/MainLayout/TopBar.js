@@ -18,7 +18,6 @@ import {useWallet} from "use-wallet";
 import {useHistory,useLocation} from 'react-router-dom';
 import {ROUTES_NAMES} from "../../constants";
 import MenuIcon from "@material-ui/icons/Menu";
-import ProfileDialog from "../../components/ProfileDialog";
 
 const drawerWidth = 240;
 
