@@ -13,11 +13,18 @@ import {
 import React, {useEffect, useState} from "react";
 import Blockies from "react-blockies";
 import {useWallet} from "use-wallet";
-import {checkNickname, estimateGasForClaim, getDataForClaimNickname, getNickname} from "../utils/volume-core";
+import {
+    checkNickname,
+    estimateGasForClaim,
+    getAllMilestonesAndFuelForAddress,
+    getDataForClaimNickname,
+    getNickname
+} from "../utils/volume-core";
 import {Edit2, Search} from "react-feather";
 import {CheckSharp, LocalGasStation} from "@material-ui/icons";
 import {volumeAddress} from "../utils/config";
 import {useSnackbar} from "notistack";
+
 const Big = require('big-js');
 
 const styles = makeStyles((theme) => ({
@@ -30,14 +37,15 @@ const styles = makeStyles((theme) => ({
         paddingBottom: 10,
         paddingTop: 80,
         backgroundColor: 'rgba(10, 10, 10, 0.6)',
-        [theme.breakpoints.down('lg')]: {
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%'
-        },
-        [theme.breakpoints.up('lg')]: {
-            height: '100vh'
-        }
+        // [theme.breakpoints.down('lg')]: { // Implement this when we have > 6 milestones
+        //     display: 'flex',
+        //     flexDirection: 'column',
+        //     height: '100%'
+        // },
+        // [theme.breakpoints.up('lg')]: {
+        //     height: '100vh'
+        // }
+        height: '100vh'
     },
     paper: {
         padding: '6px 16px',
@@ -116,7 +124,8 @@ const styles = makeStyles((theme) => ({
         fontSize: 18,
         color: theme.palette.text.paragraph,
         margin: '0.5em',
-        textAlign: "left"
+        textAlign: "left",
+        textTransform: "capitalize"
     },
     statsDivider: {
         height: '0.05em',
@@ -147,13 +156,23 @@ const Profile = () => {
     const [busy, setBusy] = useState(false);
 
     // Stats
+    const [milestonesInit, setMilestonesInit] = useState(false);
+    const [milestones, setMilestones] = useState([]);
     const [totalFuelAdded, setTotalFuelAdded] = useState(new Big(0));
-    const [fuelToMars, setFuelToMars] = useState(new Big(0));
-    const [fuelToJupiter, setFuelToJupiter] = useState(new Big(0));
-    const [fuelToSaturn, setFuelToSaturn] = useState(new Big(0));
-    const [fuelToUranus, setFuelToUranus] = useState(new Big(0));
-    const [fuelToNeptune, setFuelToNeptune] = useState(new Big(0));
-    const [fuelToPluto, setFuelToPluto] = useState(new Big(0));
+
+    useEffect(() => {
+        if (wallet.status === 'connected' && !milestonesInit) {
+            getAllMilestonesAndFuelForAddress(wallet.account).then((milestones) => {
+                let total = new Big(0);
+                for (let i = 0; i < milestones.length; i++) {
+                    total = total.plus(milestones[i].fuelAdded);
+                }
+                setTotalFuelAdded(total.toFixed(4));
+                setMilestones(milestones);
+            });
+            setMilestonesInit(true);
+        }
+    }, [milestonesInit, wallet.status]);
 
     useEffect(() => {
         if (wallet.status === 'connected' && !currentNickname) {
@@ -166,10 +185,10 @@ const Profile = () => {
     }, [wallet.status, currentNickname]);
 
     useEffect(() => {
-        if (currentNickname !== undefined && wallet.status === 'connected') {
+        if (currentNickname !== undefined && wallet.status === 'connected' && milestonesInit) {
             setProfileInit(true);
         }
-    }, [currentNickname, wallet.status]);
+    }, [currentNickname, wallet.status, milestonesInit]);
 
     const handleClick = async () => {
         // TODO - display nice box to show tx hash
@@ -256,14 +275,14 @@ const Profile = () => {
 
                             profileInit &&
                             <Grid container item xs={10} justify={"center"}>
-                                <Grid container item xs={12} md={2} style={{padding: '1em'}}>
+                                <Grid container item xs={10} md={2} style={{padding: '1em'}}>
                                     <Blockies
                                         scale={10}
                                         seed={wallet.status === 'connected' ? wallet.account : ""}
                                     />
                                 </Grid>
 
-                                <Grid container item xs={12} md={8} lg={8} style={{padding: '1em'}} alignItems={"flex-start"}>
+                                <Grid container item xs={10} md={8} lg={8} style={{padding: '1em'}} alignItems={"flex-start"}>
                                     <Grid container item xs={10} sm={8} md={6} alignItems={"center"}>
                                         {
                                             editNickname
@@ -343,58 +362,33 @@ const Profile = () => {
                                     </Typography>
                                 </Grid>
 
-                                <StatEntry
-                                    milestone={'Total:'}
-                                    amount={totalFuelAdded.toString()}
-                                    mobile={mobile}
-                                />
+                                {
+                                    profileInit &&
+                                        <>
+                                            <StatEntry
+                                                milestone={'Total'}
+                                                amount={totalFuelAdded.toString()}
+                                                mobile={mobile}
+                                            />
 
-                                <Grid item xs={12}>
-                                    <Divider className={classes.statsDivider} variant={"middle"}/>
-                                </Grid>
+                                            <Grid item xs={12}>
+                                                <Divider className={classes.statsDivider} variant={"middle"}/>
+                                            </Grid>
 
-                                {/*Mars*/}
-                                <StatEntry
-                                    milestone={'Earth to Mars:'}
-                                    amount={fuelToMars.toString()}
-                                    mobile={mobile}
-                                />
-
-                                {/*Jupiter*/}
-                                <StatEntry
-                                    milestone={'Mars to Jupiter:'}
-                                    amount={fuelToJupiter.toString()}
-                                    mobile={mobile}
-                                />
-
-                                {/*Saturn*/}
-                                <StatEntry
-                                    milestone={'Jupiter to Saturn:'}
-                                    amount={fuelToSaturn.toString()}
-                                    mobile={mobile}
-                                />
-
-                                {/*Uranus*/}
-                                <StatEntry
-                                    milestone={'Saturn to Uranus:'}
-                                    amount={fuelToUranus.toString()}
-                                    mobile={mobile}
-                                />
-
-                                {/*Neptune*/}
-                                <StatEntry
-                                    milestone={'Uranus to Neptune:'}
-                                    amount={fuelToNeptune.toString()}
-                                    mobile={mobile}
-                                />
-
-                                {/*Pluto*/}
-                                <StatEntry
-                                    milestone={'Neptune to Pluto:'}
-                                    amount={fuelToPluto.toString()}
-                                    mobile={mobile}
-                                />
-
+                                            {
+                                                milestones.map((milestone) => {
+                                                    return (
+                                                        <StatEntry
+                                                            key={milestone.name}
+                                                            mobile={mobile}
+                                                            milestone={milestone.name}
+                                                            amount={new Big(milestone.fuelAdded).toFixed(4).toString()}
+                                                        />
+                                                    )
+                                                })
+                                            }
+                                        </>
+                                }
                             </Grid>
                         </Grid>
 

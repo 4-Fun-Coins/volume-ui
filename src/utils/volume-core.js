@@ -1,8 +1,12 @@
+import {VolumeJackpotABI} from "./volume-jackpot-abi";
+
 const Web3 = require('web3');
-const {volumeAddress, rpcUrl} = require('./config.js');
+const {volumeAddress, rpcUrl, volumeJackpotAddress} = require('./config.js');
 const Big = require('big.js');
+const {volumeABI} = require('./volume-abi');
+const {volumeJackpotABI} = require('./volume-jackpot-abi');
+
 let web3 = new Web3(rpcUrl);
-let {volumeABI} = require('./volume-abi');
 
 export async function getFuel() {
     return new Promise((resolve, reject) => {
@@ -154,7 +158,6 @@ export function getDataForClaimNickname(nickname) {
 }
 
 export async function estimateGasForClaim(_from, nickname) {
-    console.log(nickname);
     return new Promise((resolve, reject) => {
         const volume = new web3.eth.Contract(volumeABI, volumeAddress);
         web3.eth.getGasPrice().then((_gasPrice) => {
@@ -170,6 +173,31 @@ export async function estimateGasForClaim(_from, nickname) {
         });
     });
 }
+
+export async function getAllMilestonesAndFuelForAddress(address) {
+    return new Promise((resolve, reject) => {
+
+        const volumeJackpot = new web3.eth.Contract(VolumeJackpotABI, volumeJackpotAddress);
+        volumeJackpot.methods.getAllMilestones().call(async (err, milestones) => {
+            if (err)
+                reject(err);
+
+            resolve(await Promise.all(
+                milestones.map(async milestone => {
+                    const fuelAdded = await volumeJackpot.methods.getFuelAddedInMilestone(milestone.startBlock, address).call();
+                    console.log(fuelAdded);
+
+                    return {
+                        name: milestone.name,
+                        fuelAdded: web3.utils.fromWei(fuelAdded)
+                    }
+                })
+            ));
+        });
+    });
+}
+
+
 
 // === HELPER FUNCTIONS === //
 
