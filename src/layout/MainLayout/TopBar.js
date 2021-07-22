@@ -98,13 +98,12 @@ const TopBar = ({className, ...rest}) => {
     }
 
     useEffect(() => {
-        console.log(wallet);
         if (wallet.error && wallet.error.name === "ChainUnsupportedError") {
             setWrongNet(true);
         } else {
             setWrongNet(false);
         }
-    }, [wallet.error, wallet.account]);
+    }, [wallet.error]);
 
     useEffect(() => {
         if (wallet.account){
