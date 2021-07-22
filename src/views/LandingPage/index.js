@@ -1,9 +1,9 @@
 import Page from "../../components/Page";
-import {Container, makeStyles} from "@material-ui/core";
+import {Container, Grid, makeStyles} from "@material-ui/core";
 import About from "../../components/About";
 import Footer from "../../components/Footer";
-import NewSpace from "../../components/NewSpace";
 import Dash from "../../components/Dash";
+import {useEffect, useState} from "react";
 
 const landingStyles = makeStyles((theme) => ({
     root: {
@@ -31,28 +31,33 @@ const landingStyles = makeStyles((theme) => ({
 const LandingPage = () => {
     const classes = landingStyles();
 
+    const [visited, setVisited] = useState(false);
+
+    useEffect(() => {
+        setVisited(localStorage.getItem('visited') === 'true');
+        localStorage.setItem('visited', "true");
+    }, [visited]);
+
     return (
         <Page
             className={classes.root}
             title={'Home'}
         >
-            <div className={classes.universeBackground}>
-                <NewSpace />
-            </div>
+            <Grid container item direction={visited ? "column-reverse" : "column"}>
+                <Container
+                    maxWidth={false}
+                    className={classes.contentBackground}
+                >
+                    <About/>
+                </Container>
 
-            <Container
-                maxWidth={false}
-                className={classes.contentBackground}
-            >
-                <About/>
-            </Container>
-
-            <Container
-                maxWidth={false}
-                className={classes.contentBackground}
-            >
-                <Dash/>
-            </Container>
+                <Container
+                    maxWidth={false}
+                    className={classes.contentBackground}
+                >
+                    <Dash/>
+                </Container>
+            </Grid>
 
             <Container
                 maxWidth={false}

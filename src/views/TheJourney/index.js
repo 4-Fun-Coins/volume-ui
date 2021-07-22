@@ -1,49 +1,135 @@
 import Page from "../../components/Page";
-import {Container, makeStyles} from "@material-ui/core";
-import About from "../../components/About";
-import Stats from "../../components/Stats";
-import Footer from "../../components/Footer";
-import NewSpace from "../../components/NewSpace";
-import Dash from "../../components/Dash";
+import {Container, Grid, Hidden, makeStyles, useMediaQuery, useTheme} from "@material-ui/core";
+import {
+    Timeline,
+    TimelineConnector, TimelineContent,
+    TimelineDot,
+    TimelineItem,
+    TimelineOppositeContent,
+    TimelineSeparator
+} from "@material-ui/lab";
+import TimelineEntry from "../../components/TimelineEntry";
+import PlanetIcon from "../../components/CustomIcons/PlanetIcon";
+import {useEffect, useState} from "react";
+import {getActiveMilestone, getAllMilestones, getCurrentBlock} from "../../utils/volume-core";
+import LoadingScreen from "../../components/LoadingScreen";
 
-const landingStyles = makeStyles((theme) => ({
+const journeyStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
-        height: '100%'
-    },
-    universeBackground: {
-        position: "fixed",
-        zIndex: -1,
-        filter: 'blur(3px)'
+        height: '100%',
     },
     contentBackground: {
-        backgroundColor: 'rgba(10, 10, 10, 0.6)',
         paddingBottom: 10,
         paddingTop: 80,
+        backgroundColor: 'rgba(10, 10, 10, 0.6)',
+        // [theme.breakpoints.down('md')]: { // Uncomment this when content length exceeds 100vh on mobile
+        //     display: 'flex',
+        //     height: '100%',
+        // },
+        // [theme.breakpoints.up('md')]: {
+        //     height: '100vh'
+        // },
+
+        height: '100vh' // Remove this when content length exceeds 100vh
     },
-    footerBackground: {
-        backgroundColor: 'rgba(10, 10, 10, 0.3)',
-        paddingBottom: 10,
-        width: '100%'
+    paper: {
+        padding: '6px 16px',
+        backgroundColor: "#1d0134",
+        borderRadius: 12,
+    },
+    connector: {
+        backgroundColor: "#2981e6"
+    },
+    icon: {
+        height: 50,
+        width: 50
     }
 }));
 
-const LandingPage = () => {
-    const classes = landingStyles();
+const Journey = () => {
+    const classes = journeyStyles();
+
+    const [milestonesInit, setMilestonesInit] = useState(false);
+
+    const [milestones, setMilestones] = useState(undefined);
+    const [activeMilestone, setActiveMilestone] = useState(undefined);
+
+    const mobile = useMediaQuery(useTheme().breakpoints.down('sm'));
+
+    useEffect(() => {
+        if (!milestones) {
+            getAllMilestones().then(milestones => {
+                setMilestones(milestones.slice(1, milestones.length));
+            });
+        }
+    }, [milestones]);
+
+    useEffect(() => {
+        if (!activeMilestone) {
+            // get current block
+            getActiveMilestone().then((milestone) => {
+                setActiveMilestone(milestone);
+            });
+        }
+    }, [activeMilestone]);
+
+    useEffect(() => {
+        if (milestones !== undefined && activeMilestone !== undefined) {
+            setMilestonesInit(true);
+        }
+    }, [milestones, activeMilestone]);
 
     return (
         <Page
             className={classes.root}
             title={'Home'}
         >
-            <div className={classes.universeBackground}>
-                <NewSpace />
-            </div>
+            <Container className={classes.contentBackground} maxWidth={"xl"}>
+                <Grid container item xs={12} style={{display: "flex", width: '100%', height: '100%'}}>
+                    {
+                        !milestonesInit &&
+                            <Grid container item justify={"center"} xs={12}>
+                                <LoadingScreen transparent/>
+                            </Grid>
+                    }
+                    {
+                        milestonesInit &&
+                        <Timeline align={mobile ? "right" : "alternate"}>
+                            {
+                                milestones.map((milestone) => {
 
+                                    return (
+                                        <TimelineItem key={milestone.name}>
 
+                                            <TimelineOppositeContent>
+                                                <TimelineEntry milestone={milestone}/>
+                                            </TimelineOppositeContent>
+
+                                            <TimelineSeparator>
+                                                <TimelineDot variant={milestone.name === activeMilestone.name ? "default" : "outlined"} color={"secondary"}>
+                                                    <PlanetIcon className={classes.icon} filled={milestone.name === activeMilestone.name}/>
+                                                </TimelineDot>
+                                                <TimelineConnector className={classes.connector}/>
+                                            </TimelineSeparator>
+
+                                            <Hidden smDown>
+                                                <TimelineContent>
+                                                    {/*    Mars NFT & content here  */}
+                                                </TimelineContent>
+                                            </Hidden>
+
+                                        </TimelineItem>
+                                    )
+                                })
+                            }
+                        </Timeline>
+                    }
+                </Grid>
+            </Container>
         </Page>
     )
 }
 
-export default LandingPage;
+export default Journey;

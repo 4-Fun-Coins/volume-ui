@@ -1,7 +1,6 @@
 module.exports = {
-    volumeTestAddress: '0x8c590BF25Dc6c6EA45353B8011B6712a3B0bd6Ec', // This is the MainNet address for Volume
-    testVolumeAddress: '0x8c590BF25Dc6c6EA45353B8011B6712a3B0bd6Ec', // This is currently the testnet address for TestVolume
-    localUrl: 'ws://localhost:8545',
-    testNetUrl: 'https://kovan.poa.network/',
-    mainNetUrl: 'https://bsc-dataseed1.binance.org'
+    volumeAddress: '0xD934AfDCe00240B9878521083989453c9A63B4d7', // Change this to main/test depending on your use case
+    volumeJackpotAddress: '0xABdb4c4a4849ad26DB7FC9F7D352174B83F77623',
+    rpcUrl: 'https://kovan.poa.network/', // 'https://bsc-dataseed1.binance.org'
+    chainId: 42
 }
