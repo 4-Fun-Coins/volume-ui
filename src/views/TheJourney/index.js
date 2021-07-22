@@ -11,7 +11,7 @@ import {
 import TimelineEntry from "../../components/TimelineEntry";
 import PlanetIcon from "../../components/CustomIcons/PlanetIcon";
 import {useEffect, useState} from "react";
-import {getAllMilestones, getCurrentBlock} from "../../utils/volume-core";
+import {getActiveMilestone, getAllMilestones, getCurrentBlock} from "../../utils/volume-core";
 import LoadingScreen from "../../components/LoadingScreen";
 
 const journeyStyles = makeStyles((theme) => ({
@@ -54,7 +54,7 @@ const Journey = () => {
     const [milestonesInit, setMilestonesInit] = useState(false);
 
     const [milestones, setMilestones] = useState(undefined);
-    const [currentBlock, setCurrentBlock] = useState(undefined);
+    const [activeMilestone, setActiveMilestone] = useState(undefined);
 
     const mobile = useMediaQuery(useTheme().breakpoints.down('sm'));
 
@@ -67,19 +67,19 @@ const Journey = () => {
     }, [milestones]);
 
     useEffect(() => {
-        if (!currentBlock) {
+        if (!activeMilestone) {
             // get current block
-            getCurrentBlock().then((block) => {
-                setCurrentBlock(block.number);
+            getActiveMilestone().then((milestone) => {
+                setActiveMilestone(milestone);
             });
         }
-    }, [currentBlock]);
+    }, [activeMilestone]);
 
     useEffect(() => {
-        if (milestones !== undefined && currentBlock !== undefined) {
+        if (milestones !== undefined && activeMilestone !== undefined) {
             setMilestonesInit(true);
         }
-    }, [milestones, currentBlock]);
+    }, [milestones, activeMilestone]);
 
     return (
         <Page
@@ -108,8 +108,8 @@ const Journey = () => {
                                             </TimelineOppositeContent>
 
                                             <TimelineSeparator>
-                                                <TimelineDot variant={currentBlock < milestone.endBlock ? "default" : "outlined"} color={"secondary"}>
-                                                    <PlanetIcon className={classes.icon} filled={currentBlock < milestone.endBlock}/>
+                                                <TimelineDot variant={milestone.name === activeMilestone.name ? "default" : "outlined"} color={"secondary"}>
+                                                    <PlanetIcon className={classes.icon} filled={milestone.name === activeMilestone.name}/>
                                                 </TimelineDot>
                                                 <TimelineConnector className={classes.connector}/>
                                             </TimelineSeparator>

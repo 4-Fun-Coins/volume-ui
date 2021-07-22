@@ -208,8 +208,16 @@ export async function getAllMilestones() {
     })
 }
 
-export async function getCurrentBlock() {
-    return await web3.eth.getBlock("latest");
+export async function getActiveMilestone() {
+    return new Promise((resolve, reject) => {
+        const volumeJackpot = new web3.eth.Contract(VolumeJackpotABI, volumeJackpotAddress);
+        volumeJackpot.methods.getCurrentActiveMilestone().call((err, milestone) => {
+            if (err)
+                reject(err);
+
+            resolve(milestone);
+        });
+    })
 }
 
 export async function getAllContributorsForMilestone(id) {
