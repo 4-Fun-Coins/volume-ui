@@ -94,13 +94,13 @@ const TimelineEntry = ({milestone}) => {
                         <Grid container item xs={12}>
                             <Grid item xs={12}>
                                 <Typography variant={"body1"} className={classes.text}>
-                                    Fuel added: {new Big(web3.utils.fromWei(milestone.totalFuelAdded)).toFixed(4)} blocks
+                                    Total Fuel Added: {new Big(web3.utils.fromWei(milestone.totalFuelAdded)).toFixed(4)} blocks
                                 </Typography>
                             </Grid>
 
                             <Grid item xs={12}>
                                 <Typography variant={"body1"} className={classes.text}>
-                                    Jackpot value: {new Big(web3.utils.fromWei(milestone.amountInPot)).toFixed(4)} VOL
+                                    Jackpot Value: {new Big(web3.utils.fromWei(milestone.amountInPot)).toFixed(4)} VOL
                                 </Typography>
                             </Grid>
                         </Grid>
