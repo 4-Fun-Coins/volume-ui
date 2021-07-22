@@ -217,8 +217,6 @@ const Profile = () => {
                     chainId: 42
                 }
 
-                console.log('here');
-
                 wallet.ethereum.request({
                     method: 'eth_sendTransaction',
                     params: [transactionParams]
