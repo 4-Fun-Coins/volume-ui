@@ -19,6 +19,7 @@ import {useHistory,useLocation} from 'react-router-dom';
 import {ROUTES_NAMES} from "../../constants";
 import MenuIcon from "@material-ui/icons/Menu";
 import {chainId} from '../../utils/config';
+import {User} from "react-feather";
 
 const drawerWidth = 240;
 
@@ -59,6 +60,9 @@ const topBarStyles = makeStyles((theme) => ({
     drawerListItem: {
         color: theme.palette.twinkle.main,
         paddingLeft: '2em'
+    },
+    userIcon: {
+        color: theme.palette.twinkle.main
     }
 }));
 
@@ -153,6 +157,7 @@ const TopBar = ({className, ...rest}) => {
                         if (wallet.status !== 'connected')
                             wallet.connect();
                     }}>
+                        {wallet.status === 'connected' && <User className={classes.userIcon}/>}
                         <Typography variant={"h4"} className={classes.volText}>
                             {
                                 wallet.status === 'connected'
@@ -211,6 +216,7 @@ const TopBar = ({className, ...rest}) => {
                                 history.push(ROUTES_NAMES.USER_PROFILE);
                             }
                         }}>
+                            {wallet.status === 'connected' && <User className={classes.userIcon}/>}
                             <Typography variant={"h4"} className={classes.volText}>
                                 {
                                     wallet.status === 'connected'
