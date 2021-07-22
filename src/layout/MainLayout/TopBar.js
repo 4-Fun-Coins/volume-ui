@@ -18,6 +18,7 @@ import {useWallet} from "use-wallet";
 import {useHistory,useLocation} from 'react-router-dom';
 import {ROUTES_NAMES} from "../../constants";
 import MenuIcon from "@material-ui/icons/Menu";
+import {chainId} from '../../utils/config';
 
 const drawerWidth = 240;
 
@@ -35,7 +36,10 @@ const topBarStyles = makeStyles((theme) => ({
     volText: {
         color: theme.palette.twinkle.main,
         fontSize: '1.5em',
-        marginRight: '2em'
+    },
+    wrongNetText: {
+        color: theme.palette.primary.main,
+        fontSize: '1em',
     },
     boldText: {
         color: theme.palette.twinkle.main,
@@ -43,7 +47,8 @@ const topBarStyles = makeStyles((theme) => ({
         textDecoration: "underline"
     },
     button: {
-        padding: '1em'
+        padding: '1em',
+        marginLeft: '0.5em'
     },
     emptyBar: theme.mixins.toolbar,
     drawerPaper: {
@@ -62,7 +67,11 @@ const TopBar = ({className, ...rest}) => {
     const wallet = useWallet();
     const history = useHistory();
     const location = useLocation();
-    const locations = [ROUTES_NAMES.HOME,ROUTES_NAMES.JOURNEY,ROUTES_NAMES.REFUEL]
+    const locations = [ROUTES_NAMES.HOME,ROUTES_NAMES.JOURNEY,ROUTES_NAMES.REFUEL];
+
+    const [wrongNet, setWrongNet] = useState(false);
+    const [address, setAddress] = useState(undefined);
+
     // ========================== Profile
     const [activeTab ,  setActiveTab] = useState(0);
 
@@ -83,6 +92,22 @@ const TopBar = ({className, ...rest}) => {
     const toRefuel = () => {
         history.push(ROUTES_NAMES.REFUEL);
     }
+
+    useEffect(() => {
+        console.log(wallet);
+        if (wallet.error && wallet.error.name === "ChainUnsupportedError") {
+            setWrongNet(true);
+        } else {
+            setWrongNet(false);
+        }
+    }, [wallet.error, wallet.account]);
+
+    useEffect(() => {
+        if (wallet.account){
+            setAddress(`${wallet.account.slice(0, 6)}...${wallet.account.slice(wallet.account.length-4, wallet.account.length)}`);
+            setWrongNet(false);
+        }
+    }, [wallet.account]);
 
     // ========================== Mobile optimization
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -112,15 +137,26 @@ const TopBar = ({className, ...rest}) => {
             </List>
             <Divider />
             <Grid container>
+                {
+                    wrongNet &&
+                    <Grid container item xs={12} justify={"center"}>
+                        <Button variant={"outlined"} className={classes.button} style={{marginTop: '0.5em'}}>
+                            <Typography variant={"body1"} className={classes.wrongNetText}>
+                                Wrong Network
+                            </Typography>
+                        </Button>
+                    </Grid>
+                }
+
                 <Grid container item xs={12} justify={"center"}>
-                    <Button variant={"text"} className={classes.button} onClick={() => {
+                    <Button variant={"text"} className={classes.button} style={{marginTop: '0.5em'}} onClick={() => {
                         if (wallet.status !== 'connected')
                             wallet.connect();
                     }}>
                         <Typography variant={"h4"} className={classes.volText}>
                             {
                                 wallet.status === 'connected'
-                                    ? `${wallet.account.slice(0, 6)}...${wallet.account.slice(wallet.account.length-4, wallet.account.length)}`
+                                    ? address
                                     : 'Connect'
                             }
                         </Typography>
@@ -157,6 +193,16 @@ const TopBar = ({className, ...rest}) => {
                             <Tab label="Direct Refuel" />
                         </Tabs>
 
+                        {
+                            wrongNet &&
+                            <Button variant={"outlined"} className={classes.button}>
+                                <Typography variant={"body1"} className={classes.wrongNetText}>
+                                    Wrong Network
+                                </Typography>
+                            </Button>
+                        }
+
+
                         <Button variant={"text"} className={classes.button} onClick={() => {
                             if (wallet.status !== 'connected')
                                 wallet.connect();
@@ -168,7 +214,7 @@ const TopBar = ({className, ...rest}) => {
                             <Typography variant={"h4"} className={classes.volText}>
                                 {
                                     wallet.status === 'connected'
-                                        ? `${wallet.account.slice(0, 6)}...${wallet.account.slice(wallet.account.length-4, wallet.account.length)}`
+                                        ? address
                                         : 'Connect'
                                 }
                             </Typography>
