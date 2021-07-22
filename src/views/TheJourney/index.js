@@ -10,7 +10,9 @@ import {
 } from "@material-ui/lab";
 import TimelineEntry from "../../components/TimelineEntry";
 import PlanetIcon from "../../components/CustomIcons/PlanetIcon";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {getAllMilestones, getCurrentBlock} from "../../utils/volume-core";
+import LoadingScreen from "../../components/LoadingScreen";
 
 const journeyStyles = makeStyles((theme) => ({
     root: {
@@ -22,13 +24,15 @@ const journeyStyles = makeStyles((theme) => ({
         paddingBottom: 10,
         paddingTop: 80,
         backgroundColor: 'rgba(10, 10, 10, 0.6)',
-        [theme.breakpoints.down('md')]: {
-            display: 'flex',
-            height: '100%',
-        },
-        [theme.breakpoints.up('md')]: {
-            height: '100vh'
-        }
+        // [theme.breakpoints.down('md')]: { // Uncomment this when content length exceeds 100vh on mobile
+        //     display: 'flex',
+        //     height: '100%',
+        // },
+        // [theme.breakpoints.up('md')]: {
+        //     height: '100vh'
+        // },
+
+        height: '100vh' // Remove this when content length exceeds 100vh
     },
     paper: {
         padding: '6px 16px',
@@ -47,14 +51,35 @@ const journeyStyles = makeStyles((theme) => ({
 const Journey = () => {
     const classes = journeyStyles();
 
-    const [mars, setMars] = useState(false);
-    const [jupiter, setJupiter] = useState(false);
-    const [saturn, setSaturn] = useState(false);
-    const [uranus, setUranus] = useState(false);
-    const [neptune, setNeptune] = useState(false);
-    const [pluto, setPluto] = useState(false);
+    const [milestonesInit, setMilestonesInit] = useState(false);
+
+    const [milestones, setMilestones] = useState(undefined);
+    const [currentBlock, setCurrentBlock] = useState(undefined);
 
     const mobile = useMediaQuery(useTheme().breakpoints.down('sm'));
+
+    useEffect(() => {
+        if (!milestones) {
+            getAllMilestones().then(milestones => {
+                setMilestones(milestones.slice(1, milestones.length));
+            });
+        }
+    }, [milestones]);
+
+    useEffect(() => {
+        if (!currentBlock) {
+            // get current block
+            getCurrentBlock().then((block) => {
+                setCurrentBlock(block.number);
+            });
+        }
+    }, [currentBlock]);
+
+    useEffect(() => {
+        if (milestones !== undefined && currentBlock !== undefined) {
+            setMilestonesInit(true);
+        }
+    }, [milestones, currentBlock]);
 
     return (
         <Page
@@ -63,145 +88,44 @@ const Journey = () => {
         >
             <Container className={classes.contentBackground} maxWidth={"xl"}>
                 <Grid container item xs={12} style={{display: "flex", width: '100%', height: '100%'}}>
-                    <Timeline align={mobile ? "right" : "alternate"}>
-                        {/*     Mars    */}
-                        <TimelineItem>
+                    {
+                        !milestonesInit &&
+                            <Grid container item justify={"center"} xs={12}>
+                                <LoadingScreen transparent/>
+                            </Grid>
+                    }
+                    {
+                        milestonesInit &&
+                        <Timeline align={mobile ? "right" : "alternate"}>
+                            {
+                                milestones.map((milestone) => {
 
-                            <TimelineOppositeContent>
-                                <TimelineEntry heading={"Mars"}
-                                               text={"No diamonds here"}/>
-                            </TimelineOppositeContent>
+                                    return (
+                                        <TimelineItem key={milestone.name}>
 
-                            <TimelineSeparator>
-                                <TimelineDot variant={mars ? "default" : "outlined"} color={"secondary"}>
-                                    <PlanetIcon className={classes.icon} filled={mars}/>
-                                </TimelineDot>
-                                <TimelineConnector className={classes.connector}/>
-                            </TimelineSeparator>
+                                            <TimelineOppositeContent>
+                                                <TimelineEntry milestone={milestone}/>
+                                            </TimelineOppositeContent>
 
-                            <Hidden smDown>
-                                <TimelineContent>
-                                    {/*    Mars NFT & content here  */}
-                                </TimelineContent>
-                            </Hidden>
+                                            <TimelineSeparator>
+                                                <TimelineDot variant={currentBlock < milestone.endBlock ? "default" : "outlined"} color={"secondary"}>
+                                                    <PlanetIcon className={classes.icon} filled={currentBlock < milestone.endBlock}/>
+                                                </TimelineDot>
+                                                <TimelineConnector className={classes.connector}/>
+                                            </TimelineSeparator>
 
-                        </TimelineItem>
+                                            <Hidden smDown>
+                                                <TimelineContent>
+                                                    {/*    Mars NFT & content here  */}
+                                                </TimelineContent>
+                                            </Hidden>
 
-                        {/*     Jupiter    */}
-                        <TimelineItem>
-
-                            <TimelineOppositeContent>
-                                <TimelineEntry heading={"Jupiter"}
-                                               text={"Some text about Jupiter to fill the gaping void in my soul..."}/>
-                            </TimelineOppositeContent>
-
-                            <TimelineSeparator>
-                                <TimelineDot variant={jupiter ? "default" : "outlined"} color={"secondary"}>
-                                    <PlanetIcon className={classes.icon} filled={jupiter}/>
-                                </TimelineDot>
-                                <TimelineConnector className={classes.connector}/>
-                            </TimelineSeparator>
-
-                            <Hidden smDown>
-                                <TimelineContent>
-                                    {/*    Jupiter NFT & content here  */}
-                                </TimelineContent>
-                            </Hidden>
-
-                        </TimelineItem>
-
-                        {/*     Saturn    */}
-                        <TimelineItem>
-
-                            <TimelineOppositeContent>
-                                <TimelineEntry heading={"Saturn"}
-                                               text={"I know you can see me little one."}/>
-                            </TimelineOppositeContent>
-
-                            <TimelineSeparator>
-                                <TimelineDot variant={saturn ? "default" : "outlined"} color={"secondary"}>
-                                    <PlanetIcon className={classes.icon} filled={saturn}/>
-                                </TimelineDot>
-                                <TimelineConnector className={classes.connector}/>
-                            </TimelineSeparator>
-
-                            <Hidden smDown>
-                                <TimelineContent>
-                                    {/*    Saturn NFT & content here  */}
-                                </TimelineContent>
-                            </Hidden>
-
-                        </TimelineItem>
-
-                        {/*     Uranus    */}
-                        <TimelineItem>
-
-                            <TimelineOppositeContent>
-                                <TimelineEntry heading={"Uranus"}
-                                               text={"There is an anus pun here somewhere..."}/>
-                            </TimelineOppositeContent>
-
-                            <TimelineSeparator>
-                                <TimelineDot variant={uranus ? "default" : "outlined"} color={"secondary"}>
-                                    <PlanetIcon className={classes.icon} filled={uranus}/>
-                                </TimelineDot>
-                                <TimelineConnector className={classes.connector}/>
-                            </TimelineSeparator>
-
-                            <Hidden smDown>
-                                <TimelineContent>
-                                    {/*    Uranus NFT & content here  */}
-                                </TimelineContent>
-                            </Hidden>
-
-                        </TimelineItem>
-
-                        {/*     Neptune    */}
-                        <TimelineItem>
-
-                            <TimelineOppositeContent>
-                                <TimelineEntry heading={"Neptune"}
-                                               text={"I'm the smallest gas giant, but I can bring the biggest house down!"}/>
-                            </TimelineOppositeContent>
-
-                            <TimelineSeparator>
-                                <TimelineDot variant={neptune ? "default" : "outlined"} color={"secondary"}>
-                                    <PlanetIcon className={classes.icon} filled={neptune}/>
-                                </TimelineDot>
-                                <TimelineConnector className={classes.connector}/>
-                            </TimelineSeparator>
-
-                            <Hidden smDown>
-                                <TimelineContent>
-                                    {/*    Neptune NFT & content here  */}
-                                </TimelineContent>
-                            </Hidden>
-
-                        </TimelineItem>
-
-                        {/*     Pluto    */}
-                        <TimelineItem>
-
-                            <TimelineOppositeContent>
-                                <TimelineEntry heading={"Pluto"}
-                                               text={"They say size doesn't matter and I'm here to prove it baby"}/>
-                            </TimelineOppositeContent>
-
-                            <TimelineSeparator>
-                                <TimelineDot variant={pluto ? "default" : "outlined"} color={"secondary"}>
-                                    <PlanetIcon className={classes.icon} filled={pluto}/>
-                                </TimelineDot>
-                            </TimelineSeparator>
-
-                            <Hidden smDown>
-                                <TimelineContent>
-                                    {/*    Pluto NFT & content here  */}
-                                </TimelineContent>
-                            </Hidden>
-
-                        </TimelineItem>
-
-                    </Timeline>
+                                        </TimelineItem>
+                                    )
+                                })
+                            }
+                        </Timeline>
+                    }
                 </Grid>
             </Container>
         </Page>
