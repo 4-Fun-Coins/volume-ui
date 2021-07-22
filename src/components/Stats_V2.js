@@ -28,12 +28,12 @@ const Stats = () => {
     const wallet = useWallet();
 
     const [initGlobalStats, setInitGlobalStats] = useState(false);
-    const [globalBlocks, setGlobalBlocks] = useState(new Big(0));
+    const [globalBlocks, setGlobalBlocks] = useState(0);
     const [globalSeconds, setGlobalSeconds] = useState(new Big(0));
     const [globalError, setGlobalError] = useState(false);
 
     const [initUserStats, setInitUserStats] = useState(false);
-    const [userBlocks, setUserBlocks] = useState(new Big(0));
+    const [userBlocks, setUserBlocks] = useState(0);
     const [userSeconds, setUserSeconds] = useState(new Big(0));
     const [userError, setUserError] = useState(false);
 
@@ -41,8 +41,8 @@ const Stats = () => {
         if (!initGlobalStats) {
             // Fetch global stats
             getTotalFuelAdded().then((res) => {
-                setGlobalBlocks(new Big(res).toFixed(4));
-                setGlobalSeconds(new Big(res).times(3).toFixed(0).toString());
+                setGlobalBlocks(res);
+                setGlobalSeconds(new Big(res).times(5).toString());
                 //
             }).catch((err) => {
                 setGlobalError(true);
@@ -56,8 +56,8 @@ const Stats = () => {
         if (wallet.status === 'connected') {
             // Fetch the user stats here
             getFuelAddedForAddress(wallet.account).then((res) => {
-                setUserBlocks(new Big(res).toFixed(4));
-                setUserSeconds(new Big(res).times(3).toFixed(0).toString());
+                setUserBlocks(res);
+                setUserSeconds(new Big(res).times(5).toString());
                 // Set loading stats to false & initStats to true
             }).catch((err) => {
                 setUserError(true);
@@ -74,12 +74,6 @@ const Stats = () => {
             spacing={1}
             xs={12}
         >
-            {
-                !initGlobalStats &&
-                <Grid container item justify={"center"}>
-                    <LoadingScreen transparent/>
-                </Grid>
-            }
             {initGlobalStats &&
             <>
                 <Grid container item xs={12} justify={"center"}>

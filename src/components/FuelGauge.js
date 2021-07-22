@@ -30,7 +30,7 @@ const fuelGaugeStyles = makeStyles((theme) => ({
 const FuelGauge = () => {
     const classes = fuelGaugeStyles();
 
-    const initialFuel = 2592000;
+    const initialFuel = 6307200;
 
     const [initFuel, setInitFuel] = useState(false);
     const [fuel, setFuel] = useState(new Big(0));
@@ -41,7 +41,7 @@ const FuelGauge = () => {
             getFuel().then((res, rej) => {
                 if (!rej) {
                     setFuel(new Big(res));
-                    setMilliseconds(new Big(res).times(3000));
+                    setMilliseconds(new Big(res).times(5000));
                     setInitFuel(true);
                 }
             });
@@ -61,14 +61,16 @@ const FuelGauge = () => {
                 {   initFuel &&
                     <Gauge
                         min={0}
-                        max={initialFuel.toFixed(2)}
-                        value={fuel.toFixed(2)}
+                        max={initFuel}
+                        value={fuel}
                         units={"(blocks)"}
                         label={"Fuel Tank"}
                         date={Date.now() + Number(milliseconds)}
                     />
                 }
             </Grid>
+
+
         </Grid>
     );
 }

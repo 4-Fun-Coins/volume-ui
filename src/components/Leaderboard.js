@@ -7,8 +7,6 @@ import LeaderboardEntry from "./LeaderboardEntry";
 import {getSortedLeaderboard} from "../utils/volume-core";
 import {useWallet} from "use-wallet";
 import {utils} from "web3";
-import LoadingScreen from "./LoadingScreen";
-const Big = require('big.js');
 
 const leaderboardStyles = makeStyles((theme) => ({
     lbWrapper: {
@@ -35,21 +33,6 @@ const Leaderboard = () => {
 
     const [userLbPosition, setUserLbPosition] = useState(undefined);
 
-    const findUser = (address, lb) => {
-        for (let i = 0; i < lb.length; i++) {
-            if (lb[i].user === address) {
-                return {
-                    nickname: lb[i].nickname,
-                    user: lb[i].user,
-                    fuelAdded: lb[i].fuelAdded,
-                    position: i+1
-                };
-            }
-        }
-
-        return undefined;
-    }
-
     useEffect(() => {
         if (!lbInit) {
             // Load leaderboard here
@@ -68,7 +51,7 @@ const Leaderboard = () => {
                     let foundUser = false;
                     for (let i = 0; i < 10; i++) {
                         tempArr.push(sortedLeaderboard[i]);
-                        if (wallet.status === 'connected' && sortedLeaderboard[i].user === wallet.account) {
+                        if (wallet.status === 'connected' && sortedLeaderboard[i].user === wallet.address) {
                             foundUser = true;
                         }
                     }
@@ -76,22 +59,21 @@ const Leaderboard = () => {
                     // if we still did not find the user address, it might be somewhere else in the array
                     if (!foundUser) {
                         // Make sure it is in the array
-                        let user = findUser(wallet.account, sortedLeaderboard);
-                        if (wallet.status === 'connected' && user !== undefined) {
-                            setUserLbPosition({
-                                nickname: user.nickname,
-                                user: user.user,
-                                fuelAdded: user.fuelAdded,
-                                number: user.position
-                            });
+                        if (wallet.status === 'connected' && sortedLeaderboard.find(entry => {return entry.user === wallet.address})) {
+                            for (let i = 10; i < sortedLeaderboard.length; i++) {
+                                if (sortedLeaderboard[i].user === wallet.address) {
+                                    setUserLbPosition({
+                                        nickname: sortedLeaderboard[i].nickname,
+                                        user: sortedLeaderboard[i].user,
+                                        fuelAdded: sortedLeaderboard[i].fuelAdded,
+                                        number: i + 1
+                                    });
+                                }
+                            }
                         }
                     }
-
-                    setLeaderboard(tempArr);
                 }
                 setLbInit(true);
-            }).catch((err) => {
-                console.log(err);
             });
         }
     }, [lbInit]);
@@ -102,59 +84,48 @@ const Leaderboard = () => {
     }, [wallet.status]);
 
     return (
-        <Grid container item direction={"column"} justify={"space-evenly"} className={classes.lbWrapper} spacing={1}>
-            {
-                !lbInit &&
-                <LoadingScreen transparent/>
-            }
-            {
-                lbInit &&
-                <>
-                    <Grid container item justify={"center"} spacing={1}>
-                        <Typography className={classes.lbHeader}>
-                            Leaderboard
+            <Grid container item direction={"column"} justify={"space-evenly"} className={classes.lbWrapper} spacing={1}>
+                <Grid container item justify={"center"} spacing={1}>
+                    <Typography className={classes.lbHeader}>
+                        Leaderboard
+                    </Typography>
+                    <Grid item xs={12}>
+                        <Divider light={true} variant={"fullWidth"}/>
+                    </Grid>
+                </Grid>
+
+                <Grid container item direction={"row"} spacing={1}>
+                    <Grid container item xs={6}>
+                        <Typography className={classes.lbSubHeader}>
+                            Player Name
                         </Typography>
-                        <Grid item xs={12}>
-                            <Divider light={true} variant={"fullWidth"}/>
-                        </Grid>
                     </Grid>
 
-                    <Grid container item direction={"row"} spacing={1}>
-                        <Grid container item xs={6}>
-                            <Typography className={classes.lbSubHeader}>
-                                Player Name
-                            </Typography>
-                        </Grid>
-
-                        <Grid container item xs={6}>
-                            <Typography className={classes.lbSubHeader}>
-                                Fuel Added
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Divider light={true} variant={"fullWidth"}/>
-                        </Grid>
+                    <Grid container item xs={6} >
+                        <Typography className={classes.lbSubHeader}>
+                            Fuel Added
+                        </Typography>
                     </Grid>
-                </>
-            }
+                    <Grid item xs={12}>
+                        <Divider light={true} variant={"fullWidth"}/>
+                    </Grid>
+                </Grid>
 
-            {lbInit &&
-                <>
-                    {
-                        leaderboard.map((entry, i) => {
-                            return (
-                                <LeaderboardEntry
-                                    key={i}
-                                    number={i + 1}
-                                    name={entry.nickname ? entry.nickname : entry.user}
-                                    fuelAdded={new Big(utils.fromWei(entry.fuelAdded)).toFixed(4)}
-                                    thisUser={wallet.status === 'connected' ? wallet.account === entry.user : false}
-                                />
-                            )
-                        })
-                    }
+                {lbInit &&
+                    leaderboard.map((entry, i) => {
+                        return (
+                            <LeaderboardEntry
+                                key={i}
+                                number={i + 1}
+                                name={entry.nickname ? entry.nickname : entry.user}
+                                fuelAdded={utils.fromWei(entry.fuelAdded)}
+                                thisUser={wallet.status === 'connected' ? wallet.account === entry.user : false}
+                            />
+                        )
+                    })
+                }
 
-                    {userLbPosition &&
+                {userLbPosition &&
                     <>
                         <LeaderboardEntry
                             key={"emptyUser"}
@@ -165,15 +136,12 @@ const Leaderboard = () => {
                         <LeaderboardEntry
                             key={"thisUser"}
                             number={userLbPosition.number}
-                            name={userLbPosition.nickname ? userLbPosition.nickname : userLbPosition.user}
-                            fuelAdded={utils.fromWei(userLbPosition.fuelAdded)}
-                            thisUser={wallet.status === 'connected' ? wallet.account === userLbPosition.user : false}
+                            name={userLbPosition.nickname !== "" ? userLbPosition.nickname : userLbPosition.user}
+                            fuelAdded={userLbPosition.fuelAdded}
                         />
                     </>
-                    }
-                </>
-            }
-        </Grid>
+                }
+            </Grid>
     )
 }
 

@@ -37,21 +37,23 @@ const NewSpace = () => {
     const elements = [];
     let loadedImages;
     
-    if(!loaded)
-        loadImages([
-            '/spaceDust4x.png',
-            '/rock3.png',
-            '/blue_planet.png',
-            '/double_rock.png',
-            '/deep_red_planet.png',
-            '/rock1.png',
-            '/pink_planet.png',
-            '/red_planet.png',
-            '/orange_planet.png'
-        ], (images) => {
-            loadedImages = images;
-            loaded = true;
-        });
+    useEffect(() => {
+        if(!loaded)
+            loadImages([
+                '/spaceDust4x.png',
+                '/rock3.png',
+                '/blue_planet.png',
+                '/double_rock.png',
+                '/deep_red_planet.png',
+                '/rock1.png',
+                '/pink_planet.png',
+                '/red_planet.png',
+                '/orange_planet.png'
+            ], (images) => {
+                loadedImages = images;
+                loaded = true;
+            });
+    },[]);
 
     let lastFrame = performance.now();
     const wantedFps = 144
