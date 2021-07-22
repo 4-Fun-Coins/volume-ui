@@ -79,7 +79,7 @@ const About = () => {
                     <Grid container item xs={12} md={6} justify={"center"}>
                         <img
                             alt="Logo"
-                            src={"/explorer.jpg"}
+                            src={"/explorer.webp"}
                             className={classes.image1}
                         />
                     </Grid>
@@ -89,7 +89,7 @@ const About = () => {
                     <Grid container item xs={12} md={6} justify={"center"}>
                         <img
                             alt="Logo"
-                            src={"/arsonist.jpg"}
+                            src={"/arsonist.webp"}
                             className={classes.image2}
                         />
                     </Grid>
