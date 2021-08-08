@@ -1,10 +1,10 @@
 import {makeStyles} from "@material-ui/core";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Canvas from "./Canvas";
 
 function loadImages(pathsArray, callback) {
     const images = {};
-    let loadedImageCount = 0;
+    let  loadedImageCount = 0;
 
     // Make sure arr is actually an array and any other error checking
     for (let i = 0; i < pathsArray.length; i++){
@@ -25,8 +25,8 @@ function loadImages(pathsArray, callback) {
 
 const landingStyles = makeStyles((theme) => ({
     universeBackground: {
-        paddingTop: 60,
-        overflow: "hidden"
+        paddingTop: 55,  
+        overflow: "hidden",
     },
 }));
 
@@ -34,10 +34,10 @@ const NewSpace = () => {
     const classes = landingStyles();
 
     let init = false;
-    let loaded = false;
     const elements = [];
-    let loadedImages;
-    
+    const  [loadedImages,setLoadedImages] = useState({});
+    const [loaded,setLoaded] = useState(false);
+
   
     useEffect(() => {
         if(!loaded)
@@ -52,8 +52,8 @@ const NewSpace = () => {
                 '/red_planet.webp',
                 '/orange_planet.webp'
             ], (images) => {
-                loadedImages = images;
-                loaded = true;
+                setLoadedImages(images);
+                setLoaded(true);
             });
     },[]);
 
@@ -68,7 +68,7 @@ const NewSpace = () => {
     }
 
     const draw = (ctx, frameCount) => {
-        if(getLastFrameTime() < 1000/wantedFps || !loadedImages) // 60fsp
+        if(getLastFrameTime() < 1000/wantedFps || !loaded) // 60fsp
             return;
         ctx.mozImageSmoothingEnabled = false;
         ctx.webkitImageSmoothingEnabled = false;

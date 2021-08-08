@@ -1,11 +1,11 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 
 const Canvas = props => {
 
     const { draw, ...rest } = props;
     const canvasRef = useRef(null);
 
-    let init = false;
+    const [init,setInit] = useState(false);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -18,7 +18,7 @@ const Canvas = props => {
         if (!init) {
             resizeCanvas();
             window.addEventListener('resize', resizeCanvas);
-            init = true;
+            setInit(true);
         }
 
         const context = canvas.getContext('2d');
@@ -35,7 +35,7 @@ const Canvas = props => {
         return () => {
             window.cancelAnimationFrame(animationFrameId);
         }
-    }, [draw]);
+    }, [draw,init]);
 
     return <canvas ref={canvasRef} {...rest}> Your browser does not support canvas </canvas>
 }
