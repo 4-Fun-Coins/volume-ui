@@ -2,10 +2,7 @@ import {
     AppBar,
     Button,
     Divider, Drawer,
-    Grid, Hidden, IconButton,
-    List,
-    ListItem,
-    ListItemText,
+    Hidden, IconButton,
     makeStyles,
     Toolbar
 } from "@material-ui/core";
@@ -84,6 +81,7 @@ const TopBar = ({className, ...rest}) => {
     const location = useLocation();
 
     const [lastToast , setLastToast] = useState(0);
+    const [wrongNet, setWrongNet] = useState(false);
 
     const { enqueueSnackbar } = useSnackbar();
 
@@ -93,36 +91,13 @@ const TopBar = ({className, ...rest}) => {
                 enqueueSnackbar(`Unsupported network Volume is only available on ${wallet.networkName} chainId (${chainId})`,{variant: 'error'});
                 setLastToast(performance.now());
             }
-        }
-    },[wallet])
-    const locations = [ROUTES_NAMES.HOME,ROUTES_NAMES.JOURNEY,ROUTES_NAMES.REFUEL];
-
-    const [wrongNet, setWrongNet] = useState(false);
-    const [address, setAddress] = useState(undefined);
-
-    // ========================== Profile
-    const [activeTab ,  setActiveTab] = useState(0);
-
-    useEffect(() => {
-        console.log(lastToast);
-    }, [lastToast]);
-
-    useEffect(() => {
-        if (wallet.error && wallet.error.name === "ChainUnsupportedError") {
             setWrongNet(true);
         } else {
             setWrongNet(false);
         }
-    }, [wallet.error]);
+    },[wallet])
 
-    useEffect(() => {
-        if (wallet.account){
-            setAddress(`${wallet.account.slice(0, 6)}...${wallet.account.slice(wallet.account.length-4, wallet.account.length)}`);
-            setWrongNet(false);
-        }
-    }, [wallet.account]);
 
-    // ========================== Mobile optimization
     const [mobileOpen, setMobileOpen] = useState(false);
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -188,6 +163,7 @@ const TopBar = ({className, ...rest}) => {
                                 history.push(ROUTES_NAMES.USER_PROFILE);
                             }
                         }}>
+                            <User/>
                             <Typography variant={"subtitle1"} style={{fontSize: '0.9em'}}>
                                 {
                                     wallet.status === 'connected' && wallet.account
