@@ -14,6 +14,7 @@ import routes, {renderRoutes} from './routes';
 import {HashRouter} from 'react-router-dom';
 import CookiesNotification from "./components/CookiesNotification";
 import NewSpace from "./components/NewSpace";
+import MainLayout from './layout/MainLayout';
 
 const jss = create({plugins: [...jssPreset().plugins, rtl()]});
 const history = createBrowserHistory();
@@ -52,7 +53,9 @@ const App = () => {
                 <div className={classes.universeBackground}>
                             <NewSpace />
                 </div>
-                {renderRoutes(routes)}
+                <MainLayout>
+                  {renderRoutes(routes)}
+                </MainLayout>
               </HashRouter>
             </SnackbarProvider>
           </MuiPickersUtilsProvider>
