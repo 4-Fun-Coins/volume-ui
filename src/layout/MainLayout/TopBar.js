@@ -20,7 +20,6 @@ import {User} from "react-feather";
 import { useSnackbar } from 'notistack';
 
 import LogoWithText from '../../components/LogoWithText'
-import { ColorLens } from "@material-ui/icons";
 
 const drawerWidth = 240;
 
@@ -28,6 +27,7 @@ const topBarStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: "#1d0134",
         flexGrow: 1,
+        borderBottom: '1px solid #373737',
     },
     toolBar: {
         height: '100%',
