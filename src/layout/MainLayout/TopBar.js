@@ -18,9 +18,10 @@ import {useWallet ,ChainUnsupportedError} from "use-wallet";
 import {useHistory,useLocation} from 'react-router-dom';
 import {ROUTES_NAMES} from "../../constants";
 import MenuIcon from "@material-ui/icons/Menu";
+import {chainId} from '../../utils/config';
+import {User} from "react-feather";
 import { useSnackbar } from 'notistack';
 
-import {chainId} from "../../utils/config";
 import LogoWithText from '../../components/LogoWithText'
 import { ColorLens } from "@material-ui/icons";
 
@@ -43,6 +44,10 @@ const topBarStyles = makeStyles((theme) => ({
         color: theme.palette.twinkle.main,
         fontSize: '1.1em',
     },
+    wrongNetText: {
+        color: theme.palette.primary.main,
+        fontSize: '1em',
+    },
     boldText: {
         color: theme.palette.twinkle.main,
         fontWeight: "bold",
@@ -63,6 +68,9 @@ const topBarStyles = makeStyles((theme) => ({
     drawerListItem: {
         color: theme.palette.twinkle.main,
         paddingLeft: '2em'
+    },
+    userIcon: {
+        color: theme.palette.twinkle.main
     },
     flewGrow : {
         flexGrow: 1
@@ -85,12 +93,34 @@ const TopBar = ({className, ...rest}) => {
                 enqueueSnackbar(`Unsupported network Volume is only available on ${wallet.networkName} chainId (${chainId})`,{variant: 'error'});
                 setLastToast(performance.now());
             }
-        } 
+        }
     },[wallet])
+    const locations = [ROUTES_NAMES.HOME,ROUTES_NAMES.JOURNEY,ROUTES_NAMES.REFUEL];
+
+    const [wrongNet, setWrongNet] = useState(false);
+    const [address, setAddress] = useState(undefined);
+
+    // ========================== Profile
+    const [activeTab ,  setActiveTab] = useState(0);
 
     useEffect(() => {
         console.log(lastToast);
     }, [lastToast]);
+
+    useEffect(() => {
+        if (wallet.error && wallet.error.name === "ChainUnsupportedError") {
+            setWrongNet(true);
+        } else {
+            setWrongNet(false);
+        }
+    }, [wallet.error]);
+
+    useEffect(() => {
+        if (wallet.account){
+            setAddress(`${wallet.account.slice(0, 6)}...${wallet.account.slice(wallet.account.length-4, wallet.account.length)}`);
+            setWrongNet(false);
+        }
+    }, [wallet.account]);
 
     // ========================== Mobile optimization
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -140,6 +170,14 @@ const TopBar = ({className, ...rest}) => {
                             <Tab label="Direct Refuel" value={ROUTES_NAMES.REFUEL}/>
                         </Tabs>
                     </Hidden>
+                    {
+                        wrongNet &&
+                        <Button variant={"outlined"} className={classes.button}>
+                            <Typography variant={"body1"} className={classes.wrongNetText}>
+                                Wrong Network
+                            </Typography>
+                        </Button>
+                    }
                     <Button variant={"contained"} color={'secondary'} className={classes.button} onClick={() => {
                             if (wallet.status !== 'connected'){
                                 wallet.connect();

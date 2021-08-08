@@ -61,7 +61,8 @@ const themesOptions = [
                 main: "#F8F8F8"
             },
             twinkle: {
-                main: '#F5BC00'
+                main: '#F5BC00',
+                dark: '#bb9001'
             },
             rocket: {
                 main: '#A1A1A1'
