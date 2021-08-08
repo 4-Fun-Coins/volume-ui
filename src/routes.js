@@ -6,7 +6,6 @@ import {
 } from "react-router-dom";
 import LoadingScreen from "./components/LoadingScreen";
 import {ROUTES_NAMES} from "./constants";
-import MainLayout from "./layout/MainLayout";
 
 export const renderRoutes = (routes = []) => {
     return (
@@ -14,22 +13,16 @@ export const renderRoutes = (routes = []) => {
             <Switch>
                 {
                     routes.map((route, i) => {
-                        const Layout = route.layout || Fragment;
                         const Component = route.component;
-
                         return (
                             <Route
                                 key={i}
                                 path={route.path}
                                 exact={route.exact}
                                 render={(props) => (
-                                    <Layout>
-                                        {
-                                            route.routes
-                                                ? renderRoutes(route.routes)
-                                                : <Component {...props} />
-                                        }
-                                    </Layout>
+                                    route.routes
+                                        ? renderRoutes(route.routes)
+                                        : <Component {...props} />
                                 )}
                             />
                         );
@@ -44,25 +37,21 @@ const routes = [
     {
         path: ROUTES_NAMES.HOME,
         exact: true,
-        layout: MainLayout,
         component: lazy(() => import("./views/LandingPage"))
     },
     {
         path: ROUTES_NAMES.JOURNEY,
         exact: true,
-        layout: MainLayout,
         component: lazy(() => import("./views/TheJourney"))
     },
     {
         path: ROUTES_NAMES.REFUEL,
         exact: true,
-        layout: MainLayout,
         component: lazy(() => import("./views/Refuel"))
     },
     {
         path: ROUTES_NAMES.USER_PROFILE,
         exact: true,
-        layout: MainLayout,
         component: lazy(() => import("./views/Profile"))
     },
     {

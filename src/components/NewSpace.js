@@ -25,6 +25,7 @@ function loadImages(pathsArray, callback) {
 
 const landingStyles = makeStyles((theme) => ({
     universeBackground: {
+        paddingTop: 60,
         overflow: "hidden"
     },
 }));
@@ -60,10 +61,10 @@ const NewSpace = () => {
     const wantedFps = 144
 
     const getLastFrameTime = () => {
-        const elappsedTime = performance.now() - lastFrame;
-        if(elappsedTime > 1000/wantedFps)
+        const elapsedTime = performance.now() - lastFrame;
+        if(elapsedTime > 1000/wantedFps)
             lastFrame = performance.now();
-        return elappsedTime;
+        return elapsedTime;
     }
 
     const draw = (ctx, frameCount) => {
@@ -94,7 +95,7 @@ const NewSpace = () => {
                 const element = Math.floor(Math.random() * 6 + 1);
 
                 switch (element) {
-                    case 1: {
+                    default: {
                         // rock
                         elements.push(drawElement(ctx, '/rock3.webp', i, false));
                         break;
@@ -164,12 +165,12 @@ const NewSpace = () => {
                 }
             }
         }
-        //ctx.restore();
+        ctx.restore();
     }
 
     const drawElement = (ctx, elementSrc, index, planet) => {
         // Random speed
-        const speed = Math.floor(Math.random() * 15 + 1);
+        const speed = Math.floor(Math.random() * 12 + 1);
         const delay = Math.random();
         const depth = Math.random() * 2;
 
@@ -177,7 +178,7 @@ const NewSpace = () => {
         let element = {
             x: window.innerWidth * 1.05 + delay,
             y: window.innerHeight * 0.05 * index * (planet ? 2 : 1),
-            vx: Math.floor(planet ? speed * 0.5 : speed * 1.5),
+            vx: Math.floor(planet ? speed * 0.5 : speed),
             draw: function () {
                 let el = loadedImages[elementSrc];
                 ctx.drawImage(el,

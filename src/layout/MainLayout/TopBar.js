@@ -2,10 +2,7 @@ import {
     AppBar,
     Button,
     Divider, Drawer,
-    Grid, Hidden, IconButton,
-    List,
-    ListItem,
-    ListItemText,
+    Hidden, IconButton,
     makeStyles,
     Toolbar
 } from "@material-ui/core";
@@ -14,12 +11,16 @@ import React, {useEffect, useState} from "react";
 import Typography from "@material-ui/core/Typography";
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import {useWallet} from "use-wallet";
+import {useWallet ,ChainUnsupportedError} from "use-wallet";
 import {useHistory,useLocation} from 'react-router-dom';
 import {ROUTES_NAMES} from "../../constants";
 import MenuIcon from "@material-ui/icons/Menu";
 import {chainId} from '../../utils/config';
 import {User} from "react-feather";
+import { useSnackbar } from 'notistack';
+
+import LogoWithText from '../../components/LogoWithText'
+import { ColorLens } from "@material-ui/icons";
 
 const drawerWidth = 240;
 
@@ -29,14 +30,16 @@ const topBarStyles = makeStyles((theme) => ({
         flexGrow: 1,
     },
     toolBar: {
-        height: 72
+        height: '100%',
+        justifyContent: 'space-between'
     },
     tabs: {
         flexGrow: 1,
+        marginLeft: '2em'
     },
     volText: {
         color: theme.palette.twinkle.main,
-        fontSize: '1.5em',
+        fontSize: '1.1em',
     },
     wrongNetText: {
         color: theme.palette.primary.main,
@@ -48,8 +51,10 @@ const topBarStyles = makeStyles((theme) => ({
         textDecoration: "underline"
     },
     button: {
-        padding: '1em',
-        marginLeft: '0.5em'
+        padding: '0.5em',
+        color: 'white',
+        borderRadius: '20px',
+        minWidth: 150
     },
     emptyBar: theme.mixins.toolbar,
     drawerPaper: {
@@ -63,6 +68,9 @@ const topBarStyles = makeStyles((theme) => ({
     },
     userIcon: {
         color: theme.palette.twinkle.main
+    },
+    flewGrow : {
+        flexGrow: 1
     }
 }));
 
@@ -71,105 +79,46 @@ const TopBar = ({className, ...rest}) => {
     const wallet = useWallet();
     const history = useHistory();
     const location = useLocation();
-    const locations = [ROUTES_NAMES.HOME,ROUTES_NAMES.JOURNEY,ROUTES_NAMES.REFUEL];
 
+    const [lastToast , setLastToast] = useState(0);
     const [wrongNet, setWrongNet] = useState(false);
-    const [address, setAddress] = useState(undefined);
 
-    // ========================== Profile
-    const [activeTab ,  setActiveTab] = useState(0);
-
-    useEffect ( () => {
-        locations.forEach((loc,index) => {
-            if(loc === location.pathname) setActiveTab(index);
-        })
-    });
-
-    const toHome = () => {
-        history.push(ROUTES_NAMES.HOME);
-    }
-
-    const toJourney = () => {
-        history.push(ROUTES_NAMES.JOURNEY);
-    }
-
-    const toRefuel = () => {
-        history.push(ROUTES_NAMES.REFUEL);
-    }
+    const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
-        if (wallet.error && wallet.error.name === "ChainUnsupportedError") {
+        if (wallet.error instanceof ChainUnsupportedError) {
+            if(lastToast === 0 || performance.now() - lastToast > 5000){
+                enqueueSnackbar(`Unsupported network Volume is only available on ${wallet.networkName} chainId (${chainId})`,{variant: 'error'});
+                setLastToast(performance.now());
+            }
             setWrongNet(true);
         } else {
             setWrongNet(false);
         }
-    }, [wallet.error]);
+    },[wallet])
 
-    useEffect(() => {
-        if (wallet.account){
-            setAddress(`${wallet.account.slice(0, 6)}...${wallet.account.slice(wallet.account.length-4, wallet.account.length)}`);
-            setWrongNet(false);
-        }
-    }, [wallet.account]);
 
-    // ========================== Mobile optimization
     const [mobileOpen, setMobileOpen] = useState(false);
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     }
 
     const handleChange = (event, newValue) => {
-        setActiveTab(newValue);
-        history.push(locations[newValue]);
+        history.push(newValue);
     }
 
     const drawer = (
-        <div>
-            <div className={classes.emptyBar}/>
+        <div style={{paddingTop: '0.5em',}}>
+            <LogoWithText  />
+            <Divider style={{marginTop: '1em'}}/>
+            <Tabs value={location.pathname} onChange={handleChange} className={classes.tabs} orientation={'vertical'}>
+                            <Tab label="Home" value={ROUTES_NAMES.HOME}/>
+                            <Tab label="The Journey" value={ROUTES_NAMES.JOURNEY}/>
+                            <Tab label="Direct Refuel" value={ROUTES_NAMES.REFUEL}/>
+                        </Tabs>
             <Divider />
-            <List>
-                <ListItem button key={'Home'} onClick={toHome}>
-                    <ListItemText primary={'Home'} className={classes.drawerListItem}/>
-                </ListItem>
-                <ListItem button key={'Journey'} onClick={toJourney}>
-                    <ListItemText primary={"The Journey"} className={classes.drawerListItem}/>
-                </ListItem>
-                <ListItem button key={'Refuel'} onClick={toRefuel}>
-                    <ListItemText primary={"Refuel"} className={classes.drawerListItem}/>
-                </ListItem>
-            </List>
-            <Divider />
-            <Grid container>
-                {
-                    wrongNet &&
-                    <Grid container item xs={12} justify={"center"}>
-                        <Button variant={"outlined"} className={classes.button} style={{marginTop: '0.5em'}}>
-                            <Typography variant={"body1"} className={classes.wrongNetText}>
-                                Wrong Network
-                            </Typography>
-                        </Button>
-                    </Grid>
-                }
-
-                <Grid container item xs={12} justify={"center"}>
-                    <Button variant={"text"} className={classes.button} style={{marginTop: '0.5em'}} onClick={() => {
-                        if (wallet.status !== 'connected')
-                            wallet.connect();
-                    }}>
-                        {wallet.status === 'connected' && <User className={classes.userIcon}/>}
-                        <Typography variant={"h4"} className={classes.volText}>
-                            {
-                                wallet.status === 'connected'
-                                    ? address
-                                    : 'Connect'
-                            }
-                        </Typography>
-                    </Button>
-                </Grid>
-            </Grid>
         </div>
     );
-    // ==========================
 
     return (
         <div>
@@ -180,52 +129,49 @@ const TopBar = ({className, ...rest}) => {
                 {...rest}
             >
                 <Toolbar className={classes.toolBar}>
-                    <Hidden mdUp>
-                        <IconButton className={classes.button} onClick={() => {
+                    <Hidden mdUp className={classes.flewGrow} >
+                        <IconButton onClick={() => {
                             setMobileOpen(true);
                         }}>
                             <MenuIcon className={classes.volText}/>
                         </IconButton>
                     </Hidden>
-                    <Typography variant="h6" className={classes.volText}>
-                        Volume
-                    </Typography>
+
                     <Hidden smDown>
-                        <Tabs value={activeTab} onChange={handleChange} className={classes.tabs}>
-                            <Tab label="Home"/>
-                            <Tab label="The Journey"/>
-                            <Tab label="Direct Refuel" />
+                        <LogoWithText />
+                        <Tabs value={location.pathname} onChange={handleChange} className={classes.tabs}>
+                            <Tab label="Home" value={ROUTES_NAMES.HOME}/>
+                            <Tab label="The Journey" value={ROUTES_NAMES.JOURNEY}/>
+                            <Tab label="Direct Refuel" value={ROUTES_NAMES.REFUEL}/>
                         </Tabs>
-
-                        {
-                            wrongNet &&
-                            <Button variant={"outlined"} className={classes.button}>
-                                <Typography variant={"body1"} className={classes.wrongNetText}>
-                                    Wrong Network
-                                </Typography>
-                            </Button>
-                        }
-
-
-                        <Button variant={"text"} className={classes.button} onClick={() => {
-                            if (wallet.status !== 'connected')
+                    </Hidden>
+                    {
+                        wrongNet &&
+                        <Button variant={"outlined"} className={classes.button}>
+                            <Typography variant={"body1"} className={classes.wrongNetText}>
+                                Wrong Network
+                            </Typography>
+                        </Button>
+                    }
+                    <Button variant={"contained"} color={'secondary'} className={classes.button} onClick={() => {
+                            if (wallet.status !== 'connected'){
                                 wallet.connect();
+                                setLastToast(0);
+                            }
                             else {
                                 // open profile
                                 history.push(ROUTES_NAMES.USER_PROFILE);
                             }
                         }}>
-                            {wallet.status === 'connected' && <User className={classes.userIcon}/>}
-                            <Typography variant={"h4"} className={classes.volText}>
+                            <User/>
+                            <Typography variant={"subtitle1"} style={{fontSize: '0.9em'}}>
                                 {
-                                    wallet.status === 'connected'
-                                        ? address
-                                        : 'Connect'
+                                    wallet.status === 'connected' && wallet.account
+                                        ? `${wallet.account.slice(0, 6)}...${wallet.account.slice(wallet.account.length-4, wallet.account.length)}`
+                                        : 'Connect Wallet'
                                 }
                             </Typography>
-                        </Button>
-
-                    </Hidden>
+                    </Button>
                 </Toolbar>
             </AppBar>
 
