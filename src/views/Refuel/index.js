@@ -12,31 +12,32 @@ const Big = require('big-js');
 
 const landingStyles = makeStyles((theme) => ({
     root: {
+        backgroundColor: 'rgba(10, 10, 10, 0.6)',
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
     },
     contentBackground: {
-        backgroundColor: 'rgba(10, 10, 10, 0.6)',
-        paddingBottom: 10,
-        paddingTop: 80,
         height: '100vh'
     },
     cardWrapper: {
         paddingTop: '10em',
-        width: '100%',
     },
     card: {
-        width: '60%',
-        height: '50vh',
         backgroundColor: "#1d0134",
         borderRadius: 12,
+        paddingBottom: 16,
+    },
+    title: {
+        padding: '1.2em',
+        paddingBottom: 0,
+        color: theme.palette.twinkle.main,
     },
     text: {
-        padding: '1em',
-        textAlign: "center",
-        color: theme.palette.twinkle.main,
-        fontSize: 20,
+        padding: '2.5em',
+        textAlign: "left",
+        color: theme.palette.text.paragraph,
+        fontSize: 16,
     },
     balanceText: {
         fontSize: 16,
@@ -138,16 +139,19 @@ const Refuel = () => {
             className={classes.root}
             title={'Home'}
         >
-            <Container className={classes.contentBackground} maxWidth={"xl"}>
+            <Container className={classes.contentBackground} maxWidth={"md"}>
                 <Grid container item xs={12} className={classes.cardWrapper}>
                     <Grid container item justify={"center"}>
                         <Card className={classes.card}>
                             <Grid container style={{display: "flex", width: '100%', height: '100%'}}>
                                 <Grid container item xs={12} md={6} justify={"center"} alignItems={"flex-start"} style={{backgroundColor: "transparent"}}>
                                     <Grid item xs={12}>
+                                        <Typography variant={'h1'} className={classes.title}>
+                                            Direct Refuel
+                                        </Typography>
                                         <Typography className={classes.text}>
                                             Direct refueling burns the total amount submitted for fuel. Please do not send
-                                            an amount that you do not want to burn as it can not be recovered.
+                                            an amount that you do not want to burn as it <b>CAN NOT BE RECOVERED</b>.
                                         </Typography>
                                     </Grid>
 
@@ -160,9 +164,9 @@ const Refuel = () => {
                                             Balance: {balance.toFixed(2)}
                                         </Typography>
 
-                                        <TextField fullWidth variant={"outlined"} color={"secondary"} onChange={handleChange} value={amount}/>
+                                        <TextField fullWidth variant={"outlined"} color={"secondary"} onChange={handleChange} value={amount} style={{borderRadius: '20px'}}/>
 
-                                        <Button fullWidth color={"secondary"} variant={"contained"} onClick={refuel} disabled={!enabled} style={{marginTop: '1em'}}>
+                                        <Button fullWidth color={"secondary"} variant={"contained"} onClick={refuel} disabled={!enabled} style={{marginTop: '1em', margingBottom: '1em', borderRadius: '20px'}}>
                                             {message}
                                         </Button>
                                     </Grid>
