@@ -54,7 +54,8 @@ const topBarStyles = makeStyles((theme) => ({
         padding: '0.5em',
         color: 'white',
         borderRadius: '20px',
-        minWidth: 150
+        minWidth: 150,
+        marginLeft: '10px',
     },
     emptyBar: theme.mixins.toolbar,
     drawerPaper: {
