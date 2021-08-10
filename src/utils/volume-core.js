@@ -228,17 +228,19 @@ export async function getAllContributorsForMilestone(id) {
                 reject(err);
 
             // map and get fuel added for each participant
-            let fuelAddedPerParticipant = await Promise.all(participants.map(async participant => {
+            let fuelAddedPerParticipant = await Promise.all(participants.map(async (participant, index) => {
                     const nickname = await getNickname(participant);
                     const fuelAdded = await volumeJackpot.methods.getFuelAddedInMilestone(id, participant).call();
 
                     return {
                         participant: nickname === "" ? `${participant.slice(0, 6)}...${participant.slice(participant.length-5, participant.length-1)}` : nickname,
-                        fuelAdded: web3.utils.fromWei(fuelAdded)
+                        nickname,
+                        address: participant,
+                        fuelAdded: fuelAdded,
                     }
             }));
 
-            resolve(fuelAddedPerParticipant.sort(sortFunction));
+            resolve(fuelAddedPerParticipant.sort(sortFunction).map((element,index) => {return {rank: index+1,...element}}));
         });
     })
 }
