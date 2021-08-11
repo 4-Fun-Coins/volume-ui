@@ -5,7 +5,7 @@ import {
 import React from "react";
 import FuelGauge from "./FuelGauge";
 import Stats_V2 from "./Stats_V2";
-import Leaderboard from "./Leaderboard";
+import LeaderboardHome from "./LeaderBoardHome";
 
 const Dash = () => {
 
@@ -14,19 +14,19 @@ const Dash = () => {
             maxWidth={false}
             style={{paddingTop: '2em'}}
         >
-            <Grid container direction={"row"} justify={"center"} spacing={2}>
-                <Grid container item xs={12} sm={12} md={6} spacing={2}>
-                    <Grid container item xs={12}>
+            <Grid container direction={"row-reverse"} justify={"center"} spacing={8}>
+                <Grid container item xs={12} sm={12} md={6} spacing={2} direction={'column'}>
+                    <Grid container item>
                         <FuelGauge/>
                     </Grid>
 
-                    <Grid container item xs={12}>
+                    <Grid container item>
                         <Stats_V2/>
                     </Grid>
                 </Grid>
 
                 <Grid container item xs={12} sm={12} md={6}>
-                    <Leaderboard/>
+                    <LeaderboardHome/>
                 </Grid>
             </Grid>
         </Container>
