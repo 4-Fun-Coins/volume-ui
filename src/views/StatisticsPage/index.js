@@ -1,9 +1,7 @@
 import Page from "../../components/Page";
 import {Container, Grid, makeStyles} from "@material-ui/core";
-import About from "../../components/About";
 import Footer from "../../components/Footer";
 import Dash from "../../components/Dash";
-import {useEffect, useState} from "react";
 
 const landingStyles = makeStyles((theme) => ({
     root: {
@@ -15,25 +13,25 @@ const landingStyles = makeStyles((theme) => ({
         backgroundColor: 'rgba(10, 10, 10, 0.6)',
         paddingBottom: 10,
         paddingTop: 80,
-    },
+    }
 }));
 
-const LandingPage = () => {
+const StatisticsPage = () => {
     const classes = landingStyles();
+
 
     return (
         <Page
             className={classes.root}
-            title={'Home'}
+            title={'Dashboard'}
         >
-            <Grid container item>
+            <Grid container item >
                 <Container
                     maxWidth={false}
                     className={classes.contentBackground}
                 >
-                    <About/>
+                    <Dash/>
                 </Container>
-
             </Grid>
 
             <Container
@@ -46,4 +44,4 @@ const LandingPage = () => {
     )
 }
 
-export default LandingPage;
+export default StatisticsPage;

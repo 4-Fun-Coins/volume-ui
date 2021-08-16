@@ -2,8 +2,9 @@ import React, { forwardRef, useCallback, useEffect } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
+import { Fade, Slide, Zoom } from "@material-ui/core";
 
-const Page = forwardRef(({ children, title = "", ...rest }, ref) => {
+const Page = forwardRef(({ children, title, ...rest }, ref) => {
     const location = useLocation();
 
     const sendPageViewEvent = useCallback(() => {
@@ -20,7 +21,9 @@ const Page = forwardRef(({ children, title = "", ...rest }, ref) => {
                 <Helmet>
                     <title>{"VOLUME | " + title}</title>
                 </Helmet>
-                {children}
+                <Fade direction={"up"} in={true} timeout={1000} mountOnEnter unmountOnExit>
+                    <div>{children}</div>
+                </Fade>
             </div>
         </HelmetProvider>
     );

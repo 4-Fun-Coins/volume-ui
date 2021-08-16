@@ -1,7 +1,4 @@
-import {
-    Button,
-    Container, Grid, makeStyles, Typography,
-} from "@material-ui/core";
+import {Grid, makeStyles} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
 import Gauge from "./Gauge";
 import {getFuel} from "../utils/volume-core";

@@ -1,4 +1,6 @@
 export const formatLongNumber = (n , decimals) => {
+    if(!n) return 0;
+    n = Number(n);
     if (n < 1e3) return +(n).toFixed(decimals);
     if (n >= 1e3 && n < 1e6) return +(n / 1e3).toFixed(decimals) + "K";
     if (n >= 1e6 && n < 1e9) return +(n / 1e6).toFixed(decimals) + "M";
@@ -13,13 +15,13 @@ export const getShorAddress = (address) => {
 export function getOrdinalSuffix(n) {
     var i = n % 10,
         j = n % 100;
-    if (i == 1 && j != 11) {
+    if (i === 1 && j !== 11) {
         return n + "st";
     }
-    if (i == 2 && j != 12) {
+    if (i === 2 && j !== 12) {
         return n + "nd";
     }
-    if (i == 3 && j != 13) {
+    if (i === 3 && j !== 13) {
         return n + "rd";
     }
     return n + "th";

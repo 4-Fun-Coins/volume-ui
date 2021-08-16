@@ -9,7 +9,7 @@ import {ROUTES_NAMES} from "./constants";
 
 export const renderRoutes = (routes = []) => {
     return (
-        <Suspense fallback={<LoadingScreen/>}>
+        <Suspense fallback={<LoadingScreen transparent style={{height: '100vh'}}/>}>
             <Switch>
                 {
                     routes.map((route, i) => {
@@ -40,6 +40,11 @@ const routes = [
         component: lazy(() => import("./views/LandingPage"))
     },
     {
+        path: ROUTES_NAMES.DASHBOARD,
+        exact: true,
+        component: lazy(() => import("./views/StatisticsPage"))
+    },
+    {
         path: ROUTES_NAMES.JOURNEY,
         exact: true,
         component: lazy(() => import("./views/TheJourney"))
@@ -62,7 +67,7 @@ const routes = [
     {
         path: "*",
         exact: true,
-        component: () => <Redirect to={ROUTES_NAMES.HOME}/>
+        component: () =>  <Redirect to={ROUTES_NAMES.HOME}/>
     }
 ];
 

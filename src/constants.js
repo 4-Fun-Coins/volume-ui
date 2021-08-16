@@ -5,6 +5,7 @@ export const THEMES = {
 
 export const ROUTES_NAMES = {
     HOME: "/landing",
+    DASHBOARD: "/dashboard",
     JOURNEY: "/journey",
     REFUEL: '/direct-refuel',
     USER_PROFILE: '/user-profile',

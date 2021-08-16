@@ -113,7 +113,7 @@ const TopBar = ({className, ...rest}) => {
             <LogoWithText  />
             <Divider style={{marginTop: '1em'}}/>
             <Tabs value={location.pathname} onChange={handleChange} className={classes.tabs} orientation={'vertical'}>
-                            <Tab label="Home" value={ROUTES_NAMES.HOME}/>
+                            <Tab label="Dashboard" value={ROUTES_NAMES.DASHBOARD} class={classes.tabsEntries}/>
                             <Tab label="The Journey" value={ROUTES_NAMES.JOURNEY}/>
                             <Tab label="Direct Refuel" value={ROUTES_NAMES.REFUEL}/>
                         </Tabs>
@@ -141,7 +141,7 @@ const TopBar = ({className, ...rest}) => {
                     <Hidden smDown>
                         <LogoWithText />
                         <Tabs value={location.pathname} onChange={handleChange} className={classes.tabs}>
-                            <Tab label="Home" value={ROUTES_NAMES.HOME}/>
+                            <Tab label="Dashboard" value={ROUTES_NAMES.DASHBOARD}/>
                             <Tab label="The Journey" value={ROUTES_NAMES.JOURNEY}/>
                             <Tab label="Direct Refuel" value={ROUTES_NAMES.REFUEL}/>
                         </Tabs>

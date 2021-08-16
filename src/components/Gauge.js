@@ -53,9 +53,10 @@ const Gauge = ({
         .map(value => colorScale(value));
 
     return (
-        <div style={{width: '100%'}}>
+        <div style={{width: '100%', fontFamily: 'monospace'}}>
             <svg
                 width={"100%"}
+                height={'180px'}
                 viewBox={[
                     -1, -1,
                     2, 1
@@ -105,7 +106,7 @@ const Gauge = ({
                     <div style={{
                         color: "#8fdbfc",
                         marginTop: "0.4em",
-                        fontSize: "3em",
+                        fontSize: "2.5em",
                         lineHeight: "1em",
                         fontWeight: "900",
                         fontFeatureSettings: "'zero', 'tnum' 1",
@@ -118,7 +119,7 @@ const Gauge = ({
                         <div style={{
                             color: "#46adef",
                             marginTop: "0.6em",
-                            fontSize: "1.3em",
+                            fontSize: "1.5em",
                             lineHeight: "1.3em",
                             fontWeight: "700",
                         }}>

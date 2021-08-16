@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const LoadingScreen = ({transparent}) => {
+const LoadingScreen = ({transparent , style}) => {
     const classes = useStyles();
 
     useEffect(() => {
@@ -42,7 +42,7 @@ const LoadingScreen = ({transparent}) => {
     }, []);
 
     return (
-        <div className={transparent ? classes.rootTransparent : classes.root}>
+        <div className={transparent ? classes.rootTransparent : classes.root} style={style}>
             <CircularProgress className={classes.progress}/>
             <Typography variant={"h1"} color={"primary"}>
                 Loading
