@@ -1,6 +1,7 @@
 import {makeStyles} from "@material-ui/core";
 import PropTypes from "prop-types";
 import TopBar from "./TopBar";
+import Footer from "../../components/Footer";
 
 const mainLayoutStyle = makeStyles((theme) => ({
     root: {
@@ -32,16 +33,17 @@ const MainLayout = ({children}) => {
     const classes = mainLayoutStyle();
 
     return (
-        <div>
-                <TopBar />
-                <div className={classes.wrapper}>
+        <div style={{backgroundColor: 'rgba(10, 10, 10, 0.6)'}}>
+            <TopBar/>
+            <div className={classes.wrapper}>
 
-                    <div className={classes.contentContainer}>
-                        <div className={classes.content}>
-                            {children}
-                        </div>
+                <div className={classes.contentContainer}>
+                    <div className={classes.content}>
+                        {children}
                     </div>
                 </div>
+            </div>
+            <Footer/>
         </div>
     );
 }

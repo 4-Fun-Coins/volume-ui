@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
-import { BigTitleCard, StatsCard } from "./LeaderBoardHome";
+import {BigTitleCard, StatsCard} from "./Cards";
 import {getFuelAddedForAddress, getTotalFuelAdded} from "../utils/volume-core";
 import {useWallet} from "use-wallet";
-import { formatLongNumber } from "../utils/Utilities";
+import {formatLongNumber} from "../utils/Utilities";
+
 const Big = require('big-js');
 
 export const GlobalStats = () => {
@@ -53,14 +54,14 @@ export const GlobalStats = () => {
         <>
             <BigTitleCard imoji={'💹'} title={'Global Stats'}/>
             <StatsCard
-                statsTitles={['🛢️ Total fuel added:','⏳ Total Time Added:','🚀 Distance Traveled','🔥 $VOL burned','⛽ My fuel added:','⏱️ My Time Added:']}
+                statsTitles={['🛢️ Total fuel added:', '⏳ Total Time Added:', '🚀 Distance Traveled', '🔥 $VOL burned', '⛽ My fuel added:', '⏱️ My Time Added:']}
                 statsValues={[
-                    initGlobalStats && !globalError ? formatLongNumber(globalBlocks , 2) + ' Blocks' : '????',
-                    initGlobalStats && !globalError ? formatLongNumber(globalSeconds , 2) + ' Sec' : '????',
-                    initGlobalStats && !globalError ? formatLongNumber(globalBlocks , 2) + ' Blocks' : '????',
-                    initGlobalStats && !globalError ? formatLongNumber(globalBlocks , 2) + ' $VOL' : '????',
-                    initUserStats && !userError ? formatLongNumber(userBlocks , 2) + ' Blocks' : '????',
-                    initUserStats && !userError ? formatLongNumber(userSeconds , 2) + ' Sec' : '????',
+                    initGlobalStats && !globalError ? formatLongNumber(globalBlocks, 2) + ' Blocks' : '????',
+                    initGlobalStats && !globalError ? formatLongNumber(globalSeconds, 2) + ' Sec' : '????',
+                    initGlobalStats && !globalError ? formatLongNumber(globalBlocks, 2) + ' Blocks' : '????',
+                    initGlobalStats && !globalError ? formatLongNumber(globalBlocks, 2) + ' $VOL' : '????',
+                    initUserStats && !userError ? formatLongNumber(userBlocks, 2) + ' Blocks' : '????',
+                    initUserStats && !userError ? formatLongNumber(userSeconds, 2) + ' Sec' : '????',
                 ]}
             />
         </>

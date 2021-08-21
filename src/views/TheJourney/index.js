@@ -10,7 +10,7 @@ import {
 } from "@material-ui/lab";
 import TimelineEntry from "../../components/TimelineEntry";
 import PlanetIcon from "../../components/CustomIcons/PlanetIcon";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {getActiveMilestone, getAllMilestones, getCurrentBlock} from "../../utils/volume-core";
 import LoadingScreen from "../../components/LoadingScreen";
 
@@ -23,15 +23,6 @@ const journeyStyles = makeStyles((theme) => ({
     contentBackground: {
         paddingBottom: 10,
         paddingTop: 80,
-        backgroundColor: 'rgba(10, 10, 10, 0.6)',
-        // [theme.breakpoints.down('md')]: { // Uncomment this when content length exceeds 100vh on mobile
-        //     display: 'flex',
-        //     height: '100%',
-        // },
-        // [theme.breakpoints.up('md')]: {
-        //     height: '100vh'
-        // },
-
         height: '100vh' // Remove this when content length exceeds 100vh
     },
     paper: {
@@ -90,9 +81,9 @@ const Journey = () => {
                 <Grid container item xs={12} style={{display: "flex", width: '100%', height: '100%'}}>
                     {
                         !milestonesInit &&
-                            <Grid container item justify={"center"} xs={12}>
-                                <LoadingScreen transparent/>
-                            </Grid>
+                        <Grid container item justify={"center"} xs={12}>
+                            <LoadingScreen transparent/>
+                        </Grid>
                     }
                     {
                         milestonesInit &&
@@ -108,8 +99,11 @@ const Journey = () => {
                                             </TimelineOppositeContent>
 
                                             <TimelineSeparator>
-                                                <TimelineDot variant={milestone.name === activeMilestone.name ? "default" : "outlined"} color={"secondary"}>
-                                                    <PlanetIcon className={classes.icon} filled={milestone.name === activeMilestone.name}/>
+                                                <TimelineDot
+                                                    variant={milestone.name === activeMilestone.name ? "default" : "outlined"}
+                                                    color={"secondary"}>
+                                                    <PlanetIcon className={classes.icon}
+                                                                filled={milestone.name === activeMilestone.name}/>
                                                 </TimelineDot>
                                                 <TimelineConnector className={classes.connector}/>
                                             </TimelineSeparator>

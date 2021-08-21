@@ -7,12 +7,12 @@ import {
     estimateGasForRefuel,
     getBalanceForAddress, getDataForRefuel,
 } from "../../utils/volume-core";
+
 const {volumeAddress} = require('../../utils/config.js');
 const Big = require('big-js');
 
 const landingStyles = makeStyles((theme) => ({
     root: {
-        backgroundColor: 'rgba(10, 10, 10, 0.6)',
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
@@ -129,7 +129,7 @@ const Refuel = () => {
     const handleChange = (event) => {
         const regex = /^[0-9]*\.?[0-9]*$/;
 
-        if (regex.test(event.target.value)){
+        if (regex.test(event.target.value)) {
             setAmount(event.target.value);
         }
     }
@@ -144,13 +144,15 @@ const Refuel = () => {
                     <Grid container item justify={"center"}>
                         <Card className={classes.card}>
                             <Grid container style={{display: "flex", width: '100%', height: '100%'}}>
-                                <Grid container item xs={12} md={6} justify={"center"} alignItems={"flex-start"} style={{backgroundColor: "transparent"}}>
+                                <Grid container item xs={12} md={6} justify={"center"} alignItems={"flex-start"}
+                                      style={{backgroundColor: "transparent"}}>
                                     <Grid item xs={12}>
                                         <Typography variant={'h1'} className={classes.title}>
                                             Direct Refuel
                                         </Typography>
                                         <Typography className={classes.text}>
-                                            Direct refueling burns the total amount submitted for fuel. Please do not send
+                                            Direct refueling burns the total amount submitted for fuel. Please do not
+                                            send
                                             an amount that you do not want to burn as it <b>CAN NOT BE RECOVERED</b>.
                                         </Typography>
                                     </Grid>
@@ -164,9 +166,13 @@ const Refuel = () => {
                                             Balance: {balance.toFixed(2)}
                                         </Typography>
 
-                                        <TextField fullWidth variant={"outlined"} color={"secondary"} onChange={handleChange} value={amount} style={{borderRadius: '20px'}}/>
+                                        <TextField fullWidth variant={"outlined"} color={"secondary"}
+                                                   onChange={handleChange} value={amount}
+                                                   style={{borderRadius: '20px'}}/>
 
-                                        <Button fullWidth color={"secondary"} variant={"contained"} onClick={refuel} disabled={!enabled} style={{marginTop: '1em', margingBottom: '1em', borderRadius: '20px'}}>
+                                        <Button fullWidth color={"secondary"} variant={"contained"} onClick={refuel}
+                                                disabled={!enabled}
+                                                style={{marginTop: '1em', margingBottom: '1em', borderRadius: '20px'}}>
                                             {message}
                                         </Button>
                                     </Grid>

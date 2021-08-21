@@ -1,9 +1,9 @@
 import Page from "../../components/Page";
 import {Container, Grid, makeStyles} from "@material-ui/core";
-import About from "../../components/About";
-import Footer from "../../components/Footer";
-import Dash from "../../components/Dash";
-import {useEffect, useState} from "react";
+import Hero from "../../components/Home/Hero";
+import Features from "../../components/Home/Features";
+import TokenDistribution from "../../components/Home/TokenDistribition";
+import ProjectTimeline from "../../components/Home/ProjectTimeLine";
 
 const landingStyles = makeStyles((theme) => ({
     root: {
@@ -12,9 +12,7 @@ const landingStyles = makeStyles((theme) => ({
         height: '100%'
     },
     contentBackground: {
-        backgroundColor: 'rgba(10, 10, 10, 0.6)',
         paddingBottom: 10,
-        paddingTop: 80,
     },
 }));
 
@@ -31,17 +29,32 @@ const LandingPage = () => {
                     maxWidth={false}
                     className={classes.contentBackground}
                 >
-                    <About/>
+                    <Hero/>
+                    <Features/>
                 </Container>
 
             </Grid>
 
-            <Container
-                maxWidth={false}
-                className={classes.contentBackground}
-            >
-                <Footer/>
-            </Container>
+            <Grid container item>
+                <Container
+                    maxWidth={false}
+                    className={classes.contentBackground}
+                >
+                    <TokenDistribution/>
+                </Container>
+
+            </Grid>
+
+            <Grid container item>
+                <Container
+                    maxWidth={false}
+                    className={classes.contentBackground}
+                >
+                    {/* add project timeline here */}
+                    <ProjectTimeline/>
+                </Container>
+
+            </Grid>
         </Page>
     )
 }
