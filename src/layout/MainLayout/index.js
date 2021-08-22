@@ -2,6 +2,8 @@ import {makeStyles} from "@material-ui/core";
 import PropTypes from "prop-types";
 import TopBar from "./TopBar";
 import Footer from "../../components/Footer";
+import React, {useEffect, useRef} from "react";
+import {useLocation} from "react-router-dom";
 
 const mainLayoutStyle = makeStyles((theme) => ({
     root: {
@@ -12,37 +14,30 @@ const mainLayoutStyle = makeStyles((theme) => ({
         overflow: "hidden",
         width: "100%"
     },
-    wrapper: {
-        display: "flex",
-        flex: "1 1 auto",
-        overflow: "hidden",
-    },
-    contentContainer: {
-        display: "flex",
-        flex: "1 1 auto",
-        overflow: "hidden"
-    },
     content: {
+        display: "flex",
         flex: "1 1 auto",
         height: "100%",
-        overflow: "auto"
+        justifyContent: 'center',
     },
 }));
 
 const MainLayout = ({children}) => {
     const classes = mainLayoutStyle();
+    const location = useLocation();
+
+    useEffect(() => {
+        // reset scroll position to top (user changed the page)
+        window.scrollTo(0, 0)
+    }, [location]);
 
     return (
-        <div style={{backgroundColor: 'rgba(10, 10, 10, 0.6)'}}>
+        <div style={{backgroundColor: 'rgba(10, 10, 10, 0.2)'}}>
             <TopBar/>
-            <div className={classes.wrapper}>
-
-                <div className={classes.contentContainer}>
-                    <div className={classes.content}>
-                        {children}
-                    </div>
-                </div>
+            <div className={classes.content}>
+                {children}
             </div>
+            <div style={{height: '4em'}}/>
             <Footer/>
         </div>
     );

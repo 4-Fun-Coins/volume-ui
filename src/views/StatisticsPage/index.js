@@ -1,12 +1,11 @@
 import Page from "../../components/Page";
-import {Container, Grid, makeStyles} from "@material-ui/core";
+import {Container, makeStyles} from "@material-ui/core";
 import Dash from "../../components/Dash";
 
-const landingStyles = makeStyles((theme) => ({
+const styles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
-        height: '100vh'
     },
     contentBackground: {
         paddingBottom: 10,
@@ -15,7 +14,7 @@ const landingStyles = makeStyles((theme) => ({
 }));
 
 const StatisticsPage = () => {
-    const classes = landingStyles();
+    const classes = styles();
 
 
     return (
@@ -23,14 +22,12 @@ const StatisticsPage = () => {
             className={classes.root}
             title={'Dashboard'}
         >
-            <Grid container item>
-                <Container
-                    maxWidth={false}
-                    className={classes.contentBackground}
-                >
-                    <Dash/>
-                </Container>
-            </Grid>
+            <Container
+                maxWidth={false}
+                className={classes.contentBackground}
+            >
+                <Dash/>
+            </Container>
         </Page>
     )
 }

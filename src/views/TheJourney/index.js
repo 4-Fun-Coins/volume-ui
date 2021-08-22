@@ -77,7 +77,7 @@ const Journey = () => {
             className={classes.root}
             title={'Home'}
         >
-            <Container className={classes.contentBackground} maxWidth={"xl"}>
+            <Container className={classes.contentBackground} maxWidth={"lg"}>
                 <Grid container item xs={12} style={{display: "flex", width: '100%', height: '100%'}}>
                     {
                         !milestonesInit &&

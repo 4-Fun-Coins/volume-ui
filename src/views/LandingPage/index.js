@@ -1,9 +1,10 @@
 import Page from "../../components/Page";
-import {Container, Grid, makeStyles} from "@material-ui/core";
+import {Container, makeStyles} from "@material-ui/core";
 import Hero from "../../components/Home/Hero";
 import Features from "../../components/Home/Features";
 import TokenDistribution from "../../components/Home/TokenDistribition";
 import ProjectTimeline from "../../components/Home/ProjectTimeLine";
+import React from "react";
 
 const landingStyles = makeStyles((theme) => ({
     root: {
@@ -24,37 +25,16 @@ const LandingPage = () => {
             className={classes.root}
             title={'Home'}
         >
-            <Grid container item>
-                <Container
-                    maxWidth={false}
-                    className={classes.contentBackground}
-                >
-                    <Hero/>
-                    <Features/>
-                </Container>
+            <Container
+                maxWidth={false}
+                className={classes.contentBackground}
+            >
+                <Hero/>
+                <Features/>
+                <TokenDistribution/>
+                <ProjectTimeline/>
 
-            </Grid>
-
-            <Grid container item>
-                <Container
-                    maxWidth={false}
-                    className={classes.contentBackground}
-                >
-                    <TokenDistribution/>
-                </Container>
-
-            </Grid>
-
-            <Grid container item>
-                <Container
-                    maxWidth={false}
-                    className={classes.contentBackground}
-                >
-                    {/* add project timeline here */}
-                    <ProjectTimeline/>
-                </Container>
-
-            </Grid>
+            </Container>
         </Page>
     )
 }
