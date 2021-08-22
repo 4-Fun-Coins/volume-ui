@@ -12,7 +12,6 @@ import useSettings from './hooks/useSettings';
 import {createTheme} from './theme';
 import routes, {renderRoutes} from './routes';
 import {HashRouter} from 'react-router-dom';
-import CookiesNotification from "./components/CookiesNotification";
 import NewSpace from "./components/NewSpace";
 import MainLayout from './layout/MainLayout';
 
@@ -49,7 +48,6 @@ const App = () => {
             >
               <HashRouter history={history}>
                 <GlobalStyles/>
-                <CookiesNotification/>
                 <div className={classes.universeBackground}>
                             <NewSpace />
                 </div>
