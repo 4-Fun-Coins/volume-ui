@@ -23,7 +23,7 @@ const StatisticsPage = () => {
             title={'Dashboard'}
         >
             <Container
-                maxWidth={false}
+                maxWidth={'lg'}
                 className={classes.contentBackground}
             >
                 <Dash/>
