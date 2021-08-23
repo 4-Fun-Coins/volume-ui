@@ -105,9 +105,9 @@ const Hero = ({reverse}) => {
                 </Grid>
 
                 <Grid item xs={12} md={6} alignItems={'center'} alignContent={'center'} justifyContent={'center'}
-                      style={{textAlign: 'center'}}>
+                      style={{textAlign: 'right'}}>
                     {!isMobile &&
-                    <img src={'/explorer.webp'} alt={'logo'} height={500} style={{border: '6px double #522D82'}}/>}
+                    <img src={'/explorer.webp'} alt={'logo'} height={500} width={358} style={{border: '6px double #522D82'}}/>}
                 </Grid>
             </Grid>
             <div ref={hero2} style={{marginBottom: '4em', marginTop: '2em'}}/>
