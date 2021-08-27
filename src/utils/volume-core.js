@@ -294,7 +294,7 @@ export const blockToDate = async (blocknumber) => {
         const difference = blocknumber - currentBlock;
         const averageBlockTime = (currentBlockTime - pastBlockTime) / 1000000
         console.log('av = ' + averageBlockTime);
-        return Date.now() + averageBlockTime * difference;
+        return (Date.now() + (averageBlockTime * difference * 1000))/1000;
     }
 }
 // === HELPER FUNCTIONS === //
