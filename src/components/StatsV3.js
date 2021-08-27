@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from "react";
-import {BigTitleCard, StatsCard} from "./Cards";
+import {BigTitleCard, cardStyles, StatsCard} from "./Cards";
 import {getFuelAddedForAddress, getTotalFuelAdded} from "../utils/volume-core";
 import {useWallet} from "use-wallet";
 import {formatLongNumber} from "../utils/Utilities";
+import {Grid} from "@material-ui/core";
 
 const Big = require('big-js');
 
 export const GlobalStats = () => {
-
+    const cardClasses = cardStyles();
     const wallet = useWallet();
 
     const [initGlobalStats, setInitGlobalStats] = useState(false);
@@ -52,18 +53,20 @@ export const GlobalStats = () => {
 
     return (
         <>
-            <BigTitleCard imoji={'💹'} title={'Global Stats'}/>
-            <StatsCard
-                statsTitles={['🛢️ Total fuel added:', '⏳ Total Time Added:', '🚀 Distance Traveled', '🔥 $VOL burned', '⛽ My fuel added:', '⏱️ My Time Added:']}
-                statsValues={[
-                    initGlobalStats && !globalError ? formatLongNumber(globalBlocks, 2) + ' Blocks' : '????',
-                    initGlobalStats && !globalError ? formatLongNumber(globalSeconds, 2) + ' Sec' : '????',
-                    initGlobalStats && !globalError ? formatLongNumber(globalBlocks, 2) + ' Blocks' : '????',
-                    initGlobalStats && !globalError ? formatLongNumber(globalBlocks, 2) + ' $VOL' : '????',
-                    initUserStats && !userError ? formatLongNumber(userBlocks, 2) + ' Blocks' : '????',
-                    initUserStats && !userError ? formatLongNumber(userSeconds, 2) + ' Sec' : '????',
-                ]}
-            />
+            <BigTitleCard imoji={'💹'} title={'Global Stats'} card/>
+            <Grid item container className={cardClasses.cardGrid} style={{padding: '0.8em',}}>
+                <StatsCard
+                    statsTitles={['🛢️ Total fuel added:', '⏳ Total Time Added:', '🚀 Distance Traveled', '🔥 $VOL burned', '⛽ My fuel added:', '⏱️ My Time Added:']}
+                    statsValues={[
+                        initGlobalStats && !globalError ? formatLongNumber(globalBlocks, 2) + ' Blocks' : '????',
+                        initGlobalStats && !globalError ? formatLongNumber(globalSeconds, 2) + ' Sec' : '????',
+                        initGlobalStats && !globalError ? formatLongNumber(globalBlocks, 2) + ' Blocks' : '????',
+                        initGlobalStats && !globalError ? formatLongNumber(globalBlocks, 2) + ' $VOL' : '????',
+                        initUserStats && !userError ? formatLongNumber(userBlocks, 2) + ' Blocks' : '????',
+                        initUserStats && !userError ? formatLongNumber(userSeconds, 2) + ' Sec' : '????',
+                    ]}
+                />
+            </Grid>
         </>
     );
 }

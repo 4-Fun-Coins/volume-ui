@@ -17,7 +17,7 @@ import TimelineOppositeContent from "@material-ui/lab/TimelineOppositeContent";
 import Paper from "@material-ui/core/Paper";
 import React from "react";
 
-const heroStyles = makeStyles((theme) => ({
+export const timelineStyles = makeStyles((theme) => ({
     root: {
         padding: '8px',
     },
@@ -105,7 +105,7 @@ const TimelineData = [
 
 
 const ProjectTimeline = ({reverse, ...rest}) => {
-    const classes = heroStyles();
+    const classes = timelineStyles();
     const cardClasses = cardStyles();
 
     const theme = useTheme();

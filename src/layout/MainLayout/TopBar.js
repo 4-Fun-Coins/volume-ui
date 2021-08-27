@@ -20,6 +20,7 @@ import {User} from "react-feather";
 import { useSnackbar } from 'notistack';
 
 import LogoWithText from '../../components/LogoWithText'
+import useVolume from "../../hooks/useVolume";
 
 const drawerWidth = 240;
 
@@ -80,6 +81,7 @@ const TopBar = ({className, ...rest}) => {
     const wallet = useWallet();
     const history = useHistory();
     const location = useLocation();
+    const volume = useVolume();
 
     const [lastToast , setLastToast] = useState(0);
     const [wrongNet, setWrongNet] = useState(false);
@@ -96,6 +98,8 @@ const TopBar = ({className, ...rest}) => {
         } else {
             setWrongNet(false);
         }
+        if(volume.setWallet)
+            volume.setWallet(wallet);
     },[wallet])
 
 

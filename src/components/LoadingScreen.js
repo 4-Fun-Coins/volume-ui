@@ -43,10 +43,7 @@ const LoadingScreen = ({transparent , style}) => {
 
     return (
         <div className={transparent ? classes.rootTransparent : classes.root} style={style}>
-            <CircularProgress className={classes.progress}/>
-            <Typography variant={"h1"} color={"primary"}>
-                Loading
-            </Typography>
+            <img src={'/pacman.svg'} style={{backgroundColor: "transparent"}} width={128} height={128}/>
         </div>
     );
 };

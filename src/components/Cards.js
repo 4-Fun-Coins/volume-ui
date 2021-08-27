@@ -35,10 +35,11 @@ export const cardStyles = makeStyles((theme) => ({
 }));
 
 
-export const BigTitleCard = ({imoji, title, ...rest}) => {
+export const BigTitleCard = ({imoji, title, card, ...rest}) => {
     const classes = cardStyles();
+
     return (
-        <Grid item container className={classes.cardGrid} rest>
+        <Grid item container className={card ? classes.cardGrid : ''} rest>
             <h1 className={classes.cardGridTitle}>
                 {`${imoji}${imoji}${imoji}   ${title}   ${imoji}${imoji}${imoji}`}
             </h1>
@@ -69,7 +70,7 @@ export const StatsCard = ({statsTitles, statsValues}) => {
     </Grid>
 
     return (
-        <Grid item container className={classes.cardGrid} style={{padding: '0.8em',}}>
+        <>
             {statsTitles.map((title, index, array) => {
                 const hasDivider = index !== 0 && (index + 1) % 2 === 0 && index !== array.length - 1
                 return (
@@ -79,6 +80,6 @@ export const StatsCard = ({statsTitles, statsValues}) => {
                     </>
                 )
             })}
-        </Grid>
+        </>
     )
 }

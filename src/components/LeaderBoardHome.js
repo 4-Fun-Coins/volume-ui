@@ -117,17 +117,19 @@ const LeaderboardHome = (props) => {
             <Grid container spacing={1} item xs={12} justifyContent={"flex-start"} alignItems="flex-start"
                   direction={"column"}>
 
-                <BigTitleCard imoji={'🏆'} title={'Leaderboard'}/>
+                <BigTitleCard imoji={'🏆'} title={'Leaderboard'} card/>
 
-                <StatsCard
-                    statsTitles={['🎖️ My Rank', '⛽ My Fuel Added', '🗓️ Active Milestone', '💰 Jackpot Amount']}
-                    statsValues={[
-                        currentAccount.rank !== UNKNOWN ? getOrdinalSuffix(currentAccount.rank) : currentAccount.rank,
-                        formatLongNumber(Number(currentAccount.fuelAdded) / 10 ** 18, 2) + ' blocks',
-                        activeMilestone ? activeMilestone.name : UNKNOWN,
-                        activeMilestone ? formatLongNumber(activeMilestone.amountInPot / 10 ** 18, 2) : UNKNOWN + ' $Vol'
-                    ]}
-                />
+                <Grid item container className={cardClasses.cardGrid} style={{padding: '0.8em',}}>
+                    <StatsCard
+                        statsTitles={['🎖️ My Rank', '⛽ My Fuel Added', '🗓️ Active Milestone', '💰 Jackpot Amount']}
+                        statsValues={[
+                            currentAccount.rank !== UNKNOWN ? getOrdinalSuffix(currentAccount.rank) : currentAccount.rank,
+                            formatLongNumber(Number(currentAccount.fuelAdded) / 10 ** 18, 2) + ' blocks',
+                            activeMilestone ? activeMilestone.name : UNKNOWN,
+                            activeMilestone ? formatLongNumber(activeMilestone.amountInPot / 10 ** 18, 2) : UNKNOWN + ' $Vol'
+                        ]}
+                    />
+                </Grid>
 
                 <Grid item container className={cardClasses.cardGrid} style={{padding: '0.8em'}}>
                     <Grid item container xs={2} sm={2} md={1}>

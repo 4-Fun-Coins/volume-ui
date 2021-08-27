@@ -1,5 +1,3 @@
-import React, {useEffect} from 'react';
-import {createBrowserHistory} from 'history';
 import {create} from 'jss';
 import rtl from 'jss-rtl';
 import MomentUtils from '@date-io/moment';
@@ -14,9 +12,9 @@ import routes, {renderRoutes} from './routes';
 import {HashRouter} from 'react-router-dom';
 import NewSpace from "./components/NewSpace";
 import MainLayout from './layout/MainLayout';
+import {VolumeProvider} from "./contexts/VolumeContext";
 
 const jss = create({plugins: [...jssPreset().plugins, rtl()]});
-const history = createBrowserHistory();
 
 const appStyles = makeStyles((theme) => ({
   universeBackground: {
@@ -46,13 +44,15 @@ const App = () => {
                 dense
                 maxSnack={3}
             >
-              <HashRouter history={history}>
+              <HashRouter >
                 <GlobalStyles/>
                 <div className={classes.universeBackground}>
                             <NewSpace />
                 </div>
                 <MainLayout>
-                  {renderRoutes(routes)}
+                    <VolumeProvider>
+                        {renderRoutes(routes)}
+                    </VolumeProvider>
                 </MainLayout>
               </HashRouter>
             </SnackbarProvider>

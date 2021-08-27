@@ -196,14 +196,34 @@ export async function getAllMilestonesAndFuelForAddress(address) {
     });
 }
 
+
 export async function getAllMilestones() {
     return new Promise((resolve, reject) => {
         const volumeJackpot = new web3.eth.Contract(VolumeJackpotABI, volumeJackpotAddress);
-        volumeJackpot.methods.getAllMilestones().call((err, milestones) => {
+        volumeJackpot.methods.getAllMilestones().call(async (err, milestones) => {
             if (err)
                 reject(err);
 
-            resolve(milestones);
+            const formattedMilestones = await Promise.all(milestones.map(async (milestone, index) => {
+                const participants = await getAllContributorsForMilestone(milestone.startBlock);
+                const block = await getCurrentBlock();
+                const status = milestone.endBlock < block ?
+                    'past' : milestone.startBlock <= block ? 'active' : 'future'
+                return {
+                    status,
+                    startBlock: milestone.startBlock,
+                    endBlock: milestone.endBlock,
+                    startTime: await blockToDate(milestone.startBlock),
+                    endTime: await blockToDate(milestone.endBlock),
+                    name: milestone.name,
+                    amountInPot: milestone.amountInPot, // total Vol deposited for this milestone rewards
+                    totalFuelAdded: milestone.totalFuelAdded,
+                    participants: participants,
+                    winners: await getWinnersForMilestone(milestone.startBlock)
+                }
+            }))
+
+            resolve(formattedMilestones);
         });
     })
 }
@@ -229,22 +249,54 @@ export async function getAllContributorsForMilestone(id) {
 
             // map and get fuel added for each participant
             let fuelAddedPerParticipant = await Promise.all(participants.map(async (participant, index) => {
-                    const nickname = await getNickname(participant);
-                    const fuelAdded = await volumeJackpot.methods.getFuelAddedInMilestone(id, participant).call();
+                const nickname = await getNickname(participant);
+                const fuelAdded = await volumeJackpot.methods.getFuelAddedInMilestone(id, participant).call();
 
-                    return {
-                        participant: nickname === "" ? `${participant.slice(0, 6)}...${participant.slice(participant.length-5, participant.length-1)}` : nickname,
-                        nickname,
-                        address: participant,
-                        fuelAdded: fuelAdded,
-                    }
+                return {
+                    participant: nickname === "" ? `${participant.slice(0, 6)}...${participant.slice(participant.length - 5, participant.length - 1)}` : nickname,
+                    nickname,
+                    address: participant,
+                    fuelAdded: fuelAdded,
+                }
             }));
 
-            resolve(fuelAddedPerParticipant.sort(sortFunction).map((element,index) => {return {rank: index+1,...element}}));
+            resolve(fuelAddedPerParticipant.sort(sortFunction).map((element, index) => {
+                return {rank: index + 1, ...element}
+            }));
         });
     })
 }
 
+export const getWinnersForMilestone = async (milestoneID) => {
+    const volumeJackpot = new web3.eth.Contract(VolumeJackpotABI, volumeJackpotAddress);
+    return volumeJackpot.methods.getWinners(milestoneID).call().catch(error => console.error(error.message()));
+}
+
+export const getCurrentTotalSupply = async () => {
+    const volume = new web3.eth.Contract(volumeABI, volumeAddress);
+
+    return await volume.methods.totalSupply().call();
+    ;
+}
+
+export const getCurrentBlock = async () => {
+    return await web3.eth.getBlockNumber();
+}
+export const blockToDate = async (blocknumber) => {
+    const currentBlock = await getCurrentBlock();
+
+    if (blocknumber <= currentBlock)
+        return (await web3.eth.getBlock(blocknumber)).timestamp
+    else {
+        // we average the future blocktime based on the average blocktime in the last one million block
+        const pastBlockTime = (await web3.eth.getBlock(currentBlock - 1000000)).timestamp;
+        const currentBlockTime = (await web3.eth.getBlock(currentBlock)).timestamp;
+        const difference = blocknumber - currentBlock;
+        const averageBlockTime = (currentBlockTime - pastBlockTime) / 1000000
+        console.log('av = ' + averageBlockTime);
+        return Date.now() + averageBlockTime * difference;
+    }
+}
 // === HELPER FUNCTIONS === //
 
 const sortFunction = (a, b) => {
