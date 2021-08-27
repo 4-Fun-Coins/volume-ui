@@ -87,7 +87,7 @@ const styles = makeStyles((theme) => ({
 
     '@keyframes revealLeaders': {
         from: {
-            transform: 'translateX(600px)',
+            transform: 'translateX(-600px)',
             opacity: 0,
         },
         to: {
