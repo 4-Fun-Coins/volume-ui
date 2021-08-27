@@ -1,4 +1,4 @@
-import {Grid, makeStyles} from "@material-ui/core";
+import {Grid} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
 import Gauge from "./Gauge";
 import {getFuel} from "../utils/volume-core";
@@ -6,27 +6,7 @@ import LoadingScreen from "./LoadingScreen";
 
 const Big = require('big-js');
 
-const fuelGaugeStyles = makeStyles((theme) => ({
-    connectButton: {
-        borderRadius: '5em',
-        height: '10em',
-        width: '10em',
-        backgroundColor: '#522d82',
-    },
-    buttonText: {
-        color: "#f9c501",
-        textOverflow: 'ellipsis',
-        whiteSpace: "nowrap",
-        overflow: "hidden"
-    },
-    spacer: {
-        height: '10em',
-    }
-}));
-
 const FuelGauge = () => {
-    const classes = fuelGaugeStyles();
-
     const initialFuel = 2592000;
 
     const [initFuel, setInitFuel] = useState(false);
