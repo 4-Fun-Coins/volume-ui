@@ -1,4 +1,4 @@
-import {Grid, makeStyles, Divider, Avatar, Badge} from "@material-ui/core";
+import {Grid, makeStyles, Avatar, Badge} from "@material-ui/core";
 import {withStyles} from '@material-ui/core/styles';
 import {useEffect, useState} from "react";
 import {useWallet} from "use-wallet";
@@ -8,6 +8,8 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import {useTheme} from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import {BigTitleCard, cardStyles, StatsCard} from "./Cards";
+import {FillBar} from "./Journey/JourneyLeaderBoard";
+import {LeaderBoardColors} from "../data/static/Colors";
 
 const UNKNOWN = '????';
 const emojis = ['🥇', '🥈', '🥉', '💯', '🔥', '⭐️', '🤩', '👏', '👍', '🙌'];
@@ -15,7 +17,8 @@ const emojis = ['🥇', '🥈', '🥉', '💯', '🔥', '⭐️', '🤩', '👏'
 const styles = makeStyles((theme) => ({
     leaderboardContainer: {
         marginTop: '7px',
-        padding: '0px !important',
+        padding: '6px !important',
+        cursor: 'default'
     },
     leaderboradEntry: {
         color: 'white',
@@ -25,22 +28,6 @@ const styles = makeStyles((theme) => ({
         [theme.breakpoints.between('xs', 'sm')]: {
             fontSize: '0.9rem',
         }
-    },
-    avatarGold: {
-        backgroundColor: '#DAA520',
-        color: 'white'
-    },
-    avatarSilver: {
-        backgroundColor: '#00cec9',
-        color: 'white'
-    },
-    avatarBronze: {
-        backgroundColor: '#e17055',
-        color: 'white'
-    },
-    avatarRest: {
-        backgroundColor: '#69696966',
-        color: 'white'
     },
     currentUserBg: {
         backgroundColor: 'green',
@@ -144,14 +131,15 @@ const LeaderboardHome = (props) => {
                 </Grid>
 
                 <Grid item container direction={"column"} justify={"center"} alignItems="center"
-                      className={classes.leaderboardContainer}>
+                      className={`${classes.leaderboardContainer} ${cardClasses.cardGrid}`}>
                     {participants.length > 0 ?
                         participants.slice(0, 10).map(element => {
                             return LeaderboardEntry({
                                 ...element,
                                 classes,
                                 loaded,
-                                isCurrentUser: element.address === wallet.account
+                                isCurrentUser: element.address === wallet.account,
+                                maxScore: participants[0].fuelAdded
                             });
                         })
                         :
@@ -169,14 +157,13 @@ const LeaderboardHome = (props) => {
 }
 
 
-const LeaderboardEntry = ({rank, address, nickname, classes, loaded, fuelAdded, isCurrentUser}) => {
+const LeaderboardEntry = ({rank, address, nickname, classes, loaded, fuelAdded, isCurrentUser, maxScore}) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
 
     const classesArr = [classes.avatarGold, classes.avatarSilver, classes.avatarBronze, classes.avatarRest,]
     const rr = (rank - 1) % 10;
     const avatarClass = rank - 1 < 3 ? classesArr[rank - 1] : classesArr[3]
-
     const StyledBadge = withStyles((theme) => ({
         badge: {
             top: '90%',
@@ -190,13 +177,12 @@ const LeaderboardEntry = ({rank, address, nickname, classes, loaded, fuelAdded, 
 
     return (
         <>
-            {rank === 1 && <Divider style={{height: '1px', backgroundColor: '#444444', margin: 0, width: '99%'}}/>}
             <Grid container item
-                  className={[classes.leaderboradEntry, isMobile && isCurrentUser && classes.currentUserBg]}
+                  className={`${classes.leaderboradEntry} ${isMobile && isCurrentUser && classes.currentUserBg}`}
                   alignItems="center">
 
                 <Grid container item xs={2} sm={2} md={1} justifyContent={'center'}>
-                    <Avatar variant="rounded" className={avatarClass}>{rank}</Avatar>
+                    <Avatar variant="rounded" style={{backgroundColor: LeaderBoardColors[rank - 1]}}>{rank}</Avatar>
                 </Grid>
                 <Grid container item xs={5} sm={5} md={6} style={{paddingLeft: '3px'}}>
 
@@ -218,9 +204,11 @@ const LeaderboardEntry = ({rank, address, nickname, classes, loaded, fuelAdded, 
                     {loaded ? formatLongNumber(Number(fuelAdded) / 10 ** 18, 2) + (isMobile ? '' : ' blocks') + ` ${emojis[rr]}` :
                         <Skeleton variant="text" width={'100%'}/>}
                 </Grid>
-
+                <Grid item xs={12}>
+                    {loaded &&
+                    <FillBar rank={rank - 1} percentage={100 * Number(fuelAdded) / Number(maxScore)} compact/>}
+                </Grid>
             </Grid>
-            <Divider style={{height: '1px', backgroundColor: '#444444', margin: 0, width: '99%'}}/>
         </>
     )
 }

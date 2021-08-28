@@ -4,6 +4,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import {formatLongNumber} from "../../utils/Utilities";
 import React from "react";
+import {LeaderBoardColors} from "../../data/static/Colors";
 
 const styles = makeStyles((theme) => ({
     Leaderboard: {
@@ -78,7 +79,6 @@ const styles = makeStyles((theme) => ({
         animationFillMode: 'both',
         animationTimingFunction: 'cubic-bezier(0.6, 0.2, 0.1, 1)',
         transformOrigin: 'left',
-        marginBottom: '10px'
     },
     bar: {
         height: '4px',
@@ -106,13 +106,6 @@ const styles = makeStyles((theme) => ({
     }
 }));
 
-let colors = [
-    '#FFB900',
-    '#69797E',
-    '#847545',
-    '#E74856',
-    '#0078D7',
-];
 const JourneyLeaderboard = ({participants, maxScore}) => {
     const classes = styles();
 
@@ -127,7 +120,7 @@ const JourneyLeaderboard = ({participants, maxScore}) => {
                         <Box
                             key={i}
                             style={{
-                                animationDelay: i * 0.1 + 's'
+                                animationDelay: i * 0.2 + 's'
                             }}
                             className={classes.leader}
                         >
@@ -135,7 +128,7 @@ const JourneyLeaderboard = ({participants, maxScore}) => {
                                 {i < 3 ? (
                                     <Box
                                         style={{
-                                            backgroundColor: colors[i]
+                                            backgroundColor: LeaderBoardColors[i]
                                         }}
                                         className={classes.leaderAva}
                                     >
@@ -154,27 +147,38 @@ const JourneyLeaderboard = ({participants, maxScore}) => {
                                 <Box style={{textAlign: "left"}}>
                                     <Box className={classes.username}>{i + 1 + '. ' + participant.nickname}</Box>
                                     <Box className={classes.leaderScore}>
-                                        <Avatar className={classes.svg} style={{backgroundColor: colors[i]}}>B</Avatar>
+                                        <Avatar className={classes.svg}
+                                                style={{backgroundColor: LeaderBoardColors[i]}}>B</Avatar>
                                         <Box
                                             className={classes.leaderScoreTitle}>{formatLongNumber(participant.fuelAdded / 10 ** 18) + ' Fuel Block'}</Box>
                                     </Box>
                                 </Box>
                             </Box>
-                            <Box style={{animationDelay: 0.4 + i * 0.2 + 's'}} className={classes.leaderBar}>
-                                <Box
-                                    style={{
-                                        backgroundColor: colors[i],
-                                        width: participant.fuelAdded / maxScore * 100 + '%'
-                                    }}
-                                    className={classes.bar}
-                                />
-                            </Box>
+                            <FillBar rank={i} percentage={(participant.fuelAdded / maxScore) * 100}/>
                         </Box>
                     ))
                 ) : (
                     <Box>Loading</Box>
                 )}
             </Box>
+        </Box>
+    )
+}
+
+export const FillBar = ({rank, percentage, compact}) => {
+    const classes = styles();
+
+    return (
+        <Box style={{animationDelay: 0.4 + rank * 0.2 + 's', width: '100%', marginBottom: compact ? 4 : 10}}
+             className={classes.leaderBar}>
+            <Box
+                style={{
+                    backgroundColor: LeaderBoardColors[rank],
+                    // TODO : remove this in production
+                    width: `${percentage < 1 ? percentage * 1000000 : percentage < 5 ? percentage * 10 : percentage}%`
+                }}
+                className={classes.bar}
+            />
         </Box>
     )
 }
