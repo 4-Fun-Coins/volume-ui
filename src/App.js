@@ -4,13 +4,13 @@ import MomentUtils from '@date-io/moment';
 import {SnackbarProvider} from 'notistack';
 import {jssPreset, StylesProvider, ThemeProvider} from '@material-ui/core';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
-import GlobalStyles from './components/GlobalStyles';
+import GlobalStyles from './components/Root/GlobalStyles';
 import {makeStyles} from "@material-ui/core";
 import useSettings from './hooks/useSettings';
 import {createTheme} from './theme';
 import routes, {renderRoutes} from './routes';
 import {HashRouter} from 'react-router-dom';
-import NewSpace from "./components/NewSpace";
+import NewSpace from "./components/Root/NewSpace";
 import MainLayout from './layout/MainLayout';
 import {VolumeProvider} from "./contexts/VolumeContext";
 

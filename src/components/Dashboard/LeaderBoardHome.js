@@ -2,14 +2,14 @@ import {Grid, makeStyles, Avatar, Badge} from "@material-ui/core";
 import {withStyles} from '@material-ui/core/styles';
 import {useEffect, useState} from "react";
 import {useWallet} from "use-wallet";
-import {formatLongNumber, getOrdinalSuffix, getShorAddress} from "../utils/Utilities";
-import {getActiveMilestone, getAllContributorsForMilestone, getNickname} from "../utils/volume-core";
+import {formatLongNumber, getOrdinalSuffix, getShorAddress} from "../../utils/Utilities";
+import {getActiveMilestone, getAllContributorsForMilestone, getNickname} from "../../utils/volume-core";
 import Skeleton from '@material-ui/lab/Skeleton';
 import {useTheme} from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery'
-import {BigTitleCard, cardStyles, StatsCard} from "./Cards";
-import {FillBar} from "./Journey/JourneyLeaderBoard";
-import {LeaderBoardColors} from "../data/static/Colors";
+import {BigTitleCard, cardStyles, StatsCard} from "../Cards";
+import {FillBar} from "../Journey/JourneyLeaderBoard";
+import {LeaderBoardColors} from "../../data/static/Colors";
 
 const UNKNOWN = '????';
 const emojis = ['🥇', '🥈', '🥉', '💯', '🔥', '⭐️', '🤩', '👏', '👍', '🙌'];
@@ -161,9 +161,7 @@ const LeaderboardEntry = ({rank, address, nickname, classes, loaded, fuelAdded, 
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
 
-    const classesArr = [classes.avatarGold, classes.avatarSilver, classes.avatarBronze, classes.avatarRest,]
     const rr = (rank - 1) % 10;
-    const avatarClass = rank - 1 < 3 ? classesArr[rank - 1] : classesArr[3]
     const StyledBadge = withStyles((theme) => ({
         badge: {
             top: '90%',

@@ -1,7 +1,7 @@
 import {makeStyles} from "@material-ui/core";
 import PropTypes from "prop-types";
 import TopBar from "./TopBar";
-import Footer from "../../components/Footer";
+import Footer from "../../components/Root/Footer";
 import React, {useEffect, useRef} from "react";
 import {useLocation} from "react-router-dom";
 

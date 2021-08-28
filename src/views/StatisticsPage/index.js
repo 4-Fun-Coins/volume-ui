@@ -1,6 +1,6 @@
-import Page from "../../components/Page";
+import Page from "../../components/Root/Page";
 import {Container, makeStyles} from "@material-ui/core";
-import Dash from "../../components/Dash";
+import Dash from "../../components/Dashboard/Dash";
 
 const styles = makeStyles((theme) => ({
     root: {

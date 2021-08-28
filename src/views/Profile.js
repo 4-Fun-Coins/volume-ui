@@ -1,4 +1,4 @@
-import Page from "../components/Page";
+import Page from "../components/Root/Page";
 import {
     Button, ButtonBase, CircularProgress,
     Container,
@@ -37,14 +37,6 @@ const styles = makeStyles((theme) => ({
         paddingBottom: 10,
         paddingTop: 80,
         backgroundColor: 'rgba(10, 10, 10, 0.6)',
-        // [theme.breakpoints.down('lg')]: { // Implement this when we have > 6 milestones
-        //     display: 'flex',
-        //     flexDirection: 'column',
-        //     height: '100%'
-        // },
-        // [theme.breakpoints.up('lg')]: {
-        //     height: '100vh'
-        // }
         height: '100vh'
     },
     paper: {

@@ -1,4 +1,4 @@
-import Page from "../../components/Page";
+import Page from "../../components/Root/Page";
 import {Container, makeStyles} from "@material-ui/core";
 import Hero from "../../components/Home/Hero";
 import Features from "../../components/Home/Features";

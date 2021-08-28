@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
-import {BigTitleCard, cardStyles, StatsCard} from "./Cards";
-import {getFuelAddedForAddress, getTotalFuelAdded} from "../utils/volume-core";
+import {BigTitleCard, cardStyles, StatsCard} from "../Cards";
+import {getFuelAddedForAddress, getTotalFuelAdded} from "../../utils/volume-core";
 import {useWallet} from "use-wallet";
-import {formatLongNumber} from "../utils/Utilities";
+import {formatLongNumber} from "../../utils/Utilities";
 import {Grid} from "@material-ui/core";
 
 const Big = require('big-js');

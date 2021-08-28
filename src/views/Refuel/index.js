@@ -1,4 +1,4 @@
-import Page from "../../components/Page";
+import Page from "../../components/Root/Page";
 import {Button, Card, Container, Grid, Hidden, makeStyles, TextField} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import {useWallet} from "use-wallet";

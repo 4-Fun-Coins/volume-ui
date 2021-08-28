@@ -6,9 +6,9 @@ import {
     IconButton
 } from "@material-ui/core";
 import React from "react";
-import DiscordIcon from "./CustomIcons/DiscordIcon";
-import TwitterIcon from "./CustomIcons/TwitterIcon";
-import GitHubIcon from "./CustomIcons/GitHubIcon";
+import DiscordIcon from "../CustomIcons/DiscordIcon";
+import TwitterIcon from "../CustomIcons/TwitterIcon";
+import GitHubIcon from "../CustomIcons/GitHubIcon";
 
 const aboutStyles = makeStyles((theme) => ({
     divider: {

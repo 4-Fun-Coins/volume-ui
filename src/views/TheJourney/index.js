@@ -1,4 +1,4 @@
-import Page from "../../components/Page";
+import Page from "../../components/Root/Page";
 import {makeStyles} from "@material-ui/core";
 import React from "react";
 import JourneyHome from "../../components/Journey/Journey";

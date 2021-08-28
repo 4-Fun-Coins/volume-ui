@@ -1,8 +1,8 @@
 import {Grid} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
 import Gauge from "./Gauge";
-import {getFuel} from "../utils/volume-core";
-import LoadingScreen from "./LoadingScreen";
+import {getFuel} from "../../utils/volume-core";
+import LoadingScreen from "../LoadingScreen";
 
 const Big = require('big-js');
 
