@@ -1,11 +1,22 @@
 import React, {createContext, useEffect, useState} from 'react';
-import {getAllMilestones, getCurrentTotalSupply} from "../utils/volume-core";
+import {
+    blockToDate,
+    getAllMilestones,
+    getBalanceForAddress, getClaimableWinnings,
+    getCurrentBlock,
+    getCurrentTotalSupply,
+    getFuel, getFuelAddedForAddress
+} from "../utils/volume-core";
+import {getFormattedTimePeriod} from "../utils/Utilities";
 
 const VolumeContext = createContext({
     milestones: null,
     userStats: null,
     ecosystemStats: null,
-    setWallet: null
+    setWallet: null,
+    refreshUserStats: null,
+    refreshMilestones: null,
+    refreshEcosystemStats: null
 });
 
 export const VolumeProvider = ({children}) => {
@@ -22,7 +33,12 @@ export const VolumeProvider = ({children}) => {
         totalSupply: null,
         burntToken: null,
         flyingDistance: null,
+        flightTime: null,
+        flightTimeFormatted: null,
+        fuelTank: null,
+        estimatedDateFuelOut: null,
         tokenPrice: null,
+        timeLeft: null
     });
 
     useEffect(() => {
@@ -32,10 +48,47 @@ export const VolumeProvider = ({children}) => {
     }, []);
 
     useEffect(() => {
-        if (milestones) {
-            getCurrentTotalSupply();
+        refreshEcosystemStats();
+    }, [milestones]);
+
+
+    useEffect(() => {
+        if (wallet && wallet.account) {
+            refreshUserStats();
         }
-    }, [milestones])
+    }, [wallet]);
+
+    const refreshEcosystemStats = () => {
+        if (!milestones) {
+            refreshMilestones();
+            return;
+        }
+        getCurrentTotalSupply().then(async totalSupply => {
+
+                getCurrentBlock().then(async block => {
+                    const flightTime = await blockToDate(block) - await blockToDate(milestones[0].startBlock);
+                    const fuelTank = Number(await getFuel());
+                    const eta = await blockToDate(Number(block) + Number(fuelTank));
+                    setEcosystemStats({
+                        ...ecosystemStats,
+                        totalSupply: totalSupply,
+                        burntToken: 1000000000 * 10 ** 18 - totalSupply,
+                        flyingDistance: block - milestones[0].startBlock,
+                        flightTime: flightTime * 1000,
+                        flightTimeFormatted: getFormattedTimePeriod(flightTime * 1000),
+                        fuelTank: fuelTank,
+                        estimatedDateFuelOut: eta,
+                        timeLeft: getFormattedTimePeriod(eta * 1000 - Date.now())
+                    });
+
+
+                });
+            }
+        );
+
+
+    }
+
 
     const refreshMilestones = () => {
         getAllMilestones().then(milestones => {
@@ -43,6 +96,46 @@ export const VolumeProvider = ({children}) => {
         });
     }
 
+    const refreshUserStats = async () => {
+        if (!wallet || !wallet.account)
+            return;
+
+        const balance = await getBalanceForAddress(wallet.account);
+        const fuelAdded = await getFuelAddedForAddress(wallet.account);
+        const winnings = await getClaimableWinnings(wallet.account);
+
+        if (!milestones) {
+            refreshMilestones();
+        }
+        let userMilestones;
+        if (milestones) {
+            userMilestones = milestones.map(milestone => {
+                let fuelAdded = 0;
+                let winningAmount = 0;
+                milestone.participants.forEach((participant => {
+                    if (participant.address === wallet.account)
+                        fuelAdded = participant.fuelAdded
+                }));
+                milestone.winners.forEach(winner => {
+                    if (winner === wallet.account)
+                        winningAmount = winner.amount;
+                });
+
+                return {
+                    milestoneId: milestone.startBlock,
+                    fuelAdded,
+                    winningAmount
+                }
+            });
+        }
+        setUserStats({
+            ...setUserStats,
+            volumeBalance: balance,
+            totalFuelSupplied: fuelAdded,
+            milestonesStats: userMilestones,
+            claimableRewards: winnings,
+        })
+    }
 
     return (
         <VolumeContext.Provider
@@ -50,7 +143,10 @@ export const VolumeProvider = ({children}) => {
                 milestones,
                 userStats,
                 ecosystemStats,
-                setWallet
+                setWallet,
+                refreshUserStats,
+                refreshMilestones,
+                refreshEcosystemStats
             }}
         >
             {children}

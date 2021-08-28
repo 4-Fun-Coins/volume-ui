@@ -79,9 +79,11 @@ const JourneyHome = ({...rest}) => {
             setMilestones(filteredMilestones);
             setIsBusy(false);
         }
+    }, [activeTab, volumeEcosystem.milestones]);
 
-    }, [activeTab, volumeEcosystem.milestones])
-
+    useEffect(() => {
+        // TODO add user stats for milestone
+    }, [volumeEcosystem.userStats]);
 
     const handleChange = (event, newValue) => {
         history.push(ROUTES_NAMES.JOURNEY + `?tab=${valid[newValue]}`);
@@ -116,7 +118,7 @@ const JourneyHome = ({...rest}) => {
             {volumeEcosystem.milestones && !isBusy ?
                 <Timeline align={!isMobile ? "alternate" : "left"}
                           style={{padding: '0px', width: '100%', display: 'block', marginTop: '16px'}}>
-                    {milestones.map((el) => <JourneyEntry milestone={el} isMobile={isMobile}/>)}
+                    {milestones.map((el, index) => <JourneyEntry milestone={el} isMobile={isMobile} key={index}/>)}
                 </Timeline> :
                 <LoadingScreen transparent/>
             }

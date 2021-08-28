@@ -1,19 +1,9 @@
-import React, { forwardRef, useCallback, useEffect } from "react";
-import { Helmet, HelmetProvider } from "react-helmet-async";
-import { useLocation } from "react-router-dom";
+import React, {forwardRef, useCallback, useEffect} from "react";
+import {Helmet, HelmetProvider} from "react-helmet-async";
 import PropTypes from "prop-types";
-import { Fade, Slide, Zoom } from "@material-ui/core";
+import {Fade} from "@material-ui/core";
 
-const Page = forwardRef(({ children, title, ...rest }, ref) => {
-    const location = useLocation();
-
-    const sendPageViewEvent = useCallback(() => {
-        // TODO Parse analytics add this page view
-    }, []);
-
-    useEffect(() => {
-        sendPageViewEvent();
-    }, [sendPageViewEvent]);
+const Page = forwardRef(({children, title, ...rest}, ref) => {
 
     return (
         <HelmetProvider>

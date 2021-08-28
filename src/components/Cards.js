@@ -1,4 +1,5 @@
 import {Grid, makeStyles, Divider} from "@material-ui/core";
+import React from "react";
 
 export const cardStyles = makeStyles((theme) => ({
     cardGrid: {
@@ -39,7 +40,7 @@ export const BigTitleCard = ({imoji, title, card, ...rest}) => {
     const classes = cardStyles();
 
     return (
-        <Grid item container className={card ? classes.cardGrid : ''} rest>
+        <Grid item container className={card ? classes.cardGrid : ''} {...rest}>
             <h1 className={classes.cardGridTitle}>
                 {`${imoji}${imoji}${imoji}   ${title}   ${imoji}${imoji}${imoji}`}
             </h1>
@@ -54,7 +55,7 @@ export const StatsCard = ({statsTitles, statsValues}) => {
         return (
             <Grid item container xs={6}>
 
-                <Grid item xs={12} class={classes.myrankSubText}>
+                <Grid item xs={12} className={classes.myrankSubText}>
                     {title}
                 </Grid>
                 <Grid item xs={12} className={classes.myRankValues}>
@@ -74,10 +75,10 @@ export const StatsCard = ({statsTitles, statsValues}) => {
             {statsTitles.map((title, index, array) => {
                 const hasDivider = index !== 0 && (index + 1) % 2 === 0 && index !== array.length - 1
                 return (
-                    <>
+                    <React.Fragment key={index}>
                         <StatItem title={statsTitles[index]} statValue={statsValues[index]}/>
                         {hasDivider && <MyDivider/>}
-                    </>
+                    </React.Fragment>
                 )
             })}
         </>

@@ -10,6 +10,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 import {BigTitleCard, cardStyles, StatsCard} from "../Cards";
 import {FillBar} from "../Journey/JourneyLeaderBoard";
 import {LeaderBoardColors} from "../../data/static/Colors";
+import React from "react";
 
 const UNKNOWN = '????';
 const emojis = ['🥇', '🥈', '🥉', '💯', '🔥', '⭐️', '🤩', '👏', '👍', '🙌'];
@@ -130,24 +131,26 @@ const LeaderboardHome = (props) => {
                     </Grid>
                 </Grid>
 
-                <Grid item container direction={"column"} justify={"center"} alignItems="center"
+                <Grid item container direction={"column"} justifyContent={"center"} alignItems="center"
                       className={`${classes.leaderboardContainer} ${cardClasses.cardGrid}`}>
                     {participants.length > 0 ?
-                        participants.slice(0, 10).map(element => {
+                        participants.slice(0, 10).map((element, index) => {
                             return LeaderboardEntry({
                                 ...element,
                                 classes,
                                 loaded,
                                 isCurrentUser: element.address === wallet.account,
-                                maxScore: participants[0].fuelAdded
+                                maxScore: participants[0].fuelAdded,
+                                key: index
                             });
                         })
                         :
-                        winners.map(element => {
+                        winners.map((element, index) => {
                             return LeaderboardEntry({
                                 rank: element.rank,
                                 classes,
-                                isCurrentUser: element.address === wallet.account
+                                isCurrentUser: element.address === wallet.account,
+                                key: index
                             });
                         })}
                 </Grid>
@@ -157,7 +160,7 @@ const LeaderboardHome = (props) => {
 }
 
 
-const LeaderboardEntry = ({rank, address, nickname, classes, loaded, fuelAdded, isCurrentUser, maxScore}) => {
+const LeaderboardEntry = ({rank, address, nickname, classes, loaded, fuelAdded, isCurrentUser, maxScore, key}) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
 
@@ -174,7 +177,7 @@ const LeaderboardEntry = ({rank, address, nickname, classes, loaded, fuelAdded, 
     }))(Badge);
 
     return (
-        <>
+        <React.Fragment key={key}>
             <Grid container item
                   className={`${classes.leaderboradEntry} ${isMobile && isCurrentUser && classes.currentUserBg}`}
                   alignItems="center">
@@ -207,7 +210,7 @@ const LeaderboardEntry = ({rank, address, nickname, classes, loaded, fuelAdded, 
                     <FillBar rank={rank - 1} percentage={100 * Number(fuelAdded) / Number(maxScore)} compact/>}
                 </Grid>
             </Grid>
-        </>
+        </React.Fragment>
     )
 }
 

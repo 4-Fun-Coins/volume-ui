@@ -31,19 +31,19 @@ const FuelGauge = () => {
                 {/*    Fuel Gauge   */}
                 {
                     !initFuel &&
-                    <Grid container justify={"center"}>
+                    <Grid container justifyContent={"center"}>
                         <LoadingScreen transparent/>
                     </Grid>
                 }
-                {   initFuel &&
-                    <Gauge
-                        min={0}
-                        max={initialFuel.toFixed(2)}
-                        value={fuel.toFixed(2)}
-                        units={"(blocks)"}
-                        label={"Fuel Tank"}
-                        date={Date.now() + Number(milliseconds)}
-                    />
+                {initFuel &&
+                <Gauge
+                    min={0}
+                    max={initialFuel.toFixed(2)}
+                    value={fuel.toFixed(2)}
+                    units={"(blocks)"}
+                    label={"Fuel Tank"}
+                    date={Date.now() + Number(milliseconds)}
+                />
                 }
             </Grid>
         </Grid>

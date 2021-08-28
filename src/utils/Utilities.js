@@ -1,5 +1,5 @@
-export const formatLongNumber = (n , decimals) => {
-    if(!n) return 0;
+export const formatLongNumber = (n, decimals) => {
+    if (!n) return 0;
     n = Number(n);
     if (n < 1e3) return +(n).toFixed(decimals);
     if (n >= 1e3 && n < 1e6) return +(n / 1e3).toFixed(decimals) + "K";
@@ -9,7 +9,7 @@ export const formatLongNumber = (n , decimals) => {
 };
 
 export const getShorAddress = (address) => {
-    return address.slice(0,6) + '...' + address.slice(address.length-5 , address.length-1)
+    return address.slice(0, 6) + '...' + address.slice(address.length - 5, address.length - 1)
 }
 
 export function getOrdinalSuffix(n) {
@@ -25,4 +25,21 @@ export function getOrdinalSuffix(n) {
         return n + "rd";
     }
     return n + "th";
+}
+
+export function getFormattedTimePeriod(timeInMillis) {
+    const timeInSeconds = timeInMillis / 1000;
+    const months = Math.floor(timeInSeconds / 3600 / 24 / 30);
+    const days = Math.floor((timeInSeconds - (months * 30 * 24 * 3600)) / 3600 / 24);
+    const hours = Math.floor((timeInSeconds - (days * 24 * 3600) - (months * 30 * 24 * 3600)) / 3600);
+    const minutes = Math.floor((timeInSeconds - (hours * 3600) - (days * 24 * 3600) - (months * 30 * 24 * 3600)) / 60);
+    const seconds = timeInSeconds - (months * 3600 * 30 * 24) - (days * 3600 * 24) - (hours * 3600) - (minutes * 60);
+
+    return {
+        months,
+        days,
+        hours,
+        minutes,
+        seconds
+    }
 }

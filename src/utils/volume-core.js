@@ -4,7 +4,6 @@ const Web3 = require('web3');
 const {volumeAddress, rpcUrl, volumeJackpotAddress} = require('./config.js');
 const Big = require('big.js');
 const {volumeABI} = require('./volume-abi');
-const {volumeJackpotABI} = require('./volume-jackpot-abi');
 
 let web3 = new Web3(rpcUrl);
 
@@ -196,7 +195,6 @@ export async function getAllMilestonesAndFuelForAddress(address) {
     });
 }
 
-
 export async function getAllMilestones() {
     return new Promise((resolve, reject) => {
         const volumeJackpot = new web3.eth.Contract(VolumeJackpotABI, volumeJackpotAddress);
@@ -269,19 +267,34 @@ export async function getAllContributorsForMilestone(id) {
 
 export const getWinnersForMilestone = async (milestoneID) => {
     const volumeJackpot = new web3.eth.Contract(VolumeJackpotABI, volumeJackpotAddress);
-    return volumeJackpot.methods.getWinners(milestoneID).call().catch(error => console.error(error.message()));
+
+    let winners = await volumeJackpot.methods.getWinners(milestoneID).call()
+    let amounts = await volumeJackpot.methods.getWinningAmounts(milestoneID).call()
+
+    return winners ? winners.map((winner, index) => {
+        return {
+            address: winner,
+            amount: amounts[index]
+        }
+    }) : []
+}
+
+export const getClaimableWinnings = async (address) => {
+    const volumeJackpot = new web3.eth.Contract(VolumeJackpotABI, volumeJackpotAddress);
+
+    return volumeJackpot.methods.getClaimableAmount(address).call();
 }
 
 export const getCurrentTotalSupply = async () => {
     const volume = new web3.eth.Contract(volumeABI, volumeAddress);
 
     return await volume.methods.totalSupply().call();
-    ;
 }
 
 export const getCurrentBlock = async () => {
     return await web3.eth.getBlockNumber();
 }
+
 export const blockToDate = async (blocknumber) => {
     const currentBlock = await getCurrentBlock();
 
@@ -293,8 +306,7 @@ export const blockToDate = async (blocknumber) => {
         const currentBlockTime = (await web3.eth.getBlock(currentBlock)).timestamp;
         const difference = blocknumber - currentBlock;
         const averageBlockTime = (currentBlockTime - pastBlockTime) / 1000000
-        console.log('av = ' + averageBlockTime);
-        return (Date.now() + (averageBlockTime * difference * 1000))/1000;
+        return (Date.now() + (averageBlockTime * difference * 1000)) / 1000;
     }
 }
 // === HELPER FUNCTIONS === //

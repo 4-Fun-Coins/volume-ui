@@ -78,7 +78,7 @@ const features = [
 const Features = ({}) => {
     const classes = featuresStyles();
     return (
-        <Container maxWidth={'lg'} className={classes.root} rest>
+        <Container maxWidth={'lg'} className={classes.root}>
             <Grid container direction={'column'} spacing={2}>
                 <Grid item>
                     <Typography variant={"h1"} className={classes.BigTitles}>

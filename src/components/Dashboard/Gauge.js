@@ -6,17 +6,17 @@ import Countdown from "react-countdown";
 import React from "react";
 
 const Gauge = ({
-    value= 50,
-    min= 0,
-    max= 100,
-    label,
-    units,
-    date,
-    innerRadius = 0.8,
-    outerRadius = 1,
-    startAngle = -Math.PI / 2,
-    endAngle = Math.PI / 2
-}) => {
+                   value = 50,
+                   min = 0,
+                   max = 100,
+                   label,
+                   units,
+                   date,
+                   innerRadius = 0.8,
+                   outerRadius = 1,
+                   startAngle = -Math.PI / 2,
+                   endAngle = Math.PI / 2
+               }) => {
 
     const backgroundArc = arc()
         .innerRadius(innerRadius)
@@ -102,7 +102,7 @@ const Gauge = ({
             </svg>
 
             <Grid container>
-                <Grid container item xs={12} justify={"center"}>
+                <Grid container item xs={12} justifyContent={"center"}>
                     <div style={{
                         color: "#8fdbfc",
                         marginTop: "0.4em",
@@ -111,10 +111,10 @@ const Gauge = ({
                         fontWeight: "900",
                         fontFeatureSettings: "'zero', 'tnum' 1",
                     }}>
-                        { format(",")(value) }
+                        {format(",")(value)}
                     </div>
                 </Grid>
-                <Grid container item xs={12} justify={"center"}>
+                <Grid container item xs={12} justifyContent={"center"}>
                     {!!label && (
                         <div style={{
                             color: "#46adef",
@@ -123,22 +123,22 @@ const Gauge = ({
                             lineHeight: "1.3em",
                             fontWeight: "700",
                         }}>
-                            { label }
+                            {label}
                         </div>
                     )}
                 </Grid>
-                <Grid container item xs={12} justify={"center"}>
+                <Grid container item xs={12} justifyContent={"center"}>
                     {!!units && (
                         <div style={{
                             color: "#2981e6",
                             lineHeight: "1.3em",
                             fontWeight: "300",
                         }}>
-                            { units }
+                            {units}
                         </div>
                     )}
                 </Grid>
-                <Grid container item xs={12} justify={"center"}>
+                <Grid container item xs={12} justifyContent={"center"}>
                     {!!date && (
                         <div style={{
                             color: "#46adef",
@@ -147,7 +147,7 @@ const Gauge = ({
                             lineHeight: "1.3em",
                             fontWeight: "700",
                         }}>
-                            { <Countdown date={date} /> }
+                            {<Countdown date={date}/>}
                         </div>
                     )}
                 </Grid>

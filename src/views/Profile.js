@@ -243,7 +243,7 @@ const Profile = () => {
             title={'User Profile'}
         >
             <Container className={classes.contentBackground} maxWidth={"xl"}>
-                <Grid container item justify={"center"} alignItems={"flex-start"} xs={12}>
+                <Grid container item justifyContent={"center"} alignItems={"flex-start"} xs={12}>
                     <Grid container item xs={10}>
                         <Typography variant={"h1"} className={classes.header}>
                             Your Profile
@@ -264,7 +264,7 @@ const Profile = () => {
                         {
 
                             profileInit &&
-                            <Grid container item xs={10} justify={"center"}>
+                            <Grid container item xs={10} justifyContent={"center"}>
                                 <Grid container item xs={10} md={2} style={{padding: '1em'}}>
                                     <Blockies
                                         scale={10}
@@ -272,7 +272,8 @@ const Profile = () => {
                                     />
                                 </Grid>
 
-                                <Grid container item xs={10} md={8} lg={8} style={{padding: '1em'}} alignItems={"flex-start"}>
+                                <Grid container item xs={10} md={8} lg={8} style={{padding: '1em'}}
+                                      alignItems={"flex-start"}>
                                     <Grid container item xs={10} sm={8} md={6} alignItems={"center"}>
                                         {
                                             editNickname
@@ -310,7 +311,8 @@ const Profile = () => {
                                             !busy &&
                                             <IconButton className={classes.nicknameButton} style={{borderRadius: 10}}
                                                         onClick={handleClick}>
-                                                {!editNickname ? <Edit2/> : didCheck ? available ? <CheckSharp/> : <Search/> : <Search/>}
+                                                {!editNickname ? <Edit2/> : didCheck ? available ? <CheckSharp/> :
+                                                    <Search/> : <Search/>}
                                             </IconButton>
                                         }
 
@@ -333,7 +335,7 @@ const Profile = () => {
                         }
                         {
                             !profileInit &&
-                            <Grid container item justify={"center"}>
+                            <Grid container item justifyContent={"center"}>
                                 <Button className={classes.connectButton} onClick={() => {
                                     if (wallet.status !== 'connected')
                                         wallet.connect();
@@ -343,9 +345,9 @@ const Profile = () => {
                             </Grid>
                         }
 
-                        <Grid container justify={"center"}>
+                        <Grid container justifyContent={"center"}>
                             <Grid container item xs={10} className={classes.statsWrapper}>
-                                <Grid container item xs={12} alignItems={"center"} justify={"center"}>
+                                <Grid container item xs={12} alignItems={"center"} justifyContent={"center"}>
                                     <LocalGasStation className={classes.fuelIcon}/>
                                     <Typography className={classes.statsHeading}>
                                         Fuel added
@@ -354,35 +356,35 @@ const Profile = () => {
 
                                 {
                                     profileInit &&
-                                        <>
-                                            <StatEntry
-                                                milestone={'Total'}
-                                                amount={totalFuelAdded.toString()}
-                                                mobile={mobile}
-                                            />
+                                    <>
+                                        <StatEntry
+                                            milestone={'Total'}
+                                            amount={totalFuelAdded.toString()}
+                                            mobile={mobile}
+                                        />
 
-                                            <Grid item xs={12}>
-                                                <Divider className={classes.statsDivider} variant={"middle"}/>
-                                            </Grid>
+                                        <Grid item xs={12}>
+                                            <Divider className={classes.statsDivider} variant={"middle"}/>
+                                        </Grid>
 
-                                            {
-                                                milestones.map((milestone) => {
-                                                    return (
-                                                        <StatEntry
-                                                            key={milestone.name}
-                                                            mobile={mobile}
-                                                            milestone={milestone.name}
-                                                            amount={new Big(milestone.fuelAdded).toFixed(4).toString()}
-                                                        />
-                                                    )
-                                                })
-                                            }
-                                        </>
+                                        {
+                                            milestones.map((milestone) => {
+                                                return (
+                                                    <StatEntry
+                                                        key={milestone.name}
+                                                        mobile={mobile}
+                                                        milestone={milestone.name}
+                                                        amount={new Big(milestone.fuelAdded).toFixed(4).toString()}
+                                                    />
+                                                )
+                                            })
+                                        }
+                                    </>
                                 }
                             </Grid>
                         </Grid>
 
-                        <Grid container justify={"center"}>
+                        <Grid container justifyContent={"center"}>
                             <Grid container item xs={10}>
                                 <Grid container item xs={12}>
                                     <Typography variant={"h1"} className={classes.header}>
@@ -419,8 +421,9 @@ const StatEntry = ({milestone, amount, mobile}) => {
 
 
     return (
-        <Grid container item xs={12} justify={"center"}>
-            <Grid container item xs={6} md={3} justify={"flex-start"} style={{marginLeft: mobile ? '0' : '10em'}}>
+        <Grid container item xs={12} justifyContent={"center"}>
+            <Grid container item xs={6} md={3} justifyContent={"flex-start"}
+                  style={{marginLeft: mobile ? '0' : '10em'}}>
                 <Typography className={classes.statsText}>
                     {milestone}
                 </Typography>

@@ -29,7 +29,7 @@ const Footer = () => {
             maxWidth={false}
         >
             <Divider variant={"fullWidth"} className={classes.divider}/>
-            <Grid container spacing={2} justify={"space-around"}>
+            <Grid container spacing={2} justifyContent={"space-around"}>
                 <Grid item xs={4} sm={4} md={1}>
                     <IconButton onClick={() => {
                         // Add discord link

@@ -80,7 +80,7 @@ const Hero = ({reverse}) => {
     const executeScroll = () => hero2.current.scrollIntoView();
 
     return (
-        <Container maxWidth={'lg'} className={classes.root} rest>
+        <Container maxWidth={'lg'} className={classes.root}>
             <Grid container direction={reverse ? 'row-reverse' : 'row'} alignContent={'center'} alignItems={'center'}
                   style={{minHeight: '100vh'}}>
 
@@ -107,7 +107,8 @@ const Hero = ({reverse}) => {
                 <Grid item xs={12} md={6} alignItems={'center'} alignContent={'center'} justifyContent={'center'}
                       style={{textAlign: 'right'}}>
                     {!isMobile &&
-                    <img src={'/explorer.webp'} alt={'logo'} height={500} width={358} style={{border: '6px double #522D82'}}/>}
+                    <img src={'/explorer.webp'} alt={'logo'} height={500} width={358}
+                         style={{border: '6px double #522D82'}}/>}
                 </Grid>
             </Grid>
             <div ref={hero2} style={{marginBottom: '4em', marginTop: '2em'}}/>

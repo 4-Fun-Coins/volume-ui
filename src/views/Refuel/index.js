@@ -141,10 +141,10 @@ const Refuel = () => {
         >
             <Container className={classes.contentBackground} maxWidth={"md"}>
                 <Grid container item xs={12} className={classes.cardWrapper}>
-                    <Grid container item justify={"center"}>
+                    <Grid container item justifyContent={"center"}>
                         <Card className={classes.card}>
                             <Grid container style={{display: "flex", width: '100%', height: '100%'}}>
-                                <Grid container item xs={12} md={6} justify={"center"} alignItems={"flex-start"}
+                                <Grid container item xs={12} md={6} justifyContent={"center"} alignItems={"flex-start"}
                                       style={{backgroundColor: "transparent"}}>
                                     <Grid item xs={12}>
                                         <Typography variant={'h1'} className={classes.title}>
@@ -157,7 +157,7 @@ const Refuel = () => {
                                         </Typography>
                                     </Grid>
 
-                                    <Grid container item xs={10} justify={"space-between"}>
+                                    <Grid container item xs={10} justifyContent={"space-between"}>
                                         <Typography className={classes.balanceText}>
                                             Amount
                                         </Typography>

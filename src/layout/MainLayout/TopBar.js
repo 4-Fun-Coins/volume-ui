@@ -11,13 +11,13 @@ import React, {useEffect, useState} from "react";
 import Typography from "@material-ui/core/Typography";
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import {useWallet ,ChainUnsupportedError} from "use-wallet";
-import {useHistory,useLocation} from 'react-router-dom';
+import {useWallet, ChainUnsupportedError} from "use-wallet";
+import {useHistory, useLocation} from 'react-router-dom';
 import {ROUTES_NAMES} from "../../constants";
 import MenuIcon from "@material-ui/icons/Menu";
 import {chainId} from '../../utils/config';
 import {User} from "react-feather";
-import { useSnackbar } from 'notistack';
+import {useSnackbar} from 'notistack';
 
 import LogoWithText from '../../components/LogoWithText'
 import useVolume from "../../hooks/useVolume";
@@ -71,7 +71,7 @@ const topBarStyles = makeStyles((theme) => ({
     userIcon: {
         color: theme.palette.twinkle.main
     },
-    flewGrow : {
+    flewGrow: {
         flexGrow: 1
     }
 }));
@@ -83,24 +83,24 @@ const TopBar = ({className, ...rest}) => {
     const location = useLocation();
     const volume = useVolume();
 
-    const [lastToast , setLastToast] = useState(0);
+    const [lastToast, setLastToast] = useState(0);
     const [wrongNet, setWrongNet] = useState(false);
 
-    const { enqueueSnackbar } = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
 
     useEffect(() => {
         if (wallet.error instanceof ChainUnsupportedError) {
-            if(lastToast === 0 || performance.now() - lastToast > 5000){
-                enqueueSnackbar(`Unsupported network Volume is only available on ${wallet.networkName} chainId (${chainId})`,{variant: 'error'});
+            if (lastToast === 0 || performance.now() - lastToast > 5000) {
+                enqueueSnackbar(`Unsupported network Volume is only available on ${wallet.networkName} chainId (${chainId})`, {variant: 'error'});
                 setLastToast(performance.now());
             }
             setWrongNet(true);
         } else {
             setWrongNet(false);
         }
-        if(volume.setWallet)
+        if (volume.setWallet)
             volume.setWallet(wallet);
-    },[wallet])
+    }, [wallet])
 
 
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -114,14 +114,14 @@ const TopBar = ({className, ...rest}) => {
 
     const drawer = (
         <div style={{paddingTop: '0.5em',}}>
-            <LogoWithText  />
+            <LogoWithText/>
             <Divider style={{marginTop: '1em'}}/>
             <Tabs value={location.pathname} onChange={handleChange} className={classes.tabs} orientation={'vertical'}>
-                            <Tab label="Dashboard" value={ROUTES_NAMES.DASHBOARD} class={classes.tabsEntries}/>
-                            <Tab label="The Journey" value={ROUTES_NAMES.JOURNEY}/>
-                            <Tab label="Direct Refuel" value={ROUTES_NAMES.REFUEL}/>
-                        </Tabs>
-            <Divider />
+                <Tab label="Dashboard" value={ROUTES_NAMES.DASHBOARD} className={classes.tabsEntries}/>
+                <Tab label="The Journey" value={ROUTES_NAMES.JOURNEY}/>
+                <Tab label="Direct Refuel" value={ROUTES_NAMES.REFUEL}/>
+            </Tabs>
+            <Divider/>
         </div>
     );
 
@@ -134,7 +134,7 @@ const TopBar = ({className, ...rest}) => {
                 {...rest}
             >
                 <Toolbar className={classes.toolBar}>
-                    <Hidden mdUp className={classes.flewGrow} >
+                    <Hidden mdUp className={classes.flewGrow}>
                         <IconButton onClick={() => {
                             setMobileOpen(true);
                         }}>
@@ -143,7 +143,7 @@ const TopBar = ({className, ...rest}) => {
                     </Hidden>
 
                     <Hidden smDown>
-                        <LogoWithText />
+                        <LogoWithText/>
                         <Tabs value={location.pathname} onChange={handleChange} className={classes.tabs}>
                             <Tab label="Dashboard" value={ROUTES_NAMES.DASHBOARD}/>
                             <Tab label="The Journey" value={ROUTES_NAMES.JOURNEY}/>
@@ -159,23 +159,22 @@ const TopBar = ({className, ...rest}) => {
                         </Button>
                     }
                     <Button variant={"contained"} color={'secondary'} className={classes.button} onClick={() => {
-                            if (wallet.status !== 'connected'){
-                                wallet.connect();
-                                setLastToast(0);
+                        if (wallet.status !== 'connected') {
+                            wallet.connect();
+                            setLastToast(0);
+                        } else {
+                            // open profile
+                            history.push(ROUTES_NAMES.USER_PROFILE);
+                        }
+                    }}>
+                        <User/>
+                        <Typography variant={"subtitle1"} style={{fontSize: '0.9em'}}>
+                            {
+                                wallet.status === 'connected' && wallet.account
+                                    ? `${wallet.account.slice(0, 6)}...${wallet.account.slice(wallet.account.length - 4, wallet.account.length)}`
+                                    : 'Connect Wallet'
                             }
-                            else {
-                                // open profile
-                                history.push(ROUTES_NAMES.USER_PROFILE);
-                            }
-                        }}>
-                            <User/>
-                            <Typography variant={"subtitle1"} style={{fontSize: '0.9em'}}>
-                                {
-                                    wallet.status === 'connected' && wallet.account
-                                        ? `${wallet.account.slice(0, 6)}...${wallet.account.slice(wallet.account.length-4, wallet.account.length)}`
-                                        : 'Connect Wallet'
-                                }
-                            </Typography>
+                        </Typography>
                     </Button>
                 </Toolbar>
             </AppBar>
