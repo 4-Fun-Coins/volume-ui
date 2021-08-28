@@ -323,6 +323,7 @@ const ArrowItem = ({color, ...rest}) => {
             zIndex: 0,
             '-webkit-animation': '$slide 2s linear infinite',
             animation: '$slide 2s linear infinite',
+            opacity: 0,
         },
 
         delay1: {
