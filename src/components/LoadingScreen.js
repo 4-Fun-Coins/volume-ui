@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const LoadingScreen = ({transparent}) => {
+const LoadingScreen = ({transparent, style, ...rest}) => {
     const classes = useStyles();
 
     useEffect(() => {
@@ -42,11 +42,8 @@ const LoadingScreen = ({transparent}) => {
     }, []);
 
     return (
-        <div className={transparent ? classes.rootTransparent : classes.root}>
-            <CircularProgress className={classes.progress}/>
-            <Typography variant={"h1"} color={"primary"}>
-                Loading
-            </Typography>
+        <div className={transparent ? classes.rootTransparent : classes.root} style={style} {...rest}>
+            <img src={'/pacman.svg'} style={{backgroundColor: "transparent"}} width={128} height={128}/>
         </div>
     );
 };
