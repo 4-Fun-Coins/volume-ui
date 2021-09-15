@@ -33,7 +33,7 @@ export function getFormattedTimePeriod(timeInMillis) {
     const days = Math.floor((timeInSeconds - (months * 30 * 24 * 3600)) / 3600 / 24);
     const hours = Math.floor((timeInSeconds - (days * 24 * 3600) - (months * 30 * 24 * 3600)) / 3600);
     const minutes = Math.floor((timeInSeconds - (hours * 3600) - (days * 24 * 3600) - (months * 30 * 24 * 3600)) / 60);
-    const seconds = timeInSeconds - (months * 3600 * 30 * 24) - (days * 3600 * 24) - (hours * 3600) - (minutes * 60);
+    const seconds = Math.floor(timeInSeconds - (months * 3600 * 30 * 24) - (days * 3600 * 24) - (hours * 3600) - (minutes * 60));
 
     return {
         months,

@@ -2,7 +2,7 @@ import {create} from 'jss';
 import rtl from 'jss-rtl';
 import MomentUtils from '@date-io/moment';
 import {SnackbarProvider} from 'notistack';
-import {jssPreset, StylesProvider, ThemeProvider} from '@material-ui/core';
+import {AppBar, jssPreset, StylesProvider, ThemeProvider} from '@material-ui/core';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import GlobalStyles from './components/Root/GlobalStyles';
 import {makeStyles} from "@material-ui/core";
@@ -13,6 +13,8 @@ import {HashRouter} from 'react-router-dom';
 import NewSpace from "./components/Root/NewSpace";
 import MainLayout from './layout/MainLayout';
 import {VolumeProvider} from "./contexts/VolumeContext";
+import Typography from "@material-ui/core/Typography";
+import React from "react";
 
 const jss = create({plugins: [...jssPreset().plugins, rtl()]});
 

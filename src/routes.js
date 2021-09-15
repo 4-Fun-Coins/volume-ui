@@ -60,6 +60,11 @@ const routes = [
         component: lazy(() => import("./views/Profile"))
     },
     {
+        path: ROUTES_NAMES.NFT_MARKET,
+        exact: true,
+        component: lazy(() => import("./views/NFTMarketPlace"))
+    },
+    {
         path: "/",
         exact: true,
         component: () => <Redirect to={ROUTES_NAMES.HOME}/>
@@ -67,7 +72,7 @@ const routes = [
     {
         path: "*",
         exact: true,
-        component: () =>  <Redirect to={ROUTES_NAMES.HOME}/>
+        component: () => <Redirect to={ROUTES_NAMES.HOME}/>
     }
 ];
 

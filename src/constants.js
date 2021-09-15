@@ -9,4 +9,5 @@ export const ROUTES_NAMES = {
     JOURNEY: "/journey",
     REFUEL: '/direct-refuel',
     USER_PROFILE: '/user-profile',
+    NFT_MARKET: '/nft-store'
 }

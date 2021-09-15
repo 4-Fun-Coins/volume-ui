@@ -63,6 +63,7 @@ const LeaderboardHome = (props) => {
 
         if (activeMilestone)
             getAllContributorsForMilestone(activeMilestone.startBlock).then(result => {
+                console.log(result.length);
                 setParticipants(result);
             }).catch(error => {
                 console.warn(error.message);

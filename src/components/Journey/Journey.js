@@ -56,12 +56,12 @@ const JourneyHome = ({...rest}) => {
     const getQuery = () => {
         const query = new URLSearchParams(location.search).get('tab');
         if (!query) {
-            handleChange(null, 3);
-            return 'all'
+            handleChange(null, 1);
+            return 'active'
         }
         return !!valid.filter((el, index, arr) => {
             return el === query.toString()
-        }) ? query : 'all';
+        }) ? query : 'active';
     }
 
     useEffect(() => {

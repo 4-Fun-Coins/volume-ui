@@ -21,6 +21,7 @@ import {useSnackbar} from 'notistack';
 
 import LogoWithText from '../../components/LogoWithText'
 import useVolume from "../../hooks/useVolume";
+import App from "../../App";
 
 const drawerWidth = 240;
 
@@ -120,6 +121,7 @@ const TopBar = ({className, ...rest}) => {
                 <Tab label="Dashboard" value={ROUTES_NAMES.DASHBOARD} className={classes.tabsEntries}/>
                 <Tab label="The Journey" value={ROUTES_NAMES.JOURNEY}/>
                 <Tab label="Direct Refuel" value={ROUTES_NAMES.REFUEL}/>
+                <Tab label="NFT Market" value={ROUTES_NAMES.NFT_MARKET}/>
             </Tabs>
             <Divider/>
         </div>
@@ -147,6 +149,7 @@ const TopBar = ({className, ...rest}) => {
                         <Tabs value={location.pathname} onChange={handleChange} className={classes.tabs}>
                             <Tab label="Dashboard" value={ROUTES_NAMES.DASHBOARD}/>
                             <Tab label="The Journey" value={ROUTES_NAMES.JOURNEY}/>
+                            <Tab label="NFT Market" value={ROUTES_NAMES.NFT_MARKET}/>
                             <Tab label="Direct Refuel" value={ROUTES_NAMES.REFUEL}/>
                         </Tabs>
                     </Hidden>
