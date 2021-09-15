@@ -74,7 +74,7 @@ const TimelineData = [
         color: '#FA5049'
     },
     {
-        title: 'NFT INCO and AstroPunks',
+        title: 'INCO and AstroPunks',
         description: 'AstroPunks NFT collection will be available for public purchase. The Volume Initial NFT Collection Offering (INCO) platform will be launched and NFT artists can apply to launch their NFT collection to the public in a fair, decentralized way.',
         time: 'October 15th',
         path: 'box',
