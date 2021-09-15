@@ -89,12 +89,11 @@ const Hero = ({reverse}) => {
                         Volume
                     </Typography>
                     <Typography variant={'h1'} className={classes.BigBody}>
-                        The core idea behind Volume is that Volume is a spaceship floating through space. To sustain
-                        life on the ship, it needs fuel.
-                        Volume users supply fuel as transaction fees, NFT purchases, game participation etc. The ship
-                        has multiple milestones and, on each milestone, users who supplied the most fuel will receive
+                        Volume is a spaceship floating through space. To sustain life on the ship, it needs fuel.
+                        Volume users supply fuel as transaction fees, NFT purchases, game participation, and so on.
+                        The ship has multiple milestones and, on each milestone, users who supplied the most fuel will receive
                         generous rewards in Volume tokens and in unique NFTs.
-                        Volume will also include an NFT marketplace, community games and space lottery!
+                        Volume will also include a special launchpad for NFT artists, an NFT marketplace, community games and space lottery!
                     </Typography>
                     <Box style={{width: '100%', display: 'flex', justifyContent: 'space-evenly', marginTop: '0.8em'}}>
                         <Button color={"primary"} variant={'contained'} size={'large'} className={classes.button}> Buy
