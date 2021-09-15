@@ -3,9 +3,11 @@ export const volumeABI = [{
         "internalType": "address",
         "name": "escrowAcc",
         "type": "address"
-    }, {"internalType": "address", "name": "mulitisig", "type": "address"}],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
+    }, {"internalType": "address", "name": "mulitisig", "type": "address"}, {
+        "internalType": "address",
+        "name": "volumeJackpot",
+        "type": "address"
+    }], "stateMutability": "nonpayable", "type": "constructor"
 }, {
     "anonymous": false,
     "inputs": [{"indexed": true, "internalType": "address", "name": "freeloader", "type": "address"}],
@@ -20,6 +22,16 @@ export const volumeABI = [{
         "type": "address"
     }, {"indexed": false, "internalType": "uint256", "name": "value", "type": "uint256"}],
     "name": "Approval",
+    "type": "event"
+}, {
+    "anonymous": false,
+    "inputs": [{"indexed": true, "internalType": "address", "name": "claimer", "type": "address"}, {
+        "indexed": true,
+        "internalType": "string",
+        "name": "nickname",
+        "type": "string"
+    }],
+    "name": "NICKNAME_CLAIMED",
     "type": "event"
 }, {
     "anonymous": false,
@@ -42,8 +54,20 @@ export const volumeABI = [{
     "name": "Transfer",
     "type": "event"
 }, {
+    "inputs": [{"internalType": "address", "name": "newDirectBurner_", "type": "address"}],
+    "name": "addDirectBurner",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+}, {
     "inputs": [{"internalType": "address", "name": "newfreeloader_", "type": "address"}],
-    "name": "addFreeLoader",
+    "name": "addFreeloader",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+}, {
+    "inputs": [{"internalType": "address", "name": "newcreaditor_", "type": "address"}],
+    "name": "addfuelCreditor",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -74,6 +98,24 @@ export const volumeABI = [{
     "stateMutability": "view",
     "type": "function"
 }, {
+    "inputs": [{"internalType": "string", "name": "newUserName_", "type": "string"}],
+    "name": "canClaimNickname",
+    "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [{"internalType": "uint256", "name": "newPrice_", "type": "uint256"}],
+    "name": "changeNicknamePrice",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+}, {
+    "inputs": [{"internalType": "string", "name": "nikname_", "type": "string"}],
+    "name": "claimNickname",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+}, {
     "inputs": [],
     "name": "decimals",
     "outputs": [{"internalType": "uint8", "name": "", "type": "uint8"}],
@@ -91,15 +133,33 @@ export const volumeABI = [{
     "type": "function"
 }, {
     "inputs": [{"internalType": "uint256", "name": "amount_", "type": "uint256"}],
-    "name": "directBurnFromEscrow",
+    "name": "directBurn",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
 }, {
     "inputs": [{"internalType": "uint256", "name": "fuel_", "type": "uint256"}],
     "name": "directRefuel",
-    "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
+    "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+}, {
+    "inputs": [{"internalType": "uint256", "name": "fuel_", "type": "uint256"}, {
+        "internalType": "address",
+        "name": "fuelFor_",
+        "type": "address"
+    }], "name": "directRefuelFor", "outputs": [], "stateMutability": "nonpayable", "type": "function"
+}, {
+    "inputs": [],
+    "name": "fly",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+}, {
+    "inputs": [{"internalType": "string", "name": "nickname_", "type": "string"}],
+    "name": "getAddressForNickname",
+    "outputs": [{"internalType": "address", "name": "", "type": "address"}],
+    "stateMutability": "view",
     "type": "function"
 }, {
     "inputs": [{"internalType": "uint256", "name": "start_", "type": "uint256"}, {
@@ -140,6 +200,12 @@ export const volumeABI = [{
     "type": "function"
 }, {
     "inputs": [],
+    "name": "getCurrentBlock",
+    "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [],
     "name": "getEscrowAddress",
     "outputs": [{"internalType": "address", "name": "", "type": "address"}],
     "stateMutability": "view",
@@ -147,12 +213,6 @@ export const volumeABI = [{
 }, {
     "inputs": [],
     "name": "getFuel",
-    "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-    "stateMutability": "view",
-    "type": "function"
-}, {
-    "inputs": [],
-    "name": "getFuelPile",
     "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
     "stateMutability": "view",
     "type": "function"
@@ -169,8 +229,20 @@ export const volumeABI = [{
     "stateMutability": "view",
     "type": "function"
 }, {
+    "inputs": [{"internalType": "address", "name": "address_", "type": "address"}],
+    "name": "getNicknameForAddress",
+    "outputs": [{"internalType": "string", "name": "", "type": "string"}],
+    "stateMutability": "view",
+    "type": "function"
+}, {
     "inputs": [],
-    "name": "getPrevFuelTank",
+    "name": "getNicknamePrice",
+    "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [],
+    "name": "getTakeoffBlock",
     "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
     "stateMutability": "view",
     "type": "function"
@@ -197,9 +269,21 @@ export const volumeABI = [{
     "stateMutability": "nonpayable",
     "type": "function"
 }, {
+    "inputs": [{"internalType": "address", "name": "potentialDirectBurner_", "type": "address"}],
+    "name": "isDirectBurner",
+    "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
+    "stateMutability": "view",
+    "type": "function"
+}, {
     "inputs": [{"internalType": "address", "name": "potentialFreeloader_", "type": "address"}],
-    "name": "isFreeLoader",
-    "outputs": [{"internalType": "uint8", "name": "", "type": "uint8"}],
+    "name": "isFreeloader",
+    "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [{"internalType": "address", "name": "potentialCreditor_", "type": "address"}],
+    "name": "isFuelCreditor",
+    "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
     "stateMutability": "view",
     "type": "function"
 }, {
@@ -209,14 +293,42 @@ export const volumeABI = [{
     "stateMutability": "view",
     "type": "function"
 }, {
-    "inputs": [{"internalType": "address", "name": "newfreeloader_", "type": "address"}],
-    "name": "removeFreeLoader",
+    "inputs": [{"internalType": "address", "name": "directBurnerToBeRemoved_", "type": "address"}],
+    "name": "removeDirectBurner",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+}, {
+    "inputs": [{"internalType": "address", "name": "freeLoaderToBeRemoved_", "type": "address"}],
+    "name": "removeFreeloader",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+}, {
+    "inputs": [{"internalType": "address", "name": "creditorToBeRemoved_", "type": "address"}],
+    "name": "removefuelCreditor",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
 }, {
     "inputs": [{"internalType": "uint256", "name": "newFuel", "type": "uint256"}],
     "name": "setFuelTank",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+}, {
+    "inputs": [{"internalType": "address", "name": "lpPairAddress_", "type": "address"}],
+    "name": "setLPAddressAsCreditor",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+}, {
+    "inputs": [{"internalType": "uint256", "name": "blockNumber_", "type": "uint256"}, {
+        "internalType": "uint256",
+        "name": "initialFuelTank",
+        "type": "uint256"
+    }, {"internalType": "string", "name": "milestoneName_", "type": "string"}],
+    "name": "setTakeOffBlock",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -250,6 +362,12 @@ export const volumeABI = [{
     }, {"internalType": "uint256", "name": "amount_", "type": "uint256"}],
     "name": "transferFrom",
     "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
+    "stateMutability": "nonpayable",
+    "type": "function"
+}, {
+    "inputs": [],
+    "name": "updateBlock",
+    "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
     "stateMutability": "nonpayable",
     "type": "function"
 }];

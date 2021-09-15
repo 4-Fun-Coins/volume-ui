@@ -1,57 +1,49 @@
 import {makeStyles} from "@material-ui/core";
 import PropTypes from "prop-types";
-import {UseWalletProvider} from "use-wallet";
 import TopBar from "./TopBar";
-import {useState} from "react";
+import Footer from "../../components/Root/Footer";
+import React, {useEffect} from "react";
+import {useLocation} from "react-router-dom";
+import useVolume from "../../hooks/useVolume";
+import LoadingScreen from "../../components/LoadingScreen";
+import {ROUTES_NAMES} from "../../constants";
 
 const mainLayoutStyle = makeStyles((theme) => ({
     root: {
         backgroundColor: theme.palette.background.default,
         display: "flex",
+        flexDirection: "column",
         height: "100%",
         overflow: "hidden",
         width: "100%"
     },
-    wrapper: {
-        display: "flex",
-        flex: "1 1 auto",
-        overflow: "hidden",
-    },
-    contentContainer: {
-        display: "flex",
-        flex: "1 1 auto",
-        overflow: "hidden"
-    },
     content: {
+        display: "flex",
         flex: "1 1 auto",
         height: "100%",
-        overflow: "auto"
-    }
+        justifyContent: 'center',
+    },
 }));
 
 const MainLayout = ({children}) => {
     const classes = mainLayoutStyle();
+    const location = useLocation();
+    const volumeEcosystem = useVolume();
 
-    const [netId, setNetId] = useState(56);
+    useEffect(() => {
+        // reset scroll position to top (user changed the page)
+        window.scrollTo(0, 0)
+    }, [location]);
 
     return (
-        <div>
-            <UseWalletProvider
-                chainId={netId}
-                connectors={{}}
-                pollBalanceInterval={2000}
-                pollBlockNumberInterval={5000}
-            >
-                <TopBar changeNetwork={setNetId} network={netId}/>
-                <div className={classes.wrapper}>
-                    <div className={classes.contentContainer}>
-                        <div className={classes.content}>
-                            {children}
-                        </div>
-                    </div>
-                </div>
-            </UseWalletProvider>
-
+        <div style={{backgroundColor: 'rgba(10, 10, 10, 0.2)'}}>
+            <TopBar/>
+            <div className={classes.content}>
+                {volumeEcosystem.ecosystemStats.totalSupply || location.pathname === ROUTES_NAMES.HOME ? children :
+                    <LoadingScreen transparent style={{height: '100vh'}}/>}
+            </div>
+            <div style={{height: '4em'}}/>
+            <Footer/>
         </div>
     );
 }

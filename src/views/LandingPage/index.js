@@ -1,9 +1,10 @@
-import Page from "../../components/Page";
+import Page from "../../components/Root/Page";
 import {Container, makeStyles} from "@material-ui/core";
-import About from "../../components/About";
-import Footer from "../../components/Footer";
-import NewSpace from "../../components/NewSpace";
-import Dash from "../../components/Dash";
+import Hero from "../../components/Home/Hero";
+import Features from "../../components/Home/Features";
+import TokenDistribution from "../../components/Home/TokenDistribition";
+import ProjectTimeline from "../../components/Home/ProjectTimeLine";
+import React from "react";
 
 const landingStyles = makeStyles((theme) => ({
     root: {
@@ -11,21 +12,9 @@ const landingStyles = makeStyles((theme) => ({
         flexDirection: 'column',
         height: '100%'
     },
-    universeBackground: {
-        position: "fixed",
-        zIndex: -1,
-        filter: 'blur(3px)'
-    },
     contentBackground: {
-        backgroundColor: 'rgba(10, 10, 10, 0.6)',
         paddingBottom: 10,
-        paddingTop: 80,
     },
-    footerBackground: {
-        backgroundColor: 'rgba(10, 10, 10, 0.3)',
-        paddingBottom: 10,
-        width: '100%'
-    }
 }));
 
 const LandingPage = () => {
@@ -36,29 +25,15 @@ const LandingPage = () => {
             className={classes.root}
             title={'Home'}
         >
-            <div className={classes.universeBackground}>
-                <NewSpace />
-            </div>
-
             <Container
                 maxWidth={false}
                 className={classes.contentBackground}
             >
-                <About/>
-            </Container>
+                <Hero/>
+                <Features/>
+                <TokenDistribution/>
+                <ProjectTimeline/>
 
-            <Container
-                maxWidth={false}
-                className={classes.contentBackground}
-            >
-                <Dash/>
-            </Container>
-
-            <Container
-                maxWidth={false}
-                className={classes.contentBackground}
-            >
-                <Footer/>
             </Container>
         </Page>
     )
