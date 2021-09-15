@@ -45,32 +45,32 @@ const features = [
     {
         path: 'decentralized',
         title: 'Decentralized',
-        description: 'Volume uses the latest Blockchain and decentralized file storage technologies like Binance Smart Chain and IPFS to provide a decentralized ecosystem that can never be taken down or blacklisted all contracts and NFTs are here to stay for ever'
+        description: 'Volume uses some of the most secure blockchain- and decentralized file storage technologies like the Binance Smart Chain and IPFS to provide a decentralized ecosystem that can never be taken down or blacklisted. All contracts and NFTs are here to stay forever'
     },
     {
         path: 'deflationary',
         title: 'Deflationary',
-        description: 'Volume burns a small portion of each transaction for ever reducing the total supply on each transaction, On top of this Volume will be burning $Vol tokens on each New NFT sale, lottery and mini game ,This will help keep the Volume rocket flying and the Volume price rising'
+        description: 'Volume burns a small portion of each transaction, reducing the total supply on each transaction. Volume will also be burning $Vol tokens on each new NFT sale, in the lottery and in mini-games. This will help keep the Volume rocket flying and the Volume price rising'
     },
     {
         path: 'trustless',
         title: 'Trustless',
-        description: 'The Volume ecosystem is built using the latest smart contract standards, $VOL liquidity is provided and guaranteed by the ecosystem, built with a trustless mentality from the ground up means the Volume community and Volume users can use the Volume ecosystem in a trustless way'
+        description: 'The Volume ecosystem is built using the latest smart contract standards. $VOL liquidity is provided and guaranteed by the ecosystem, built with a trustless mentality from the ground up means the Volume community can use the ecosystem in a trustless way'
     },
     {
         path: 'community',
         title: 'Community Driven',
-        description: 'Volume ecosystem was built for the community, meaning that the comunnity will decide on the faith and the future of the Volume ecosystem, at the start all governance will be done via a snapshot vote but later on Volume will move to a full featured DAO'
+        description: 'The Volume ecosystem is built for the community, meaning that the community will decide on the faith and the future of the Volume ecosystem, at the start all governance will be done via a snapshot vote but later-on Volume will move to a complete DAO'
     },
     {
         path: 'fun',
-        title: 'Fun & informative',
-        description: 'The Volume ecosystem was made to be a fun and informative project where users will learn about Crypto, tokenomics and Space at the same time via a variety of services, games, NFTs and special events ,it also have plenty of rewards for all ours community'
+        title: 'Fun & Informative',
+        description: 'The Volume ecosystem was made to be a fun and informative project where users will learn about Crypto, tokenomics and space via a variety of services, games, NFTs and special events. It will also have plenty of rewards for the whole community'
     },
     {
         path: 'extensible',
         title: 'Extensible',
-        description: 'Volume was built with extensibility in mind with plans to make an open API that our community members can plug into to create mini games that uses the Volume ecosystem'
+        description: 'Volume was built with extensibility in mind - we have plans to make an "open API contract" that our community members can plug into to create mini-games within the Volume ecosystem'
     },
 ]
 
