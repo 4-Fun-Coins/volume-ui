@@ -92,8 +92,8 @@ const Hero = ({reverse}) => {
                         Volume is a spaceship floating through space. To sustain life on the ship, it needs fuel.
                         Volume users supply fuel as transaction fees, NFT purchases, game participation, and so on.
                         The ship has multiple milestones and, on each milestone, users who supplied the most fuel will receive
-                        generous rewards in Volume tokens and in unique NFTs.
-                        Volume will also include a special launchpad for NFT artists, an NFT marketplace, community games and space lottery!
+                        generous rewards in Volume tokens and unique NFTs.
+                        Volume will also include a special launchpad for NFT artists, an NFT marketplace, community games and a space lottery!
                     </Typography>
                     <Box style={{width: '100%', display: 'flex', justifyContent: 'space-evenly', marginTop: '0.8em'}}>
                         <Button color={"primary"} variant={'contained'} size={'large'} className={classes.button}> Buy

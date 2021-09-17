@@ -56,11 +56,10 @@ const TokenDistribution = ({reverse, ...rest}) => {
                             $VOL Token distribution
                         </Typography>
                         <Typography variant={"body1"} className={classes.BigBody}>
-                            $VOL was built to be a fairly distributed token. There was no private or special
-                            selling rounds. All the funds raised in the publicly accessible <b>ICO</b> are locked in the
-                            escrow and provided
-                            as liquidity with no option of removing it - not even by the developers. This means that the
-                            liquidity of $VOL is guaranteed.
+                            $VOL was built to be a fairly distributed token. There were no private or special selling
+                            rounds. All the funds raised in the publicly accessible ICO are locked in the escrow and
+                            provided as liquidity with no option of removing it - not even by the developers. $VOL
+                            liquidity is therefore guaranteed.
                         </Typography>
                     </Grid>
                 </Grid>
