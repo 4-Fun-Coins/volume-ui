@@ -15,7 +15,7 @@ import {useWallet, ChainUnsupportedError} from "use-wallet";
 import {useHistory, useLocation} from 'react-router-dom';
 import {ROUTES_NAMES} from "../../constants";
 import MenuIcon from "@material-ui/icons/Menu";
-import {chainId} from '../../utils/config';
+import {chainId, kovanChainId} from '../../utils/config';
 import {User} from "react-feather";
 import {useSnackbar} from 'notistack';
 
@@ -109,6 +109,7 @@ const TopBar = ({className, ...rest}) => {
         setMobileOpen(!mobileOpen);
     }
 
+
     const handleChange = (event, newValue) => {
         history.push(newValue);
     }
@@ -122,6 +123,11 @@ const TopBar = ({className, ...rest}) => {
                 <Tab label="The Journey" value={ROUTES_NAMES.JOURNEY}/>
                 <Tab label="Direct Refuel" value={ROUTES_NAMES.REFUEL}/>
                 <Tab label="NFT Market" value={ROUTES_NAMES.NFT_MARKET}/>
+                {/* BETA */}
+                {
+                    wallet.status === 'connected' && wallet.chainId ? kovanChainId &&
+                        <Tab label="Faucet" value={ROUTES_NAMES.FAUCET}/> : <></>
+                }
             </Tabs>
             <Divider/>
         </div>
@@ -151,6 +157,11 @@ const TopBar = ({className, ...rest}) => {
                             <Tab label="The Journey" value={ROUTES_NAMES.JOURNEY}/>
                             <Tab label="NFT Market" value={ROUTES_NAMES.NFT_MARKET}/>
                             <Tab label="Direct Refuel" value={ROUTES_NAMES.REFUEL}/>
+                            {/* BETA */}
+                            {
+                                wallet.status === 'connected' && wallet.chainId ? kovanChainId &&
+                                    <Tab label="Faucet" value={ROUTES_NAMES.FAUCET}/> : <></>
+                            }
                         </Tabs>
                     </Hidden>
                     {

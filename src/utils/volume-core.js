@@ -1,9 +1,11 @@
 import {VolumeJackpotABI} from "./volume-jackpot-abi";
+import {bscTestnetId} from "./config";
 
 const Web3 = require('web3');
-const {volumeAddress, rpcUrl, volumeJackpotAddress} = require('./config.js');
+const {volumeAddress, rpcUrl, volumeJackpotAddress, volumeFaucetAddress, kovanChainId} = require('./config.js');
 const Big = require('big.js');
 const {volumeABI} = require('./volume-abi');
+const {VolumeFaucetAbi} = require('./volume-faucet-abi');
 
 let web3 = new Web3(rpcUrl);
 
@@ -309,6 +311,51 @@ export const blockToDate = async (blocknumber) => {
         return (Date.now() + (averageBlockTime * difference * 1000)) / 1000;
     }
 }
+
+// === FAUCET FUNCTIONS === //
+export const estimateGasForFaucetClaim = (_from) => {
+    const volumeFaucet = new web3.eth.Contract(VolumeFaucetAbi, volumeFaucetAddress);
+    return new Promise((resolve, reject) => {
+        web3.eth.getGasPrice().then((_gasPrice) => {
+            volumeFaucet.methods.claimTestVol().estimateGas({
+                from: _from,
+                gasPrice: _gasPrice
+            }, (error, estPrice) => {
+                if (error)
+                    reject(error);
+
+                resolve(estPrice);
+            });
+        });
+    });
+}
+export const claimTestVol = async (wallet) => {
+    const volumeFaucet = new web3.eth.Contract(VolumeFaucetAbi, volumeFaucetAddress);
+    const data = volumeFaucet.methods.claimTestVol().encodeABI();
+
+    return new Promise((resolve, reject) => {
+        estimateGasForFaucetClaim(wallet.account).then((estGas) => {
+            const transactionParams = {
+                nonce: '0x00',
+                gas: estGas.toString(),
+                to: volumeFaucetAddress,
+                from: wallet.account,
+                data: data,
+                chainId: bscTestnetId
+            }
+
+            wallet.ethereum.request({
+                method: 'eth_sendTransaction',
+                params: [transactionParams]
+            }).then((txHash) => {
+                resolve(txHash);
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    });
+}
+
 // === HELPER FUNCTIONS === //
 
 const sortFunction = (a, b) => {
