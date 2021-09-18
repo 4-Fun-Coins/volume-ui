@@ -15,7 +15,7 @@ import {useWallet, ChainUnsupportedError} from "use-wallet";
 import {useHistory, useLocation} from 'react-router-dom';
 import {ROUTES_NAMES} from "../../constants";
 import MenuIcon from "@material-ui/icons/Menu";
-import {chainId, kovanChainId} from '../../utils/config';
+import {chainId, kovanChainId, bscTestnetId} from '../../utils/config';
 import {User} from "react-feather";
 import {useSnackbar} from 'notistack';
 
@@ -125,7 +125,7 @@ const TopBar = ({className, ...rest}) => {
                 <Tab label="NFT Market" value={ROUTES_NAMES.NFT_MARKET}/>
                 {/* BETA */}
                 {
-                    wallet.status === 'connected' && wallet.chainId ? kovanChainId &&
+                    wallet.status === 'connected' && wallet.chainId ? bscTestnetId &&
                         <Tab label="Faucet" value={ROUTES_NAMES.FAUCET}/> : <></>
                 }
             </Tabs>
@@ -159,7 +159,7 @@ const TopBar = ({className, ...rest}) => {
                             <Tab label="Direct Refuel" value={ROUTES_NAMES.REFUEL}/>
                             {/* BETA */}
                             {
-                                wallet.status === 'connected' && wallet.chainId ? kovanChainId &&
+                                wallet.status === 'connected' && wallet.chainId ? bscTestnetId &&
                                     <Tab label="Faucet" value={ROUTES_NAMES.FAUCET}/> : <></>
                             }
                         </Tabs>
