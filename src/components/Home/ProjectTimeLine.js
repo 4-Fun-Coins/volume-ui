@@ -61,21 +61,21 @@ export const timelineStyles = makeStyles((theme) => ({
 const TimelineData = [
     {
         title: 'Launch',
-        description: 'Launch of the Volume rocket! The volume website will be live and all contracts deployed, there will also be an ICO to raise funds for the project. All funds raised will be used in their entirety to provide liquidity and none of it will go to the team.',
+        description: 'Launch of the Volume rocket! The volume website will be live and all contracts deployed. There will also be an ICO to raise funds for the project. All funds raised will be used in their entirety to provide liquidity, and none of it will go to the team.',
         time: 'September 15th',
         path: 'rocket',
         color: '#4558DC'
     },
     {
         title: 'NFT marketplace',
-        description: 'The Volume NFT market place will be live. Volume NFT holders can sell their NFTs on the marketplace for any BEP20 token they want. The marketplace will also have auction sales available to Volume users who may want that.',
+        description: 'The Volume NFT marketplace will be live. Volume NFT holders can sell their NFTs on the marketplace for any BEP20 token they want. The marketplace will also have auction sales available to Volume users who may wish to use that.',
         time: 'September 30th',
         path: 'shoe-shop',
         color: '#FA5049'
     },
     {
         title: 'INCO and AstroPunks',
-        description: 'AstroPunks NFT collection will be available for public purchase. The Volume Initial NFT Collection Offering (INCO) platform will be launched and NFT artists can apply to launch their NFT collection to the public in a fair, decentralized way.',
+        description: 'AstroPunks NFT collection will be available for public purchase. The Volume Initial NFT Collection Offering (INCO) platform will be launched. NFT artists can apply to launch their NFT collection to the public in a fair, decentralized way.',
         time: 'October 15th',
         path: 'box',
         color: '#FFCCAC'
@@ -89,15 +89,15 @@ const TimelineData = [
     },
     {
         title: 'Community Games',
-        description: 'Launch of Community games on the volume ecosystem. Third party teams can plug in and create their own games on top of the Volume ecosystem using the deployed API contract.',
+        description: 'Launch of Community games on the volume ecosystem. Third-party teams can plugin and create their games on top of the Volume ecosystem using the deployed API contract.',
         time: 'Q1 2022',
         path: 'game-console',
         color: '#08D5CC'
     },
     {
-        title: 'Sky is the limit',
-        description: 'After all the Core products are live, the community can decide what is next for Volume and what features we should bring to it. Think big, because the sky is the limit!',
-        time: 'after Q1 2022',
+        title: 'The Sky is the Limit',
+        description: 'After all the core products are live, the community can decide what is next for Volume and what features we should add. Think big because the sky is the limit!',
+        time: 'After Q1 2022',
         path: 'infinity',
         color: '#6ABFF6'
     },

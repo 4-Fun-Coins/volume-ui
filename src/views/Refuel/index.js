@@ -59,7 +59,7 @@ const landingStyles = makeStyles((theme) => ({
     }
 }));
 
-const ViewOnExplorerButton = ({txHash}) => {
+export const ViewOnExplorerButton = ({txHash}) => {
     return (
         <Button onClick={() => window.open(configs.explorer + 'tx/' + txHash, '_blank')}>
             View Transaction
@@ -141,11 +141,11 @@ const Refuel = () => {
                             setAmount("");
                         }).finally(() => setBusy(false))
                     }).catch((err) => {
-                        enqueueSnackbar(err.message, {variant: "error", autoHideDuration: 2000});
+                        enqueueSnackbar(err.message, {variant: "error", autoHideDuration: 3000});
                         setBusy(false);
                     });
                 }).catch(() => {
-                    enqueueSnackbar("Error Happened during gas estimation", {variant: "error", autoHideDuration: 2000});
+                    enqueueSnackbar("Error Happened during gas estimation", {variant: "error", autoHideDuration: 3000});
                     setBusy(false);
                 });
             } else {

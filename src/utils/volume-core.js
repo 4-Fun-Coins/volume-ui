@@ -1,9 +1,10 @@
 import {VolumeJackpotABI} from "./volume-jackpot-abi";
 
 const Web3 = require('web3');
-const {volumeAddress, rpcUrl, volumeJackpotAddress} = require('./config.js');
+const {volumeAddress, rpcUrl, volumeJackpotAddress, volumeFaucet, chainId} = require('./config.js');
 const Big = require('big.js');
 const {volumeABI} = require('./volume-abi');
+const {VolumeFaucetAbi} = require('./volume-faucet-abi');
 
 let web3 = new Web3(rpcUrl);
 
@@ -310,6 +311,57 @@ export const blockToDate = async (blocknumber) => {
     }
 }
 
+// === FAUCET FUNCTIONS === //
+export const estimateGasForFaucetClaim = (_from) => {
+    const volumeFaucetContract = new web3.eth.Contract(VolumeFaucetAbi, volumeFaucet);
+    return new Promise((resolve, reject) => {
+        web3.eth.getGasPrice().then((_gasPrice) => {
+            volumeFaucetContract.methods.claimTestVol().estimateGas({
+                from: _from,
+                gasPrice: _gasPrice
+            }, (error, estPrice) => {
+                if (error)
+                    reject(error);
+
+                resolve(estPrice);
+            });
+        });
+    });
+}
+export const claimTestVol = async (wallet) => {
+    const volumeFaucetContract = new web3.eth.Contract(VolumeFaucetAbi, volumeFaucet);
+    const data = volumeFaucetContract.methods.claimTestVol().encodeABI();
+
+    return new Promise((resolve, reject) => {
+        estimateGasForFaucetClaim(wallet.account).then((estGas) => {
+            const transactionParams = {
+                nonce: '0x00',
+                gas: estGas.toString(),
+                to: volumeFaucet,
+                from: wallet.account,
+                data: data,
+                chainId: chainId
+            }
+
+            wallet.ethereum.request({
+                method: 'eth_sendTransaction',
+                params: [transactionParams]
+            }).then((txHash) => {
+                resolve(txHash);
+            }).catch(err => {
+                reject(err);
+            })
+        }).catch((err) => {
+            reject(err);
+        });
+    });
+}
+
+export const canClaimTestVol = async (address) => {
+    const volumeFaucetContract = new web3.eth.Contract(VolumeFaucetAbi, volumeFaucet);
+    return volumeFaucetContract.methods.canClaim(address).call();
+}
+
 export const getTakeOffBlock = async () => {
     const volume = new web3.eth.Contract(volumeABI, volumeAddress);
     return (await volume.methods.getTakeoffBlock().call()) / 10 ** 18;
@@ -319,7 +371,7 @@ export const getTakeOffBlock = async () => {
 export const waitForTransaction = async (pendingTxHash) => {
     return new Promise(async (resolve, reject) => {
         let receipt;
-        do{
+        do {
             await sleep(3000); // this will be roughly one block on BSC main net
             receipt = await web3.eth.getTransactionReceipt(pendingTxHash);
         } while (!receipt)

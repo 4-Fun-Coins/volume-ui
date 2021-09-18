@@ -15,13 +15,12 @@ import {useWallet, ChainUnsupportedError} from "use-wallet";
 import {useHistory, useLocation} from 'react-router-dom';
 import {ROUTES_NAMES} from "../../constants";
 import MenuIcon from "@material-ui/icons/Menu";
-import {chainId} from '../../utils/config';
+import {chainId, volumeFaucet} from '../../utils/config';
 import {User} from "react-feather";
 import {useSnackbar} from 'notistack';
 
 import LogoWithText from '../../components/LogoWithText'
 import useVolume from "../../hooks/useVolume";
-import App from "../../App";
 
 const drawerWidth = 240;
 
@@ -90,6 +89,7 @@ const TopBar = ({className, ...rest}) => {
     const {enqueueSnackbar} = useSnackbar();
 
     useEffect(() => {
+        console.log(volumeFaucet)
         if (wallet.error instanceof ChainUnsupportedError) {
             if (lastToast === 0 || performance.now() - lastToast > 5000) {
                 enqueueSnackbar(`Unsupported network Volume is only available on ${wallet.networkName} chainId (${chainId})`, {variant: 'error'});
@@ -109,6 +109,7 @@ const TopBar = ({className, ...rest}) => {
         setMobileOpen(!mobileOpen);
     }
 
+
     const handleChange = (event, newValue) => {
         history.push(newValue);
     }
@@ -122,6 +123,11 @@ const TopBar = ({className, ...rest}) => {
                 <Tab label="The Journey" value={ROUTES_NAMES.JOURNEY}/>
                 <Tab label="Direct Refuel" value={ROUTES_NAMES.REFUEL}/>
                 <Tab label="NFT Market" value={ROUTES_NAMES.NFT_MARKET}/>
+                {/* BETA */}
+                {
+                    wallet.status === 'connected' && volumeFaucet &&
+                        <Tab label="Faucet" value={ROUTES_NAMES.FAUCET}/>
+                }
             </Tabs>
             <Divider/>
         </div>
@@ -151,6 +157,11 @@ const TopBar = ({className, ...rest}) => {
                             <Tab label="The Journey" value={ROUTES_NAMES.JOURNEY}/>
                             <Tab label="NFT Market" value={ROUTES_NAMES.NFT_MARKET}/>
                             <Tab label="Direct Refuel" value={ROUTES_NAMES.REFUEL}/>
+                            {/* BETA */}
+                            {
+                                wallet.status === 'connected' && volumeFaucet &&
+                                    <Tab label="Faucet" value={ROUTES_NAMES.FAUCET}/>
+                            }
                         </Tabs>
                     </Hidden>
                     {

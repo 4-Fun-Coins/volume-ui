@@ -65,6 +65,11 @@ const routes = [
         component: lazy(() => import("./views/NFTMarketPlace"))
     },
     {
+        path: ROUTES_NAMES.FAUCET,
+        exact: true,
+        component: lazy(() => import("./views/Faucet"))
+    },
+    {
         path: "/",
         exact: true,
         component: () => <Redirect to={ROUTES_NAMES.HOME}/>

@@ -2,8 +2,8 @@ const configs = {
     bscTest: {
         volumeAddress: '0x5980A1d3db54c22FEb966449fFD228a9E39c3970',
         volumeJackpotAddress: '0xD38a0b1f191D1AFAf788aD7162fC79aB058F3d99',
-        volumeEscrow: '0x5980A1d3db54c22FEb966449fFD228a9E39c3970',
-        volumeFaucet: '0xD38a0b1f191D1AFAf788aD7162fC79aB058F3d99',
+        volumeEscrow: '0xA0CcF5047480a270C9ECcA7c7f6453c69443F882',
+        volumeFaucet: '0xCFf364d0045Df807AB53dDC827d054Ee6807471a',
 
         rpcUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545/',//'https://kovan.poa.network/', // 'https://bsc-dataseed1.binance.org'
         explorer: 'https://testnet.bscscan.com/',
@@ -12,6 +12,7 @@ const configs = {
     kovan: {
         volumeAddress: '0xD934AfDCe00240B9878521083989453c9A63B4d7',
         volumeJackpotAddress: '0xABdb4c4a4849ad26DB7FC9F7D352174B83F77623',
+        volumeFaucet: '0xBA0F2723beEa8B1bdeFCE44BeCc041A9f6685701',
         rpcUrl: 'https://kovan.poa.network/',
         explorer: 'https://kovan.etherscan.io/',
         chainId: 42
