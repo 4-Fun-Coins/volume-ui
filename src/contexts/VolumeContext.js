@@ -1,11 +1,11 @@
 import React, {createContext, useEffect, useState} from 'react';
 import {
-    blockToDate,
+    blockToDate, getActiveMilestone,
     getAllMilestones,
     getBalanceForAddress, getClaimableWinnings,
     getCurrentBlock,
     getCurrentTotalSupply,
-    getFuel, getFuelAddedForAddress
+    getFuel, getFuelAddedForAddress, getTakeOffBlock
 } from "../utils/volume-core";
 import {getFormattedTimePeriod} from "../utils/Utilities";
 
@@ -31,6 +31,8 @@ export const VolumeProvider = ({children}) => {
     });
     const [ecosystemStats, setEcosystemStats] = useState({
         totalSupply: null,
+        takeoffBlock: null,
+        tookOff: null,
         burntToken: null,
         flyingDistance: null,
         flightTime: null,
@@ -66,19 +68,22 @@ export const VolumeProvider = ({children}) => {
         getCurrentTotalSupply().then(async totalSupply => {
 
                 getCurrentBlock().then(async block => {
-                    const flightTime = await blockToDate(block) - await blockToDate(milestones[0].startBlock);
+                    const flightTime = milestones[0] ? await blockToDate(block) - await blockToDate(milestones[0].startBlock) : 0;
                     const fuelTank = Number(await getFuel());
                     const eta = await blockToDate(Number(block) + Number(fuelTank));
                     setEcosystemStats({
                         ...ecosystemStats,
                         totalSupply: totalSupply,
+                        takeoffBlock: Number(await getTakeOffBlock()),
+                        tookOff: await getTakeOffBlock() != 0 && await getTakeOffBlock() <= await getCurrentBlock(),
                         burntToken: 1000000000 * 10 ** 18 - totalSupply,
-                        flyingDistance: block - milestones[0].startBlock,
+                        flyingDistance: milestones[0] ? block - milestones[0].startBlock : 0,
                         flightTime: flightTime * 1000,
                         flightTimeFormatted: getFormattedTimePeriod(flightTime * 1000),
                         fuelTank: fuelTank,
                         estimatedDateFuelOut: eta,
-                        timeLeft: getFormattedTimePeriod(eta * 1000 - Date.now())
+                        timeLeft: getFormattedTimePeriod(eta * 1000 - Date.now()),
+                        activeMilestone: await getActiveMilestone()
                     });
 
 

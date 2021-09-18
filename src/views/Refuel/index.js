@@ -2,12 +2,16 @@ import Page from "../../components/Root/Page";
 import {Button, Card, Container, Grid, Hidden, makeStyles, TextField} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import {useWallet} from "use-wallet";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     estimateGasForRefuel,
-    getBalanceForAddress, getDataForRefuel,
+    getBalanceForAddress, getDataForRefuel, waitForTransaction,
 } from "../../utils/volume-core";
+import {useSnackbar} from "notistack";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import Box from "@material-ui/core/Box";
 
+const configs = require('../../utils/config');
 const {volumeAddress} = require('../../utils/config.js');
 const Big = require('big-js');
 
@@ -55,7 +59,18 @@ const landingStyles = makeStyles((theme) => ({
     }
 }));
 
+const ViewOnExplorerButton = ({txHash}) => {
+    return (
+        <Button onClick={() => window.open(configs.explorer + 'tx/' + txHash, '_blank')}>
+            View Transaction
+        </Button>
+    )
+
+}
+
 const Refuel = () => {
+    const {enqueueSnackbar} = useSnackbar();
+
     const classes = landingStyles();
 
     const wallet = useWallet();
@@ -64,7 +79,7 @@ const Refuel = () => {
     const [amount, setAmount] = useState("");
     const [message, setMessage] = useState("");
     const [enabled, setEnabled] = useState(false);
-
+    const [busy, setBusy] = useState(false);
     const fetchBalance = () => {
         if (wallet.status === 'connected') {
             // fetch balance
@@ -77,6 +92,7 @@ const Refuel = () => {
 
     const refuel = async () => {
         // Calculate expected gas
+        setBusy(true)
         if (wallet.status === 'connected') {
             // Get balance for user
             const currentBalance = new Big(await getBalanceForAddress(wallet.account));
@@ -96,10 +112,41 @@ const Refuel = () => {
                         method: 'eth_sendTransaction',
                         params: [transactionParams]
                     }).then((txHash) => {
-                        console.log(txHash);
+                        enqueueSnackbar(`Transaction submitted ${txHash.toString().substr(0, 10)}`, {
+                            variant: "success",
+                            action: <ViewOnExplorerButton txHash={txHash}/>,
+                            autoHideDuration: 3000
+                        })
+                        waitForTransaction(txHash).then(receipt => {
+                            if (receipt.status) {
+                                // transaction mined and did not revert
+                                enqueueSnackbar(
+                                    "Fuel supplied Successfully! All Crew members Thank you",
+                                    {
+                                        variant: "success",
+                                        autoHideDuration: 4000,
+                                        action: <ViewOnExplorerButton txHash={txHash}/>,
+                                    }
+                                )
+                            } else {
+                                // transaction mined and did revert
+                                enqueueSnackbar(
+                                    "Transaction Reverted 😢",
+                                    {
+                                        variant: "error",
+                                        autoHideDuration: 3000,
+                                        action: <ViewOnExplorerButton txHash={txHash}/>
+                                    })
+                            }
+                            setAmount("");
+                        }).finally(() => setBusy(false))
                     }).catch((err) => {
-                        console.log(err);
+                        enqueueSnackbar(err.message, {variant: "error", autoHideDuration: 2000});
+                        setBusy(false);
                     });
+                }).catch(() => {
+                    enqueueSnackbar("Error Happened during gas estimation", {variant: "error", autoHideDuration: 2000});
+                    setBusy(false);
                 });
             } else {
                 setBalance(currentBalance);
@@ -143,6 +190,9 @@ const Refuel = () => {
                 <Grid container item xs={12} className={classes.cardWrapper}>
                     <Grid container item justifyContent={"center"}>
                         <Card className={classes.card}>
+                            {busy && <Box sx={{width: '100%'}}>
+                                <LinearProgress color={"secondary"}/>
+                            </Box>}
                             <Grid container style={{display: "flex", width: '100%', height: '100%'}}>
                                 <Grid container item xs={12} md={6} justifyContent={"center"} alignItems={"flex-start"}
                                       style={{backgroundColor: "transparent"}}>
@@ -171,7 +221,7 @@ const Refuel = () => {
                                                    style={{borderRadius: '20px'}}/>
 
                                         <Button fullWidth color={"secondary"} variant={"contained"} onClick={refuel}
-                                                disabled={!enabled}
+                                                disabled={!enabled || busy}
                                                 style={{marginTop: '1em', margingBottom: '1em', borderRadius: '20px'}}>
                                             {message}
                                         </Button>

@@ -64,6 +64,17 @@ const LeaderboardHome = (props) => {
         if (activeMilestone)
             getAllContributorsForMilestone(activeMilestone.startBlock).then(result => {
                 console.log(result.length);
+                if (result.length < 10)
+                    // fill leader board with empty entries (esthetics)
+                    for (let i = result.length; i < 10; i++) {
+                        result.push({
+                            participant: "No Name",
+                            nickname: "No Player Yet",
+                            address: "0x0000...0000",
+                            fuelAdded: 0,
+                            rank: i + 1,
+                        })
+                    }
                 setParticipants(result);
             }).catch(error => {
                 console.warn(error.message);
@@ -135,7 +146,7 @@ const LeaderboardHome = (props) => {
                 <Grid item container direction={"column"} justifyContent={"center"} alignItems="center"
                       className={`${classes.leaderboardContainer} ${cardClasses.cardGrid}`}>
                     {participants.length > 0 ?
-                        participants.slice(0, 10).map((element, index) => {
+                        participants.map((element, index) => {
                             return LeaderboardEntry({
                                 ...element,
                                 classes,

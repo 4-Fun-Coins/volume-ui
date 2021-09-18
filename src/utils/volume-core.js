@@ -309,8 +309,30 @@ export const blockToDate = async (blocknumber) => {
         return (Date.now() + (averageBlockTime * difference * 1000)) / 1000;
     }
 }
+
+export const getTakeOffBlock = async () => {
+    const volume = new web3.eth.Contract(volumeABI, volumeAddress);
+    return (await volume.methods.getTakeoffBlock().call()) / 10 ** 18;
+}
+
+// TODO Add a timeout to avoid getting stuck
+export const waitForTransaction = async (pendingTxHash) => {
+    return new Promise(async (resolve, reject) => {
+        let receipt;
+        do{
+            await sleep(3000); // this will be roughly one block on BSC main net
+            receipt = await web3.eth.getTransactionReceipt(pendingTxHash);
+        } while (!receipt)
+        resolve(receipt)
+    })
+}
+
 // === HELPER FUNCTIONS === //
 
 const sortFunction = (a, b) => {
     return new Big(b.fuelAdded).minus(a.fuelAdded);
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
