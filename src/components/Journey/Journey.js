@@ -39,6 +39,7 @@ function a11yProps(index) {
 }
 
 const valid = ['past', 'active', 'future', 'all'];
+const descriptionWhenEmpty = ['There are not Past milestones', 'There are No Active milestones', 'There are no future Milestones yet', 'There are no milestones'];
 
 const JourneyHome = ({...rest}) => {
     const location = useLocation();
@@ -119,6 +120,11 @@ const JourneyHome = ({...rest}) => {
                 <Timeline align={!isMobile ? "alternate" : "left"}
                           style={{padding: '0px', width: '100%', display: 'block', marginTop: '16px'}}>
                     {milestones.map((el, index) => <JourneyEntry milestone={el} isMobile={isMobile} key={index}/>)}
+                    {milestones.length === 0 &&
+                    <Typography variant={'h2'} style={{color: 'white', width: '100%', textAlign: 'center'}}>
+                        {descriptionWhenEmpty[activeTab]}
+                    </Typography>
+                    }
                 </Timeline> :
                 <LoadingScreen transparent/>
             }

@@ -1,8 +1,7 @@
 import {VolumeJackpotABI} from "./volume-jackpot-abi";
-import {bscTestnetId} from "./config";
 
 const Web3 = require('web3');
-const {volumeAddress, rpcUrl, volumeJackpotAddress, volumeFaucetAddress, kovanChainId} = require('./config.js');
+const {volumeAddress, rpcUrl, volumeJackpotAddress, volumeFaucet, chainId} = require('./config.js');
 const Big = require('big.js');
 const {volumeABI} = require('./volume-abi');
 const {VolumeFaucetAbi} = require('./volume-faucet-abi');
@@ -314,10 +313,10 @@ export const blockToDate = async (blocknumber) => {
 
 // === FAUCET FUNCTIONS === //
 export const estimateGasForFaucetClaim = (_from) => {
-    const volumeFaucet = new web3.eth.Contract(VolumeFaucetAbi, volumeFaucetAddress);
+    const volumeFaucetContract = new web3.eth.Contract(VolumeFaucetAbi, volumeFaucet);
     return new Promise((resolve, reject) => {
         web3.eth.getGasPrice().then((_gasPrice) => {
-            volumeFaucet.methods.claimTestVol().estimateGas({
+            volumeFaucetContract.methods.claimTestVol().estimateGas({
                 from: _from,
                 gasPrice: _gasPrice
             }, (error, estPrice) => {
@@ -330,18 +329,18 @@ export const estimateGasForFaucetClaim = (_from) => {
     });
 }
 export const claimTestVol = async (wallet) => {
-    const volumeFaucet = new web3.eth.Contract(VolumeFaucetAbi, volumeFaucetAddress);
-    const data = volumeFaucet.methods.claimTestVol().encodeABI();
+    const volumeFaucetContract = new web3.eth.Contract(VolumeFaucetAbi, volumeFaucet);
+    const data = volumeFaucetContract.methods.claimTestVol().encodeABI();
 
     return new Promise((resolve, reject) => {
         estimateGasForFaucetClaim(wallet.account).then((estGas) => {
             const transactionParams = {
                 nonce: '0x00',
                 gas: estGas.toString(),
-                to: volumeFaucetAddress,
+                to: volumeFaucet,
                 from: wallet.account,
                 data: data,
-                chainId: bscTestnetId
+                chainId: chainId
             }
 
             wallet.ethereum.request({
@@ -349,15 +348,43 @@ export const claimTestVol = async (wallet) => {
                 params: [transactionParams]
             }).then((txHash) => {
                 resolve(txHash);
-            }).catch((err) => {
+            }).catch(err => {
                 reject(err);
-            });
+            })
+        }).catch((err) => {
+            reject(err);
         });
     });
+}
+
+export const canClaimTestVol = async (address) => {
+    const volumeFaucetContract = new web3.eth.Contract(VolumeFaucetAbi, volumeFaucet);
+    return volumeFaucetContract.methods.canClaim(address).call();
+}
+
+export const getTakeOffBlock = async () => {
+    const volume = new web3.eth.Contract(volumeABI, volumeAddress);
+    return (await volume.methods.getTakeoffBlock().call()) / 10 ** 18;
+}
+
+// TODO Add a timeout to avoid getting stuck
+export const waitForTransaction = async (pendingTxHash) => {
+    return new Promise(async (resolve, reject) => {
+        let receipt;
+        do {
+            await sleep(3000); // this will be roughly one block on BSC main net
+            receipt = await web3.eth.getTransactionReceipt(pendingTxHash);
+        } while (!receipt)
+        resolve(receipt)
+    })
 }
 
 // === HELPER FUNCTIONS === //
 
 const sortFunction = (a, b) => {
     return new Big(b.fuelAdded).minus(a.fuelAdded);
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }

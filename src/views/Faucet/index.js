@@ -3,9 +3,14 @@ import {Button, Card, Container, Grid, Hidden, makeStyles} from "@material-ui/co
 import React, {useEffect, useState} from "react";
 import Typography from "@material-ui/core/Typography";
 import Big from "big-js";
-import {getBalanceForAddress, claimTestVol} from "../../utils/volume-core";
+import {getBalanceForAddress, claimTestVol, canClaimTestVol, waitForTransaction} from "../../utils/volume-core";
 import {useWallet} from "use-wallet";
-import {bscTestnetId} from "../../utils/config";
+import {volumeFaucet} from "../../utils/config";
+import Alert from "@material-ui/lab/Alert";
+import {useSnackbar} from "notistack";
+import {ViewOnExplorerButton} from "../Refuel";
+import Box from "@material-ui/core/Box";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 const faucetStyles = makeStyles((theme) => ({
     root: {
@@ -54,10 +59,14 @@ const faucetStyles = makeStyles((theme) => ({
 }));
 
 const FaucetPage = () => {
+    const {enqueueSnackbar} = useSnackbar();
+
     const classes = faucetStyles();
     const wallet = useWallet();
     const [balance, setBalance] = useState(new Big(0));
     const [test, setTest] = useState(false);
+    const [canClaim, setCanClaim] = useState(false);
+    const [busy, setBusy] = useState(false);
 
     useEffect(() => {
         if (wallet.status === 'connected') {
@@ -66,19 +75,53 @@ const FaucetPage = () => {
                 if (res)
                     setBalance(new Big(res));
             });
+            canClaimTestVol(wallet.account).then(res => setCanClaim(res));
         }
-    }, [wallet.status]);
+    }, [wallet.status, busy]);
 
     useEffect(() => {
-        if(wallet.status === 'connected' && wallet.chainId === bscTestnetId)
+        if (wallet.status === 'connected' && volumeFaucet)
             setTest(true);
         else
             setTest(false);
-    }, [wallet.status, wallet.chainId]);
+    }, [wallet.status]);
 
+    /*
+        TODO: Make a handler for transactions that can be observed by components (maybe even save transactions history to browser storage)
+     */
     const claim = async () => {
-        const hash = await claimTestVol(wallet);
-        console.log(hash);
+        setBusy(true);
+        let failed = false;
+        const hash = await claimTestVol(wallet).catch(error => {
+            enqueueSnackbar(error.message, {variant: "error", autoHideDuration: 3000});
+            failed = true;
+        });
+        if (!failed) {
+            const receipt = await waitForTransaction(hash)
+                .catch(error => console.log("Error" + error))
+                .finally(() => setBusy(false));
+
+            if (receipt.status) {
+                // transaction mined and did not revert
+                enqueueSnackbar(
+                    "Success! Test $Vol should show in your wallet shortly!",
+                    {
+                        variant: "success",
+                        autoHideDuration: 4000,
+                        action: <ViewOnExplorerButton txHash={hash}/>,
+                    }
+                )
+            } else {
+                // transaction mined and did revert
+                enqueueSnackbar(
+                    "Transaction Reverted 😢",
+                    {
+                        variant: "error",
+                        autoHideDuration: 3000,
+                        action: <ViewOnExplorerButton txHash={hash}/>
+                    })
+            }
+        } else setBusy(false);
     }
 
     return (
@@ -93,6 +136,9 @@ const FaucetPage = () => {
                 <Grid container item xs={12} className={classes.cardWrapper}>
                     <Grid container item justifyContent={"center"}>
                         <Card className={classes.card}>
+                            {busy && <Box sx={{width: '100%'}}>
+                                <LinearProgress color={"secondary"}/>
+                            </Box>}
                             <Grid container style={{display: "flex", width: '100%', height: '100%'}}>
                                 <Grid container item xs={12} md={6} justifyContent={"center"} alignItems={"flex-start"}
                                       style={{backgroundColor: "transparent"}}>
@@ -105,11 +151,14 @@ const FaucetPage = () => {
                                         </Typography>
 
                                         <Typography className={classes.balanceText}>
-                                            Balance: {balance.toFixed(2)}
+                                            Your Balance: {balance.toFixed(2)}
                                         </Typography>
-
+                                        {!canClaim && wallet.status === 'connected' &&
+                                        <Alert severity={"error"} style={{marginTop: 6}}>
+                                            You can only Claim once a day.
+                                        </Alert>}
                                         <Button color={"secondary"} variant={"contained"} onClick={claim}
-                                                disabled={!test}
+                                                disabled={!test || !canClaim || busy}
                                                 style={{margin: '1em', borderRadius: '20px', width: '80%'}}>
                                             {test ? 'Claim' : 'Connect to TestNet'}
                                         </Button>
