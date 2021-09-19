@@ -146,7 +146,7 @@ const LeaderboardHome = (props) => {
                 <Grid item container direction={"column"} justifyContent={"center"} alignItems="center"
                       className={`${classes.leaderboardContainer} ${cardClasses.cardGrid}`}>
                     {participants.length > 0 ?
-                        participants.map((element, index) => {
+                        participants.slice(0,10).map((element, index) => {
                             return LeaderboardEntry({
                                 ...element,
                                 classes,
