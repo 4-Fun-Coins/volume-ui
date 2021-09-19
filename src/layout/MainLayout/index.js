@@ -39,7 +39,7 @@ const MainLayout = ({children}) => {
         <div style={{backgroundColor: 'rgba(10, 10, 10, 0.2)'}}>
             <TopBar/>
             <div className={classes.content}>
-                {volumeEcosystem.ecosystemStats.totalSupply || location.pathname === ROUTES_NAMES.HOME ? children :
+                {volumeEcosystem.ecosystemStats.totalSupply || location.pathname === ROUTES_NAMES.HOME || location.pathname === '/' ? children :
                     <LoadingScreen transparent style={{height: '100vh'}}/>}
             </div>
             <div style={{height: '4em'}}/>
