@@ -36,7 +36,7 @@ const faucetStyles = makeStyles((theme) => ({
         textAlign: "center"
     },
     text: {
-        padding: '2.5em',
+        padding: '1em',
         textAlign: "center",
         color: theme.palette.text.paragraph,
         fontSize: 16,
@@ -127,7 +127,7 @@ const FaucetPage = () => {
     return (
         <Page
             className={classes.root}
-            title={'Home'}
+            title={'Faucet'}
         >
             <Container
                 maxWidth={false}
@@ -153,10 +153,12 @@ const FaucetPage = () => {
                                         <Typography className={classes.balanceText}>
                                             Your Balance: {balance.toFixed(2)}
                                         </Typography>
-                                        {!canClaim && wallet.status === 'connected' &&
-                                        <Alert severity={"error"} style={{marginTop: 6}}>
-                                            You can only Claim once a day.
-                                        </Alert>}
+                                        <Grid item xs={12} style={{padding: 8}}>
+                                            {!canClaim && wallet.status === 'connected' &&
+                                            <Alert severity={"error"} style={{maxWidth: "300px", margin: "auto"}}>
+                                                You can only Claim once a day.
+                                            </Alert>}
+                                        </Grid>
                                         <Button color={"secondary"} variant={"contained"} onClick={claim}
                                                 disabled={!test || !canClaim || busy}
                                                 style={{margin: '1em', borderRadius: '20px', width: '80%'}}>
