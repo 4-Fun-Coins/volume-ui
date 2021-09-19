@@ -31,13 +31,12 @@ const styles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',
+        minHeight: '100vh',
     },
     contentBackground: {
         paddingBottom: 10,
         paddingTop: 80,
-        backgroundColor: 'rgba(10, 10, 10, 0.6)',
-        height: '100vh'
+        minHeight: '100vh'
     },
     paper: {
         padding: '6px 16px',
