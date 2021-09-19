@@ -174,8 +174,7 @@ export const FillBar = ({rank, percentage, compact}) => {
             <Box
                 style={{
                     backgroundColor: LeaderBoardColors[rank],
-                    // TODO : remove this in production
-                    width: `${percentage < 1 ? percentage * 1000000 : percentage < 5 ? percentage * 10 : percentage}%`
+                    width: `${percentage}%`
                 }}
                 className={classes.bar}
             />
