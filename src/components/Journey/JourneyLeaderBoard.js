@@ -3,8 +3,11 @@ import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import {formatLongNumber} from "../../utils/Utilities";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {LeaderBoardColors} from "../../data/static/Colors";
+import {getWinnersAndAmounts} from "../../utils/volume-core";
+import Tooltip from "@material-ui/core/Tooltip";
+import Fade from "@material-ui/core/Fade";
 
 const styles = makeStyles((theme) => ({
     Leaderboard: {
@@ -13,6 +16,7 @@ const styles = makeStyles((theme) => ({
         width: '100%',
         textAlign: 'center',
         fontFamily: 'roboto',
+        cursor: "default",
         [theme.breakpoints.between('xs', 'sm')]: {
             padding: '0px',
         }
@@ -106,8 +110,14 @@ const styles = makeStyles((theme) => ({
     }
 }));
 
-const JourneyLeaderboard = ({participants, maxScore}) => {
+const JourneyLeaderboard = ({milestone, maxScore}) => {
+
     const classes = styles();
+    const [winnings, setWinnings] = useState();
+    useEffect(() => {
+        // TODO change 1000
+        setWinnings(getWinnersAndAmounts(milestone.participants, milestone.amountInPot, 1000))
+    }, []);
 
     return (
         <Box className={classes.Leaderboard}>
@@ -115,8 +125,8 @@ const JourneyLeaderboard = ({participants, maxScore}) => {
                 Top Contributors
             </Typography>
             <Box>
-                {participants ? (
-                    participants.slice(0, 3).map((participant, i) => (
+                {milestone.participants ? (
+                    milestone.participants.slice(0, 3).map((participant, i) => (
                         <Box
                             key={i}
                             style={{
@@ -144,13 +154,27 @@ const JourneyLeaderboard = ({participants, maxScore}) => {
                                         </svg>
                                     </Box>
                                 ) : null}
-                                <Box style={{textAlign: "left"}}>
+                                <Box style={{textAlign: "left", flexGrow: 1}}>
                                     <Box className={classes.username}>{i + 1 + '. ' + participant.nickname}</Box>
                                     <Box className={classes.leaderScore}>
                                         <Avatar className={classes.svg}
                                                 style={{backgroundColor: LeaderBoardColors[i]}}>B</Avatar>
                                         <Box
                                             className={classes.leaderScoreTitle}>{formatLongNumber(participant.fuelAdded / 10 ** 18) + ' Fuel Block'}</Box>
+                                    </Box>
+                                </Box>
+                                <Box style={{textAlign: "left"}}>
+                                    <Box className={classes.username}>P. Pot Share</Box>
+
+
+                                    <Box className={classes.leaderScore}>
+                                        <Tooltip
+                                            title={"This is The Volume amount to be won if this Crew Member keeps this spot on the Leaderboard"}
+                                            TransitionComponent={Fade} arrow
+                                        >
+                                            <Box
+                                                className={classes.leaderScoreTitle}>{(winnings ? formatLongNumber(winnings[participant.address], 2) : ' ???') + ' $VOL'}</Box>
+                                        </Tooltip>
                                     </Box>
                                 </Box>
                             </Box>

@@ -1,11 +1,11 @@
 import React, {createContext, useEffect, useState} from 'react';
 import {
     blockToDate, getActiveMilestone,
-    getAllMilestones,
+    getAllMilestones, getAverageBlockTime,
     getBalanceForAddress, getClaimableWinnings,
     getCurrentBlock,
     getCurrentTotalSupply,
-    getFuel, getFuelAddedForAddress, getTakeOffBlock
+    getFuel, getFuelAddedForAddress, getTakeOffBlock, getTotalFuelAdded
 } from "../utils/volume-core";
 import {getFormattedTimePeriod} from "../utils/Utilities";
 
@@ -26,6 +26,7 @@ export const VolumeProvider = ({children}) => {
     const [userStats, setUserStats] = useState({
         volumeBalance: null,
         totalFuelSupplied: null,
+        totalSecAdded: null,
         milestonesStats: null, // fuelSupplied, rank , winner , milestone book
         claimableRewards: null,
     });
@@ -38,9 +39,12 @@ export const VolumeProvider = ({children}) => {
         flightTime: null,
         flightTimeFormatted: null,
         fuelTank: null,
+        fuelAdded: null,
+        timeAdded: null,
         estimatedDateFuelOut: null,
         tokenPrice: null,
-        timeLeft: null
+        timeLeft: null,
+        activeMilestone: null
     });
 
     useEffect(() => {
@@ -71,16 +75,20 @@ export const VolumeProvider = ({children}) => {
                     const flightTime = milestones[0] ? await blockToDate(block) - await blockToDate(milestones[0].startBlock) : 0;
                     const fuelTank = Number(await getFuel());
                     const eta = await blockToDate(Number(block) + Number(fuelTank));
+                    const fuelAdded = await getTotalFuelAdded();
+                    const takeoffBlock = await getTakeOffBlock()
                     setEcosystemStats({
                         ...ecosystemStats,
                         totalSupply: totalSupply,
                         takeoffBlock: Number(await getTakeOffBlock()),
-                        tookOff: await getTakeOffBlock() != 0 && await getTakeOffBlock() <= await getCurrentBlock(),
-                        burntToken: 1000000000 * 10 ** 18 - totalSupply,
+                        tookOff: takeoffBlock != 0 && takeoffBlock <= block,
+                        burntToken: (1000000000 * 10 ** 18 - totalSupply) / 10 ** 18,
                         flyingDistance: milestones[0] ? block - milestones[0].startBlock : 0,
                         flightTime: flightTime * 1000,
                         flightTimeFormatted: getFormattedTimePeriod(flightTime * 1000),
                         fuelTank: fuelTank,
+                        fuelAdded: fuelAdded,
+                        timeAdded: fuelAdded * await getAverageBlockTime(),
                         estimatedDateFuelOut: eta,
                         timeLeft: getFormattedTimePeriod(eta * 1000 - Date.now()),
                         activeMilestone: await getActiveMilestone()
@@ -137,6 +145,7 @@ export const VolumeProvider = ({children}) => {
             ...setUserStats,
             volumeBalance: balance,
             totalFuelSupplied: fuelAdded,
+            totalSecAdded: fuelAdded * await getAverageBlockTime(),
             milestonesStats: userMilestones,
             claimableRewards: winnings,
         })

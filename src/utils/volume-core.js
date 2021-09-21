@@ -7,6 +7,7 @@ const {volumeABI} = require('./volume-abi');
 const {VolumeFaucetAbi} = require('./volume-faucet-abi');
 
 let web3 = new Web3(rpcUrl);
+const {BN} = web3.utils;
 
 export async function getFuel() {
     return new Promise((resolve, reject) => {
@@ -15,7 +16,7 @@ export async function getFuel() {
             if (error)
                 reject(error);
 
-            resolve(web3.utils.fromWei(fuel));
+            resolve(web3.utils.fromWei(new BN(fuel)));
         });
     });
 }
@@ -200,9 +201,10 @@ export async function getAllMilestones() {
     return new Promise((resolve, reject) => {
         const volumeJackpot = new web3.eth.Contract(VolumeJackpotABI, volumeJackpotAddress);
         volumeJackpot.methods.getAllMilestones().call(async (err, milestones) => {
-            if (err)
+            if (err) {
                 reject(err);
-
+                return;
+            }
             const formattedMilestones = await Promise.all(milestones.map(async (milestone, index) => {
                 const participants = await getAllContributorsForMilestone(milestone.startBlock);
                 const block = await getCurrentBlock();
@@ -302,13 +304,22 @@ export const blockToDate = async (blocknumber) => {
     if (blocknumber <= currentBlock)
         return (await web3.eth.getBlock(blocknumber)).timestamp
     else {
-        // we average the future blocktime based on the average blocktime in the last one million block
-        const pastBlockTime = (await web3.eth.getBlock(currentBlock - 1000000)).timestamp;
-        const currentBlockTime = (await web3.eth.getBlock(currentBlock)).timestamp;
         const difference = blocknumber - currentBlock;
-        const averageBlockTime = (currentBlockTime - pastBlockTime) / 1000000
+        const averageBlockTime = await getAverageBlockTime();
         return (Date.now() + (averageBlockTime * difference * 1000)) / 1000;
     }
+}
+
+/**
+ *
+ * @returns {Promise<number>} average time is seconds
+ */
+export const getAverageBlockTime = async () => {
+    // we average the future bloc time based on the average bloc time in the last one million block
+    const currentBlock = await getCurrentBlock();
+    const pastBlockTime = (await web3.eth.getBlock(currentBlock - 1000000)).timestamp;
+    const currentBlockTime = (await web3.eth.getBlock(currentBlock)).timestamp;
+    return (currentBlockTime - pastBlockTime) / 1000000
 }
 
 // === FAUCET FUNCTIONS === //
@@ -377,6 +388,49 @@ export const waitForTransaction = async (pendingTxHash) => {
         } while (!receipt)
         resolve(receipt)
     })
+}
+
+export const getWinnersAndAmounts = (participants, totalPot, winnersCount) => {
+    totalPot = new BN(totalPot);
+    const ratios = [new BN('25'), new BN('15'), new BN('10'), new BN('50')]
+    let potLeft = totalPot;
+
+    let amounts = [];
+    let winners = [];
+
+    for (let i = 0; i < winnersCount && i < participants.length; i++) {
+        const ratio = ratios[i < 3 ? i : 3];
+        amounts[i] = new BN(totalPot).mul(ratio).div(new BN('100'));
+
+        if (i > 2)
+            amounts[i] = amounts[i].div(new BN((winnersCount - 3) + ''));
+        potLeft = potLeft.sub(amounts[i]);
+        winners[i] = participants[i].address;
+    }
+    if (potLeft.gt(new BN('0'))) {
+
+        const share = potLeft.div(new BN('' + amounts.length));
+        amounts = amounts.map(amount => {
+            potLeft = potLeft.sub(share);
+            return amount.add(share);
+        });
+
+        if (potLeft.gt(new BN('0'))) {
+            amounts[0] = amounts[0].add(potLeft);
+            potLeft = potLeft.sub(potLeft);
+        }
+    }
+
+    let total = new BN("0")
+    amounts.forEach(amount => {
+        total = total.add(amount);
+    });
+    if (!total.eq(totalPot)) console.warn("Winning amounts calculations are not right");
+    const wins = {};
+    winners.forEach((winner, index) => {
+        wins[winner] = amounts[index].div(new BN(10 ** 18 + '')).toNumber();
+    })
+    return wins;
 }
 
 // === HELPER FUNCTIONS === //

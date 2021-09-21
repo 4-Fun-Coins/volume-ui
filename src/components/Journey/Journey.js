@@ -24,6 +24,7 @@ import Grid from "@material-ui/core/Grid";
 import {PlanetColors} from "../../data/static/Colors";
 import LoadingScreen from "../LoadingScreen";
 import {useSnackbar} from 'notistack';
+import {formatLongNumber} from "../../utils/Utilities";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -135,6 +136,7 @@ const JourneyHome = ({...rest}) => {
 
 export const JourneyEntry = ({isMobile, milestone, ...rest}) => {
     const {enqueueSnackbar} = useSnackbar();
+    const volume = useVolume();
 
     const colors = {
         'active': 'greenYellow',
@@ -220,7 +222,7 @@ export const JourneyEntry = ({isMobile, milestone, ...rest}) => {
                     {milestone.status !== 'future' ?
                         <>
                             <JourneyLeaderboard
-                                participants={milestone.participants}
+                                milestone={milestone}
                                 maxScore={milestone.participants.length > 0 ? milestone.participants[0].fuelAdded : 100}/>
                             <Grid container style={{textAlign: "left"}}>
                                 <Grid item xs={12} style={{textAlign: 'center'}}>
@@ -232,7 +234,10 @@ export const JourneyEntry = ({isMobile, milestone, ...rest}) => {
                                 <Grid item xs={12}><Divider/></Grid>
                                 <Grid item container xs={12}>
                                     <StatsCard statsTitles={['Total Fuel Added', '$Vol In Jackpot']}
-                                               statsValues={['365B', '175M']}/>
+                                               statsValues={[
+                                                   formatLongNumber(volume.ecosystemStats.fuelAdded, 2) + " Block",
+                                                   formatLongNumber(volume.ecosystemStats.activeMilestone.amountInPot / 10 ** 18, 2) + " $VOL"
+                                               ]}/>
                                 </Grid>
                                 <Grid item xs={12}><Divider/></Grid>
                             </Grid>
