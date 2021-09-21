@@ -9,6 +9,7 @@ import React from "react";
 import DiscordIcon from "../CustomIcons/DiscordIcon";
 import TwitterIcon from "../CustomIcons/TwitterIcon";
 import GitHubIcon from "../CustomIcons/GitHubIcon";
+import TelegramIcon from "../CustomIcons/TelegramIcon";
 
 const aboutStyles = makeStyles((theme) => ({
     divider: {
@@ -30,16 +31,25 @@ const Footer = () => {
         >
             <Divider variant={"fullWidth"} className={classes.divider}/>
             <Grid container spacing={2} justifyContent={"space-around"}>
-                <Grid item xs={4} sm={4} md={1}>
+                <Grid item xs={3} sm={3} md={1}>
                     <IconButton onClick={() => {
                         // Add discord link
-                        window.open('https://discord.gg/CWpavWAyQ2', '_blank');
+                        window.open('https://discord.gg/WEgUEzYU4M', '_blank');
                     }}>
                         <DiscordIcon className={classes.icons}/>
                     </IconButton>
                 </Grid>
 
-                <Grid item xs={4} sm={4} md={1}>
+                <Grid item xs={3} sm={3} md={1}>
+                    <IconButton onClick={() => {
+                        // Add discord link
+                        window.open('https://t.me/VolumeCoin', '_blank');
+                    }}>
+                        <TelegramIcon className={classes.icons}/>
+                    </IconButton>
+                </Grid>
+
+                <Grid item xs={3} sm={3} md={1}>
                     <IconButton onClick={() => {
                         // Link to twitter page
                         window.open('https://twitter.com/4FC_Volume', '_blank');
@@ -48,7 +58,7 @@ const Footer = () => {
                     </IconButton>
                 </Grid>
 
-                <Grid item xs={4} sm={4} md={1}>
+                <Grid item xs={3} sm={3} md={1}>
                     <IconButton onClick={() => {
                         // Link to twitter page
                         window.open('https://github.com/4-Fun-Coins', '_blank');
