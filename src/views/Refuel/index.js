@@ -31,6 +31,8 @@ const landingStyles = makeStyles((theme) => ({
         borderBottom: `6px solid ${theme.palette.secondary.dark}`,
     },
     title: {
+        width: '100%',
+        textAlign: 'center',
         padding: '1.2em',
         paddingBottom: 0,
         color: theme.palette.twinkle.main,
