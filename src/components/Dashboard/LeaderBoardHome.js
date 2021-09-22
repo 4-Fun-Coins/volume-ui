@@ -18,6 +18,7 @@ import {LeaderBoardColors} from "../../data/static/Colors";
 import React from "react";
 import Tooltip from "@material-ui/core/Tooltip";
 import Fade from "@material-ui/core/Fade";
+import useVolume from "../../hooks/useVolume";
 
 const UNKNOWN = '????';
 const emojis = ['🥇', '🥈', '🥉', '💯', '🔥', '⭐️', '🤩', '👏', '👍', '🙌'];
@@ -46,6 +47,7 @@ const styles = makeStyles((theme) => ({
 const LeaderboardHome = () => {
     const wallet = useWallet();
     const theme = useTheme();
+    const volume = useVolume();
 
     const isMobile = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
     const classes = styles();
@@ -116,13 +118,13 @@ const LeaderboardHome = () => {
                 })
             }
         }
-    }, [participants,wallet.account])
+    }, [participants, wallet.account])
 
     useEffect(() => {
         if (loaded && activeMilestone) {
             setWins(getWinnersAndAmounts(participants, activeMilestone.amountInPot, 1000))
         }
-    }, [activeMilestone, participants , loaded])
+    }, [activeMilestone, participants, loaded])
 
     const winners = [{rank: 1}, {rank: 2}, {rank: 3}, {rank: 4}, {rank: 5}, {rank: 6}, {rank: 7}, {rank: 8}, {rank: 9}, {rank: 10},]
 
@@ -136,12 +138,12 @@ const LeaderboardHome = () => {
 
                 <Grid item container className={cardClasses.cardGrid} style={{padding: '0.8em',}}>
                     <StatsCard
-                        statsTitles={['🎖️ My Rank', '⛽ My Fuel Added', '🗓️ Active Milestone', '💰 Jackpot Amount']}
+                        statsTitles={['🎖️ My Rank', '⛽ My Fuel Added', '💰 P. Pot Share:', '⏱️ My Time Added:']}
                         statsValues={[
                             currentAccount.rank !== UNKNOWN ? getOrdinalSuffix(currentAccount.rank) : currentAccount.rank,
-                            formatLongNumber(Number(currentAccount.fuelAdded) / 10 ** 18, 2) + ' blocs',
-                            activeMilestone ? activeMilestone.name : UNKNOWN,
-                            activeMilestone ? formatLongNumber(activeMilestone.amountInPot / 10 ** 18, 2) : UNKNOWN + ' $Vol'
+                            formatLongNumber(Number(currentAccount.fuelAdded) / 10 ** 18, 2) + ' blocks',
+                            wins && wins[wallet.account] ? formatLongNumber(wins[wallet.account], 2) + ' $VOL' : '????',
+                            volume.userStats.totalFuelSupplied ? formatLongNumber((volume.userStats.totalSecAdded), 2) + ' Sec' : '????',
                         ]}
                     />
                 </Grid>
@@ -233,7 +235,7 @@ const LeaderboardEntry = ({rank, address, nickname, classes, loaded, fuelAdded, 
                 </Grid>
 
                 <Grid container item xs={3} sm={4}>
-                    {loaded ? formatLongNumber(Number(fuelAdded) / 10 ** 18, 2) + (isMobile ? '' : ' blocs') + ` ${emojis[rr]}` :
+                    {loaded ? formatLongNumber(Number(fuelAdded) / 10 ** 18, 2) + (isMobile ? '' : ' blocks') + ` ${emojis[rr]}` :
                         <Skeleton variant="text" width={'100%'}/>}
                 </Grid>
                 {!isMobile && <Grid container item xs={3}>

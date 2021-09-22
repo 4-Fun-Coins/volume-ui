@@ -344,27 +344,22 @@ export const claimTestVol = async (wallet) => {
     const data = volumeFaucetContract.methods.claimTestVol().encodeABI();
 
     return new Promise((resolve, reject) => {
-        estimateGasForFaucetClaim(wallet.account).then((estGas) => {
-            const transactionParams = {
-                nonce: '0x00',
-                gas: estGas.toString(),
-                to: volumeFaucet,
-                from: wallet.account,
-                data: data,
-                chainId: chainId
-            }
+        const transactionParams = {
+            nonce: '0x00',
+            to: volumeFaucet,
+            from: wallet.account,
+            data: data,
+            chainId: chainId
+        }
 
-            wallet.ethereum.request({
-                method: 'eth_sendTransaction',
-                params: [transactionParams]
-            }).then((txHash) => {
-                resolve(txHash);
-            }).catch(err => {
-                reject(err);
-            })
-        }).catch((err) => {
+        wallet.ethereum.request({
+            method: 'eth_sendTransaction',
+            params: [transactionParams]
+        }).then((txHash) => {
+            resolve(txHash);
+        }).catch(err => {
             reject(err);
-        });
+        })
     });
 }
 

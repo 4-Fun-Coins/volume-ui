@@ -13,14 +13,14 @@ export const GlobalStats = () => {
             <BigTitleCard imoji={'💹'} title={'Global Stats'} card/>
             <Grid item container className={cardClasses.cardGrid} style={{padding: '0.8em',}}>
                 <StatsCard
-                    statsTitles={['🛢️ Total fuel added:', '⏳ Total Time Added:', '🚀 Distance Traveled', '🔥 $VOL burned', '⛽ My fuel added:', '⏱️ My Time Added:']}
+                    statsTitles={['🗓️ Active Milestone', '💰 Jackpot Amount', '🛢️ Total fuel added:', '⏳ Total Time Added:', '🚀 Distance Traveled', '🔥 $VOL burned']}
                     statsValues={[
+                        volume.ecosystemStats.activeMilestone ? volume.ecosystemStats.activeMilestone.name : '????',
+                        volume.ecosystemStats.activeMilestone ? formatLongNumber((volume.ecosystemStats.activeMilestone.amountInPot / 10 ** 18), 2) + ' $VOL' : '????',
                         volume.ecosystemStats.fuelAdded ? formatLongNumber(volume.ecosystemStats.fuelAdded, 2) + ' Blocks' : '????',
                         volume.ecosystemStats.timeAdded ? formatLongNumber(volume.ecosystemStats.timeAdded, 2) + ' Sec' : '????',
                         volume.ecosystemStats.flyingDistance ? formatLongNumber(volume.ecosystemStats.flyingDistance, 2) + ' Blocks' : '????',
                         volume.ecosystemStats.burntToken ? formatLongNumber(volume.ecosystemStats.burntToken, 2) + ' $VOL' : '????',
-                        volume.userStats.totalFuelSupplied ? formatLongNumber(volume.userStats.totalFuelSupplied, 2) + ' Blocks' : '????',
-                        volume.userStats.totalFuelSupplied ? formatLongNumber((volume.userStats.totalSecAdded), 2) + ' Sec' : '????',
                     ]}
                 />
             </Grid>

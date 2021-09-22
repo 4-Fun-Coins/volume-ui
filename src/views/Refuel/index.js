@@ -3,13 +3,11 @@ import {Button, Card, Container, Grid, Hidden, makeStyles, TextField} from "@mat
 import Typography from "@material-ui/core/Typography";
 import {useWallet} from "use-wallet";
 import React, {useEffect, useState} from "react";
-import {
-    estimateGasForRefuel,
-    getBalanceForAddress, getDataForRefuel, waitForTransaction,
-} from "../../utils/volume-core";
+import {getBalanceForAddress, getDataForRefuel, waitForTransaction} from "../../utils/volume-core";
 import {useSnackbar} from "notistack";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Box from "@material-ui/core/Box";
+import useVolume from "../../hooks/useVolume";
 
 const configs = require('../../utils/config');
 const {volumeAddress} = require('../../utils/config.js');
@@ -22,15 +20,15 @@ const landingStyles = makeStyles((theme) => ({
         height: '100%',
     },
     contentBackground: {
-        height: '100vh'
-    },
-    cardWrapper: {
-        paddingTop: '10em',
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
     },
     card: {
-        backgroundColor: "#1d0134",
         borderRadius: 12,
-        paddingBottom: 16,
+        background: 'linear-gradient(to top, #0A0A0AB2, #1d0134aa) !important',
+        borderBottom: `6px solid ${theme.palette.secondary.dark}`,
     },
     title: {
         padding: '1.2em',
@@ -52,11 +50,8 @@ const landingStyles = makeStyles((theme) => ({
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         backgroundSize: "auto",
+        margin: 16
     },
-    rocket: {
-        height: '600',
-        width: '600'
-    }
 }));
 
 export const ViewOnExplorerButton = ({txHash}) => {
@@ -74,6 +69,7 @@ const Refuel = () => {
     const classes = landingStyles();
 
     const wallet = useWallet();
+    const volume = useVolume();
 
     const [balance, setBalance] = useState(new Big(0));
     const [amount, setAmount] = useState("");
@@ -98,54 +94,50 @@ const Refuel = () => {
             const currentBalance = new Big(await getBalanceForAddress(wallet.account));
 
             if (currentBalance.gte(amount)) { // if amount is < balance
-                estimateGasForRefuel(wallet.account, amount).then((estGas) => {
-                    const transactionParams = {
-                        nonce: '0x00',
-                        gas: estGas.toString(),
-                        to: volumeAddress,
-                        from: wallet.account,
-                        data: getDataForRefuel(amount),
-                        chainId: 42
-                    }
+                const transactionParams = {
+                    to: volumeAddress,
+                    from: wallet.account,
+                    data: getDataForRefuel(amount),
+                    chainId: configs.chainId,
+                }
 
-                    wallet.ethereum.request({
-                        method: 'eth_sendTransaction',
-                        params: [transactionParams]
-                    }).then((txHash) => {
-                        enqueueSnackbar(`Transaction submitted ${txHash.toString().substr(0, 10)}`, {
-                            variant: "success",
-                            action: <ViewOnExplorerButton txHash={txHash}/>,
-                            autoHideDuration: 3000
-                        })
-                        waitForTransaction(txHash).then(receipt => {
-                            if (receipt.status) {
-                                // transaction mined and did not revert
-                                enqueueSnackbar(
-                                    "Fuel supplied Successfully! All Crew members Thank you",
-                                    {
-                                        variant: "success",
-                                        autoHideDuration: 4000,
-                                        action: <ViewOnExplorerButton txHash={txHash}/>,
-                                    }
-                                )
-                            } else {
-                                // transaction mined and did revert
-                                enqueueSnackbar(
-                                    "Transaction Reverted 😢",
-                                    {
-                                        variant: "error",
-                                        autoHideDuration: 3000,
-                                        action: <ViewOnExplorerButton txHash={txHash}/>
-                                    })
-                            }
-                            setAmount("");
-                        }).finally(() => setBusy(false))
-                    }).catch((err) => {
-                        enqueueSnackbar(err.message, {variant: "error", autoHideDuration: 3000});
-                        setBusy(false);
-                    });
-                }).catch(() => {
-                    enqueueSnackbar("Error Happened during gas estimation", {variant: "error", autoHideDuration: 3000});
+                wallet.ethereum.request({
+                    method: 'eth_sendTransaction',
+                    params: [transactionParams]
+                }).then((txHash) => {
+                    enqueueSnackbar(`Transaction submitted ${txHash.toString().substr(0, 10)}`, {
+                        variant: "success",
+                        action: <ViewOnExplorerButton txHash={txHash}/>,
+                        autoHideDuration: 3000
+                    })
+                    waitForTransaction(txHash).then(receipt => {
+                        if (receipt.status) {
+                            // transaction mined and did not revert
+                            enqueueSnackbar(
+                                "Fuel supplied Successfully! All Crew members Thank you",
+                                {
+                                    variant: "success",
+                                    autoHideDuration: 4000,
+                                    action: <ViewOnExplorerButton txHash={txHash}/>,
+                                }
+                            );
+                            volume.refreshMilestones();
+                            volume.refreshEcosystemStats();
+                            volume.refreshUserStats();
+                        } else {
+                            // transaction mined and did revert
+                            enqueueSnackbar(
+                                "Transaction Reverted 😢",
+                                {
+                                    variant: "error",
+                                    autoHideDuration: 3000,
+                                    action: <ViewOnExplorerButton txHash={txHash}/>
+                                })
+                        }
+                        setAmount("");
+                    }).finally(() => setBusy(false))
+                }).catch((err) => {
+                    enqueueSnackbar(err.message, {variant: "error", autoHideDuration: 3000});
                     setBusy(false);
                 });
             } else {
@@ -187,54 +179,57 @@ const Refuel = () => {
             title={'Home'}
         >
             <Container className={classes.contentBackground} maxWidth={"md"}>
-                <Grid container item xs={12} className={classes.cardWrapper}>
-                    <Grid container item justifyContent={"center"}>
-                        <Card className={classes.card}>
-                            {busy && <Box sx={{width: '100%'}}>
-                                <LinearProgress color={"secondary"}/>
-                            </Box>}
-                            <Grid container style={{display: "flex", width: '100%', height: '100%'}}>
-                                <Grid container item xs={12} md={6} justifyContent={"center"} alignItems={"flex-start"}
-                                      style={{backgroundColor: "transparent"}}>
-                                    <Grid item xs={12}>
-                                        <Typography variant={'h1'} className={classes.title}>
-                                            Direct Refuel
-                                        </Typography>
-                                        <Typography className={classes.text}>
-                                            Direct refueling burns the total amount submitted for fuel. Please do not
-                                            send
-                                            an amount that you do not want to burn as it <b>CAN NOT BE RECOVERED</b>.
-                                        </Typography>
-                                    </Grid>
-
-                                    <Grid container item xs={10} justifyContent={"space-between"}>
-                                        <Typography className={classes.balanceText}>
-                                            Amount
-                                        </Typography>
-
-                                        <Typography className={classes.balanceText}>
-                                            Balance: {balance.toFixed(2)}
-                                        </Typography>
-
-                                        <TextField fullWidth variant={"outlined"} color={"secondary"}
-                                                   onChange={handleChange} value={amount}
-                                                   style={{borderRadius: '20px'}}/>
-
-                                        <Button fullWidth color={"secondary"} variant={"contained"} onClick={refuel}
-                                                disabled={!enabled || busy}
-                                                style={{marginTop: '1em', margingBottom: '1em', borderRadius: '20px'}}>
-                                            {message}
-                                        </Button>
-                                    </Grid>
-                                </Grid>
-
-                                <Hidden smDown>
-                                    <Grid container item xs={6} className={classes.rocketBackground}>
-                                        <img src={'./rocket_tilted.svg'} alt={'rocket'} className={classes.rocket}/>
-                                    </Grid>
-                                </Hidden>
+                <Grid component={Card} container item justifyContent={"center"} className={classes.card}>
+                    {busy && <Box sx={{width: '100%'}}>
+                        <LinearProgress color={"secondary"}/>
+                    </Box>}
+                    <Grid container style={{display: "flex", width: '100%', height: '100%'}}>
+                        <Grid container item xs={12} md={6} justifyContent={"center"} alignItems={"flex-start"}
+                              style={{backgroundColor: "transparent"}}>
+                            <Grid item xs={12}>
+                                <Typography variant={'h1'} className={classes.title}>
+                                    Direct Refuel
+                                </Typography>
+                                <Typography className={classes.text}>
+                                    Direct refueling burns the total amount submitted for fuel. Please do not
+                                    send
+                                    an amount that you do not want to burn as it <b>CAN NOT BE RECOVERED</b>.
+                                </Typography>
                             </Grid>
-                        </Card>
+
+                            <Grid container item xs={10} justifyContent={"space-between"}>
+                                <Typography className={classes.balanceText}>
+                                    Amount
+                                </Typography>
+
+                                <Typography className={classes.balanceText}>
+                                    Balance: {balance.toFixed(2)}
+                                </Typography>
+
+                                <TextField fullWidth variant={"outlined"} color={"secondary"}
+                                           onChange={handleChange} value={amount}
+                                           style={{borderRadius: '20px'}}/>
+
+                                <Button fullWidth color={"secondary"} variant={"contained"} onClick={refuel}
+                                        disabled={!enabled || busy}
+                                        style={{
+                                            margin: '1.5em 0em 1.5em 0em',
+                                            borderRadius: '1.2em',
+                                            width: '100%',
+                                            fontSize: '1.2em',
+                                            color: 'white'
+                                        }}>
+                                    {message}
+                                </Button>
+                            </Grid>
+                        </Grid>
+
+                        <Hidden smDown>
+                            <Grid container item xs={6}>
+                                <img src={'./rocket_tilted.svg'} alt={'rocket'} className={classes.rocketBackground}
+                                     width={400} height={400}/>
+                            </Grid>
+                        </Hidden>
                     </Grid>
                 </Grid>
             </Container>

@@ -1,16 +1,18 @@
 import Page from "../../components/Root/Page";
-import {Button, Card, Container, Grid, Hidden, makeStyles} from "@material-ui/core";
+import {Button, Container, Grid, Card, makeStyles} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
 import Typography from "@material-ui/core/Typography";
-import Big from "big-js";
-import {getBalanceForAddress, claimTestVol, canClaimTestVol, waitForTransaction} from "../../utils/volume-core";
+import {claimTestVol, canClaimTestVol, waitForTransaction} from "../../utils/volume-core";
 import {useWallet} from "use-wallet";
 import {volumeFaucet} from "../../utils/config";
 import Alert from "@material-ui/lab/Alert";
 import {useSnackbar} from "notistack";
 import {ViewOnExplorerButton} from "../Refuel";
-import Box from "@material-ui/core/Box";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import {useTheme} from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import {formatLongNumber} from "../../utils/Utilities";
+import useVolume from "../../hooks/useVolume";
 
 const faucetStyles = makeStyles((theme) => ({
     root: {
@@ -19,15 +21,15 @@ const faucetStyles = makeStyles((theme) => ({
         height: '100%'
     },
     contentBackground: {
-        height: '100vh'
-    },
-    cardWrapper: {
-        paddingTop: '10em',
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
     },
     card: {
-        backgroundColor: "#1d0134",
         borderRadius: 12,
-        paddingBottom: 16,
+        background: 'linear-gradient(to top, #0A0A0AB2, #1d0134aa) !important',
+        borderBottom: `6px solid ${theme.palette.secondary.dark}`,
     },
     title: {
         padding: '1.2em',
@@ -45,37 +47,33 @@ const faucetStyles = makeStyles((theme) => ({
         fontSize: 16,
         color: theme.palette.twinkle.main,
         textAlign: "center",
+        width: '100%'
     },
     rocketBackground: {
         backgroundImage: 'url(/planet_red.svg)',
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         backgroundSize: "auto",
-    },
-    rocket: {
-        height: '600',
-        width: '600'
     }
 }));
 
 const FaucetPage = () => {
     const {enqueueSnackbar} = useSnackbar();
-
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
+    const volume = useVolume();
     const classes = faucetStyles();
+
     const wallet = useWallet();
-    const [balance, setBalance] = useState(new Big(0));
     const [test, setTest] = useState(false);
     const [canClaim, setCanClaim] = useState(false);
     const [busy, setBusy] = useState(false);
 
     useEffect(() => {
         if (wallet.status === 'connected') {
-            // fetch balance
-            getBalanceForAddress(wallet.account).then((res) => {
-                if (res)
-                    setBalance(new Big(res));
+            canClaimTestVol(wallet.account).then(res => {
+                setCanClaim(res);
             });
-            canClaimTestVol(wallet.account).then(res => setCanClaim(res));
         }
     }, [wallet.status, busy]);
 
@@ -86,9 +84,6 @@ const FaucetPage = () => {
             setTest(false);
     }, [wallet.status]);
 
-    /*
-        TODO: Make a handler for transactions that can be observed by components (maybe even save transactions history to browser storage)
-     */
     const claim = async () => {
         setBusy(true);
         let failed = false;
@@ -111,6 +106,7 @@ const FaucetPage = () => {
                         action: <ViewOnExplorerButton txHash={hash}/>,
                     }
                 )
+                volume.refreshUserStats();
             } else {
                 // transaction mined and did revert
                 enqueueSnackbar(
@@ -130,51 +126,53 @@ const FaucetPage = () => {
             title={'Faucet'}
         >
             <Container
-                maxWidth={false}
+                maxWidth={"md"}
                 className={classes.contentBackground}
             >
-                <Grid container item xs={12} className={classes.cardWrapper}>
-                    <Grid container item justifyContent={"center"}>
-                        <Card className={classes.card}>
-                            {busy && <Box sx={{width: '100%'}}>
-                                <LinearProgress color={"secondary"}/>
-                            </Box>}
-                            <Grid container style={{display: "flex", width: '100%', height: '100%'}}>
-                                <Grid container item xs={12} md={6} justifyContent={"center"} alignItems={"flex-start"}
-                                      style={{backgroundColor: "transparent"}}>
-                                    <Grid container item xs={12} justify={"center"}>
-                                        <Typography variant={'h1'} className={classes.title}>
-                                            Volume Faucet
-                                        </Typography>
-                                        <Typography className={classes.text}>
-                                            Below you can claim 10,000 VOL every 24 hours for the sake of testing.
-                                        </Typography>
+                <Grid container component={Card} className={`${classes.card}`}>
 
-                                        <Typography className={classes.balanceText}>
-                                            Your Balance: {balance.toFixed(2)}
-                                        </Typography>
-                                        <Grid item xs={12} style={{padding: 8}}>
-                                            {!canClaim && wallet.status === 'connected' &&
-                                            <Alert severity={"error"} style={{maxWidth: "300px", margin: "auto"}}>
-                                                You can only Claim once a day.
-                                            </Alert>}
-                                        </Grid>
-                                        <Button color={"secondary"} variant={"contained"} onClick={claim}
-                                                disabled={!test || !canClaim || busy}
-                                                style={{margin: '1em', borderRadius: '20px', width: '80%'}}>
-                                            {test ? 'Claim' : 'Connect to TestNet'}
-                                        </Button>
-                                    </Grid>
-                                </Grid>
+                    {busy && <Grid item xs={12} sx={{width: '100%'}}>
+                        <LinearProgress color={"secondary"} style={{borderRadius: '12px 12px 0px 0px', height: 6}}/>
+                    </Grid>}
+                    <Grid container item xs={12} md={6} justifyContent={"center"} alignItems={"center"}
+                          style={{backgroundColor: "transparent"}}>
+                        <Grid container item xs={12} justify={"center"}>
 
-                                <Hidden smDown>
-                                    <Grid container item xs={6} className={classes.rocketBackground}>
-                                        <img src={'./rocket_tilted.svg'} alt={'rocket'} className={classes.rocket}/>
-                                    </Grid>
-                                </Hidden>
+                            <Typography variant={'h1'} className={classes.title}>
+                                Volume Faucet
+                            </Typography>
+
+                            <Typography className={classes.text}>
+                                Below you can claim 10,000 VOL every 24 hours for the sake of testing.
+                            </Typography>
+
+                            <Typography className={classes.balanceText}>
+                                Your Balance: {formatLongNumber(Number(volume.userStats.volumeBalance))}
+                            </Typography>
+                            <Grid item xs={12}>
+                                {!canClaim && wallet.status === 'connected' && !busy &&
+                                <Alert severity={"error"} style={{margin: "16px"}}>
+                                    You can only Claim once a day.
+                                </Alert>}
                             </Grid>
-                        </Card>
+                            <Button color={"secondary"} variant={"contained"} onClick={claim}
+                                    disabled={!test || !canClaim || busy}
+                                    style={{
+                                        margin: '2em',
+                                        borderRadius: '1.5em',
+                                        width: '100%',
+                                        fontSize: '1.5em',
+                                        color: 'white'
+                                    }}>
+                                {test ? 'Claim' : 'Connect to TestNet'}
+                            </Button>
+                        </Grid>
                     </Grid>
+
+                    {!isMobile && <Grid item xs={6}>
+                        <img src={'./rocket_tilted.svg'} alt={'rocket'} className={classes.rocketBackground}
+                             width={400} height={400}/>
+                    </Grid>}
                 </Grid>
             </Container>
         </Page>
