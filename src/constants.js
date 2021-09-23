@@ -14,3 +14,11 @@ export const ROUTES_NAMES = {
     // beta
     FAUCET: '/faucet'
 }
+
+export const SOCIALS = {
+    TELEGRAM: 'https://t.me/VolumeCoin',
+    EMAIL: 'contact@volume.quest',
+    TWITTER: 'https://twitter.com/4FC_Volume',
+    GITHUB: 'https://github.com/4-Fun-Coins',
+    DISCORD: 'https://discord.gg/WEgUEzYU4M',
+}

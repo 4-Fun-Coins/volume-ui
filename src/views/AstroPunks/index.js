@@ -113,11 +113,11 @@ const AstroPunks = () => {
                             <p className={classes.paragraph}>
                                 AstroPunks will also feature Volume's own INO platform that will offer fair distribution
                                 of NFT collections.<br/><br/>
-                                No more unfair NFT launches, AstroPunks will be available for the public for a fraction
+                                No more unfair NFT launches and private sales, AstroPunks will be available for the public for a fraction
                                 of it's actual value
                                 every purchase will use ChainLink's Verified Randomness to assign a random NFT to the
                                 buyer, The INO scales
-                                the price to be fair to early buyers that have less chances to score a Mythic NFT or
+                                the price to be fair to early buyers that have less chances to score a Mythic or
                                 Unique NFT.<br/><br/>
                                 The INO contract will ensure a fair distribution robust against any kind of manipulation
                             </p>
