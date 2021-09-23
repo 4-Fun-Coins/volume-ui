@@ -160,7 +160,7 @@ const JourneyLeaderboard = ({milestone, maxScore}) => {
                                         <Avatar className={classes.svg}
                                                 style={{backgroundColor: LeaderBoardColors[i]}}>B</Avatar>
                                         <Box
-                                            className={classes.leaderScoreTitle}>{formatLongNumber(participant.fuelAdded / 10 ** 18) + ' Fuel Block'}</Box>
+                                            className={classes.leaderScoreTitle}>{formatLongNumber(participant.fuelAdded / 10 ** 18) + ' Fuel Blocks'}</Box>
                                     </Box>
                                 </Box>
                                 <Box style={{textAlign: "left"}}>

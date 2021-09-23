@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {getFormattedTimePeriod} from "../../utils/Utilities";
 import {makeStyles, useMediaQuery, useTheme} from "@material-ui/core";
 import LoadingScreen from "../LoadingScreen";
+import {themeColors} from "../../data/static/Colors";
 
 const mdScale = 0.80;
 const xsScale = 0.5;
@@ -21,12 +22,12 @@ const useStyles = makeStyles((theme) => ({
         flexWrap: 'wrap',
     },
     countdownItem: {
-        color: 'orange',
+        color: 'white',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
-        margin: '10px',
+        margin: '0px',
         paddingTop: '10px',
         position: 'relative',
         fontWeight: 700,
@@ -147,7 +148,7 @@ export const CountDown = ({endDate, unitColor, bgColor, ...rest}) => {
             <svg className={classes.countdownSvg}>
                 <circle cx={120 * scale} cy={120 * scale} r={108 * scale} stroke={"none"} strokeWidth={3 * scale}
                         fill={bgColor ? bgColor : 'none'}/>
-                <path fill="none" stroke="orange" strokeWidth={18 * scale}
+                <path fill="none" stroke={themeColors.twinkle.main} strokeWidth={18 * scale}
                       d={describeArc(120 * scale, 120 * scale, 100 * scale, 0, 360 - radius)}/>
             </svg>
         )

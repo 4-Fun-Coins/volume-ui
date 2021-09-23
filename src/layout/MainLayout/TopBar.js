@@ -121,12 +121,13 @@ const TopBar = ({className, ...rest}) => {
             <Tabs value={location.pathname} onChange={handleChange} className={classes.tabs} orientation={'vertical'}>
                 <Tab label="Dashboard" value={ROUTES_NAMES.DASHBOARD} className={classes.tabsEntries}/>
                 <Tab label="The Journey" value={ROUTES_NAMES.JOURNEY}/>
-                <Tab label="Direct Refuel" value={ROUTES_NAMES.REFUEL}/>
                 <Tab label="NFT Market" value={ROUTES_NAMES.NFT_MARKET}/>
+                <Tab label="AstroPunks" value={ROUTES_NAMES.ASTRO_PUNKS}/>
+                <Tab label="Direct Refuel" value={ROUTES_NAMES.REFUEL}/>
                 {/* BETA */}
                 {
                     wallet.status === 'connected' && volumeFaucet &&
-                        <Tab label="Faucet" value={ROUTES_NAMES.FAUCET}/>
+                    <Tab label="Faucet" value={ROUTES_NAMES.FAUCET}/>
                 }
             </Tabs>
             <Divider/>
@@ -156,11 +157,12 @@ const TopBar = ({className, ...rest}) => {
                             <Tab label="Dashboard" value={ROUTES_NAMES.DASHBOARD}/>
                             <Tab label="The Journey" value={ROUTES_NAMES.JOURNEY}/>
                             <Tab label="NFT Market" value={ROUTES_NAMES.NFT_MARKET}/>
+                            <Tab label="AstroPunks" value={ROUTES_NAMES.ASTRO_PUNKS}/>
                             <Tab label="Direct Refuel" value={ROUTES_NAMES.REFUEL}/>
                             {/* BETA */}
                             {
                                 wallet.status === 'connected' && volumeFaucet &&
-                                    <Tab label="Faucet" value={ROUTES_NAMES.FAUCET}/>
+                                <Tab label="Faucet" value={ROUTES_NAMES.FAUCET}/>
                             }
                         </Tabs>
                     </Hidden>

@@ -51,3 +51,16 @@ export const LeaderBoardColors = [
     '#107C10',
     '#7E735F'
 ];
+
+export const themeColors = {
+    twinkle: {
+        main: '#F5BC00',
+        dark: '#bb9001'
+    },
+    text: {
+        subHeading: '#f1076e',
+        text: '#2f50b9',
+        subText: '#94cffa',
+        paragraph: '#e8c9ff'
+    }
+}

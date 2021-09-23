@@ -3,8 +3,8 @@ import React from "react";
 import Page from "../../components/Root/Page";
 import Grid from "@material-ui/core/Grid";
 import {CountDown} from "../../components/Countdown";
-import Zoom from "@material-ui/core/Zoom";
 import Typography from "@material-ui/core/Typography";
+import {themeColors} from "../../data/static/Colors";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -37,16 +37,22 @@ const NFTMarketPlace = () => {
             >
                 <Grid container>
                     <Grid item xs={12}>
-                        <Typography variant={"h1"} color={"primary"}
-                                    style={{marginTop: '2rem', marginBottom: 10, fontSize: '3em'}}>
-                            Volume NFT market place
+                        <Typography variant={"h1"} color={"twinkle.main"}
+                                    style={{
+                                        marginTop: '2rem',
+                                        marginBottom: 10,
+                                        fontSize: '3em',
+                                        color: themeColors.twinkle.main
+                                    }}>
+                            Volume NFT marketplace
                         </Typography>
                         <p style={{fontSize: 20}}>
-                            The future of NFT trading is coming soon to Volume, Trade NFTs like never before!
+                            The future of NFT trading is coming soon to Volume. Trade NFTs like never before!
                         </p>
                     </Grid>
                     <Grid item xs={12}>
                         <CountDown endDate={Date.now() + 1000 * 60 * 60 * 24 * 30 * 1.2} bgColor={'#000000aa'}
+                                   unitColor={themeColors.text.paragraph}
                                    style={{marginTop: 100}}/>
                     </Grid>
                 </Grid>

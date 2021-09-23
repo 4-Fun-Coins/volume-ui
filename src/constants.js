@@ -10,6 +10,7 @@ export const ROUTES_NAMES = {
     REFUEL: '/direct-refuel',
     USER_PROFILE: '/user-profile',
     NFT_MARKET: '/nft-store',
+    ASTRO_PUNKS: '/astroPunks',
     // beta
     FAUCET: '/faucet'
 }

@@ -3,6 +3,7 @@ import {colors, unstable_createMuiStrictModeTheme as createMuiTheme, responsiveF
 import {THEMES} from '../constants';
 import {softShadows} from './shadows';
 import typography from './typography';
+import {themeColors} from "../data/static/Colors";
 
 const baseOptions = {
     direction: 'ltr',
@@ -27,7 +28,7 @@ const baseOptions = {
     }
 };
 
-const themesOptions = [
+export const themesOptions = [
     {
         name: THEMES.DARK,
         overrides: {
@@ -60,19 +61,11 @@ const themesOptions = [
             star: {
                 main: "#F8F8F8"
             },
-            twinkle: {
-                main: '#F5BC00',
-                dark: '#bb9001'
-            },
+            twinkle: themeColors.twinkle,
             rocket: {
                 main: '#A1A1A1'
             },
-            text: {
-                subHeading: '#f1076e',
-                text: '#2f50b9',
-                subText: '#94cffa',
-                paragraph: '#e8c9ff'
-            }
+            text: themeColors.text
         },
         shadows: softShadows
     }
