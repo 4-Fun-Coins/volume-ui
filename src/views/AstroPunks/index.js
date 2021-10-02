@@ -76,11 +76,10 @@ const AstroPunks = () => {
                                 imageRendering: 'pixelated', marginBottom: 12
                             }} alt={'astroPunks sample'}/>}
                             <p className={classes.paragraph}>
-                                AstroPunks is a collection of 10000 unique algorithmically generated NFT arts,That will
-                                be the official first NFT collection
-                                on Volume, each of this highly anticipated NFTs will have an embedded "Perk Level" that
-                                will grant special perks and
-                                discounts on all the future Volume Products.
+                                The AstroPunks is a collection of 10000 unique, algorithmically generated NFTs that will
+                                be the first official NFT collection on Volume. Each of these highly anticipated NFTs
+                                will have an embedded "Perk Level" that
+                                will grant special perks and discounts on all the future Volume Products.
                             </p>
                         </Grid>
                         {!isMobile && <Grid item xs={5}>
@@ -111,15 +110,14 @@ const AstroPunks = () => {
                                 imageRendering: 'pixelated', marginBottom: 12
                             }}/>}
                             <p className={classes.paragraph}>
-                                AstroPunks will also feature Volume's own INO platform that will offer fair distribution
-                                of NFT collections.<br/><br/>
-                                No more unfair NFT launches and private sales, AstroPunks will be available for the public for a fraction
-                                of it's actual value
-                                every purchase will use ChainLink's Verified Randomness to assign a random NFT to the
-                                buyer, The INO scales
-                                the price to be fair to early buyers that have less chances to score a Mythic or
+                                AstroPunks will be featured on the much anticipated INO platform that will offer fair
+                                distribution of NFT collections.<br/><br/>
+                                No more unfair NFT launches and private sales. The AstroPunks will be available to the
+                                public for a fraction of its actual value.
+                                Every purchase will use ChainLink's Verified Randomness to assign a random NFT to the
+                                buyer. The INO scales the price to be fair to early buyers that have a lower chance to score a Mythic or
                                 Unique NFT.<br/><br/>
-                                The INO contract will ensure a fair distribution robust against any kind of manipulation
+                                The INO contract will ensure a fair distribution - robust against any manipulation.
                             </p>
                         </Grid>
                     </Grid>
@@ -135,20 +133,18 @@ const AstroPunks = () => {
                         <Grid item xs={isMobile ? 12 : 7} className={classes.textContainer}>
                             <Typography variant={"h1"} className={classes.titleText}
                                         style={{color: PlanetColors.uranus}}>
-                                Perks Levels ?!
+                                Perk Levels ?!
                             </Typography>
                             {isMobile && <img src={'punks/Astropunks_3.png'} width={256} height={256} style={{
                                 imageRendering: 'pixelated', marginBottom: 12
                             }}/>}
                             <p className={classes.paragraph}>
-                                &emsp;At the beginning there was only NFTs but then The Volume Team said let there be
-                                perks!<br/><br/>
-                                &emsp;Perks Levels is a value embedded into AstroPunks and to future NFTs that will be
-                                launched
-                                on the Volume INO.<br/><br/>
-                                &emsp;These perks will grant the holder of the NFT special perks on all Volume products
-                                present
-                                and future from discounts for lottery tickets to special abilities in the future games
+                                &emsp;In the beginning there were only NFTs... but then the Volume team said "Let there be
+                                perks!"<br/><br/>
+                                &emsp;Perk levels is a value embedded into the AstroPunks and into future NFTs that will be
+                                launched through the Volume INO.<br/><br/>
+                                &emsp;These perks will grant the holder of the NFT special perks on all Volume products -
+                                from discounts for lottery tickets to special abilities in the future games.
                                 <br/><br/>
                             </p>
                         </Grid>

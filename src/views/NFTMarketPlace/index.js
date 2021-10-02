@@ -47,7 +47,7 @@ const NFTMarketPlace = () => {
                             Volume NFT marketplace
                         </Typography>
                         <p style={{fontSize: 20}}>
-                            The future of NFT trading is coming soon to Volume. Trade NFTs like never before!
+                            The future of NFT trading is coming to Volume soon. Trade NFTs like never before!
                         </p>
                     </Grid>
                     <Grid item xs={12}>
