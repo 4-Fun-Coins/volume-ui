@@ -40,7 +40,7 @@ function a11yProps(index) {
 }
 
 const valid = ['past', 'active', 'future', 'all'];
-const descriptionWhenEmpty = ['There are not Past milestones', 'There are No Active milestones', 'There are no future Milestones yet', 'There are no milestones'];
+const descriptionWhenEmpty = ['There are not past milestones', 'There are no active milestones', 'There are no future milestones yet', 'There are no milestones'];
 
 const JourneyHome = ({...rest}) => {
     const location = useLocation();
@@ -235,7 +235,7 @@ export const JourneyEntry = ({isMobile, milestone, ...rest}) => {
                                 <Grid item container xs={12}>
                                     <StatsCard statsTitles={['Total Fuel Added', '$Vol In Jackpot']}
                                                statsValues={[
-                                                   formatLongNumber(volume.ecosystemStats.fuelAdded, 2) + " Block",
+                                                   formatLongNumber(volume.ecosystemStats.fuelAdded, 2) + " Blocks",
                                                    formatLongNumber(volume.ecosystemStats.activeMilestone.amountInPot / 10 ** 18, 2) + " $VOL"
                                                ]}/>
                                 </Grid>

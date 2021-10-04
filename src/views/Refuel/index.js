@@ -193,7 +193,7 @@ const Refuel = () => {
                                     Direct Refuel
                                 </Typography>
                                 <Typography className={classes.text}>
-                                    Direct refueling burns the total amount submitted for fuel. Please do not
+                                    Direct refuelling burns the total amount submitted for fuel. Please do not
                                     send
                                     an amount that you do not want to burn as it <b>CAN NOT BE RECOVERED</b>.
                                 </Typography>
