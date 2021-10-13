@@ -4,7 +4,7 @@ import React, {useEffect, useState} from "react";
 import Typography from "@material-ui/core/Typography";
 import {claimTestVol, canClaimTestVol, waitForTransaction} from "../../utils/volume-core";
 import {useWallet} from "use-wallet";
-import {volumeFaucet} from "../../utils/config";
+import {volumeFaucet} from "../../utils/DeploymentConfig";
 import Alert from "@material-ui/lab/Alert";
 import {useSnackbar} from "notistack";
 import {ViewOnExplorerButton} from "../Refuel";

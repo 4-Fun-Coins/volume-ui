@@ -75,6 +75,11 @@ const routes = [
         component: lazy(() => import("./views/AstroPunks"))
     },
     {
+        path: ROUTES_NAMES.FARMS,
+        exact: true,
+        component: lazy(() => import("./views/Farms"))
+    },
+    {
         path: "/",
         exact: true,
         component: () => <Redirect to={ROUTES_NAMES.HOME}/>

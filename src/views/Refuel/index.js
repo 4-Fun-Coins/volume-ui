@@ -9,8 +9,8 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Box from "@material-ui/core/Box";
 import useVolume from "../../hooks/useVolume";
 
-const configs = require('../../utils/config');
-const {volumeAddress} = require('../../utils/config.js');
+const configs = require('../../utils/DeploymentConfig');
+const {volumeAddress} = require('../../utils/DeploymentConfig.js');
 const Big = require('big-js');
 
 const landingStyles = makeStyles((theme) => ({

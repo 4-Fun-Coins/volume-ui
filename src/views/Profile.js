@@ -22,7 +22,7 @@ import {
 } from "../utils/volume-core";
 import {Edit2, Search} from "react-feather";
 import {CheckSharp, LocalGasStation} from "@material-ui/icons";
-import {volumeAddress} from "../utils/config";
+import {volumeAddress} from "../utils/DeploymentConfig";
 import {useSnackbar} from "notistack";
 
 const Big = require('big-js');

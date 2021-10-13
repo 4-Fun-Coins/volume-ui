@@ -15,7 +15,7 @@ import {useWallet, ChainUnsupportedError} from "use-wallet";
 import {useHistory, useLocation} from 'react-router-dom';
 import {ROUTES_NAMES} from "../../constants";
 import MenuIcon from "@material-ui/icons/Menu";
-import {chainId, volumeFaucet} from '../../utils/config';
+import {chainId, volumeFaucet} from '../../utils/DeploymentConfig';
 import {User} from "react-feather";
 import {useSnackbar} from 'notistack';
 
@@ -119,7 +119,8 @@ const TopBar = ({className, ...rest}) => {
             <LogoWithText/>
             <Divider style={{marginTop: '1em'}}/>
             <Tabs value={location.pathname} onChange={handleChange} className={classes.tabs} orientation={'vertical'}>
-                <Tab label="Dashboard" value={ROUTES_NAMES.DASHBOARD} className={classes.tabsEntries}/>
+                <Tab label="Farms" value={ROUTES_NAMES.FARMS}/>
+                <Tab label="Dashboard" value={ROUTES_NAMES.DASHBOARD}/>
                 <Tab label="The Journey" value={ROUTES_NAMES.JOURNEY}/>
                 <Tab label="NFT Market" value={ROUTES_NAMES.NFT_MARKET}/>
                 <Tab label="AstroPunks" value={ROUTES_NAMES.ASTRO_PUNKS}/>
@@ -154,6 +155,7 @@ const TopBar = ({className, ...rest}) => {
                     <Hidden smDown>
                         <LogoWithText/>
                         <Tabs value={location.pathname} onChange={handleChange} className={classes.tabs}>
+                            <Tab label="Farms" value={ROUTES_NAMES.FARMS}/>
                             <Tab label="Dashboard" value={ROUTES_NAMES.DASHBOARD}/>
                             <Tab label="The Journey" value={ROUTES_NAMES.JOURNEY}/>
                             <Tab label="NFT Market" value={ROUTES_NAMES.NFT_MARKET}/>

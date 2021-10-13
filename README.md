@@ -14,7 +14,7 @@ This will install all the dependencies needed for the UI.
 
 Please follow the volume-core guide on how to deploy the contract first before running the UI.
 
-After you deployed the contracts, you should update the volumeAddress value in the config.js file.
+After you deployed the contracts, you should update the volumeAddress value in the DeploymentConfig.js file.
 This is extremely important to do, otherwise the page will not function correctly.
 
 After you deployed and made the changes to the contract address, you can run the following command:

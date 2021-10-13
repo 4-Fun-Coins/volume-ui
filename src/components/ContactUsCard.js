@@ -1,6 +1,5 @@
 import React from "react";
 import {makeStyles} from "@material-ui/core";
-import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import {SOCIALS} from "../constants";
@@ -50,6 +49,8 @@ const ContactUsCard = () => {
                 <IconWithTitle titleText={'Discord'} svgUrl={'/icons/discord.svg'} url={SOCIALS.DISCORD}
                                classes={classes}/>
                 <IconWithTitle titleText={'Github'} svgUrl={'/icons/github.svg'} url={SOCIALS.GITHUB}
+                               classes={classes}/>
+                <IconWithTitle titleText={'Medium'} svgUrl={'/icons/medium.svg'} url={SOCIALS.MEDIUM}
                                classes={classes}/>
             </Box>
             <Typography variant={"body1"}>

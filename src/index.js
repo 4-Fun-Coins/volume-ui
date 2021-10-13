@@ -4,7 +4,7 @@ import {SettingsProvider} from './contexts/SettingsContext';
 import './index.css';
 import App from "./App";
 import {UseWalletProvider} from "use-wallet";
-import {chainId} from "./utils/config";
+import {chainId} from "./utils/DeploymentConfig";
 
 ReactDOM.render(
     <React.StrictMode>

@@ -15,6 +15,7 @@ import MainLayout from './layout/MainLayout';
 import {VolumeProvider} from "./contexts/VolumeContext";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
+import {FarmsProvider} from "./contexts/FarmsContext";
 
 const jss = create({plugins: [...jssPreset().plugins, rtl()]});
 
@@ -47,16 +48,17 @@ const App = () => {
                         maxSnack={3}
                     >
                         <VolumeProvider>
-
-                            <HashRouter>
-                                <GlobalStyles/>
-                                <div className={classes.universeBackground}>
-                                    <NewSpace/>
-                                </div>
-                                <MainLayout>
-                                    {renderRoutes(routes)}
-                                </MainLayout>
-                            </HashRouter>
+                            <FarmsProvider>
+                                <HashRouter>
+                                    <GlobalStyles/>
+                                    <div className={classes.universeBackground}>
+                                        <NewSpace/>
+                                    </div>
+                                    <MainLayout>
+                                        {renderRoutes(routes)}
+                                    </MainLayout>
+                                </HashRouter>
+                            </FarmsProvider>
                         </VolumeProvider>
 
                     </SnackbarProvider>
