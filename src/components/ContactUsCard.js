@@ -32,10 +32,10 @@ const ContactUsCard = () => {
     return (
         <Card className={classes.card}>
             <Typography variant={"h1"}>
-                Wanna Learn More?
+                Want To Learn More?
             </Typography>
             <Typography variant={"subtitle2"}>
-                Get in Touch our team love answering questions
+                Get in touch! Our team loves answering questions
             </Typography>
             <Box style={{
                 display: "flex",
@@ -54,10 +54,10 @@ const ContactUsCard = () => {
                                classes={classes}/>
             </Box>
             <Typography variant={"body1"}>
-                Need a more personal and direct line of communication?
+                Need a more direct line of communication?
             </Typography>
             <pre style={{marginTop: 8}}>
-                <b>Email US at:</b> contact@volume.quest
+                <b>Email us at:</b> <a id="email" style={{color: "white"}} href="mailto:contact@volume.quest">contact@volume.quest</a>
             </pre>
         </Card>
     );
