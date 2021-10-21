@@ -89,7 +89,6 @@ const TopBar = ({className, ...rest}) => {
     const {enqueueSnackbar} = useSnackbar();
 
     useEffect(() => {
-        console.log(volumeFaucet)
         if (wallet.error instanceof ChainUnsupportedError) {
             if (lastToast === 0 || performance.now() - lastToast > 5000) {
                 enqueueSnackbar(`Unsupported network Volume is only available on ${wallet.networkName} chainId (${chainId})`, {variant: 'error'});
@@ -121,6 +120,7 @@ const TopBar = ({className, ...rest}) => {
             <Tabs value={location.pathname} onChange={handleChange} className={classes.tabs} orientation={'vertical'}>
                 <Tab label="Dashboard" value={ROUTES_NAMES.DASHBOARD} className={classes.tabsEntries}/>
                 <Tab label="The Journey" value={ROUTES_NAMES.JOURNEY}/>
+                <Tab label="INO" value={ROUTES_NAMES.INO}/>
                 <Tab label="NFT Market" value={ROUTES_NAMES.NFT_MARKET}/>
                 <Tab label="AstroPunks" value={ROUTES_NAMES.ASTRO_PUNKS}/>
                 <Tab label="Direct Refuel" value={ROUTES_NAMES.REFUEL}/>
@@ -156,6 +156,7 @@ const TopBar = ({className, ...rest}) => {
                         <Tabs value={location.pathname} onChange={handleChange} className={classes.tabs}>
                             <Tab label="Dashboard" value={ROUTES_NAMES.DASHBOARD}/>
                             <Tab label="The Journey" value={ROUTES_NAMES.JOURNEY}/>
+                            <Tab label="INO" value={ROUTES_NAMES.INO}/>
                             <Tab label="NFT Market" value={ROUTES_NAMES.NFT_MARKET}/>
                             <Tab label="AstroPunks" value={ROUTES_NAMES.ASTRO_PUNKS}/>
                             <Tab label="Direct Refuel" value={ROUTES_NAMES.REFUEL}/>
