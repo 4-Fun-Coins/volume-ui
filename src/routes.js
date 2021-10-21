@@ -1,4 +1,4 @@
-import React, {Fragment, lazy, Suspense} from "react";
+import React, {lazy, Suspense} from "react";
 import {
     Redirect,
     Route,
@@ -73,6 +73,21 @@ const routes = [
         path: ROUTES_NAMES.ASTRO_PUNKS,
         exact: true,
         component: lazy(() => import("./views/AstroPunks"))
+    },
+    {
+        path: ROUTES_NAMES.INO,
+        exact: true,
+        component: lazy(() => import("./views/INO"))
+    },
+    {
+        path: ROUTES_NAMES.INO_COLLECTION,
+        exact: true,
+        component: lazy(() => import("./views/INOCollection"))
+    },
+    {
+        path: ROUTES_NAMES.INO_APPLICATION,
+        exact: true,
+        component: lazy(() => import("./views/INOApplication"))
     },
     {
         path: "/",
