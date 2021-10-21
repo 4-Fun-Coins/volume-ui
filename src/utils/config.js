@@ -10,12 +10,24 @@ const configs = {
         chainId: 97
     },
     kovan: {
+        // Base
         volumeAddress: '0xD934AfDCe00240B9878521083989453c9A63B4d7',
         volumeJackpotAddress: '0xABdb4c4a4849ad26DB7FC9F7D352174B83F77623',
+
+        // Test
         volumeFaucet: '0xBA0F2723beEa8B1bdeFCE44BeCc041A9f6685701',
+
+        // INO
+        volumeFactory: '0x336878Fd391b83c2baaD35714D8804f6D019FD34',
+        volumeINO: '0xa09C94800D9e64dE6840F48B8669DB16241913C6',
+
+        // Chain info
         rpcUrl: 'https://kovan.poa.network/',
         explorer: 'https://kovan.etherscan.io/',
-        chainId: 42
+        chainId: 42,
+
+        // Other token info
+        daiAddress: '0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa'
     },
     local: {
         // put local contracts addresses here
@@ -23,7 +35,11 @@ const configs = {
     },
     BSC: {
         // put bsc contracts addresses here
-    }
+    },
 }
 
-module.exports = configs[process.env.REACT_APP_NETWORK_NAME ? process.env.REACT_APP_NETWORK_NAME : 'bscTest'];
+const conf = configs[process.env.REACT_APP_NETWORK_NAME ? process.env.REACT_APP_NETWORK_NAME : 'bscTest'];
+conf.ipfsGateway = 'https://dweb.link/';//'https://ipfs.infura.io:5001/api/v0';
+conf.resourceLink = 'https://github.com/4-Fun-Coins/volume-resource';
+
+module.exports = conf;
