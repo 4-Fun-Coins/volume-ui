@@ -11,6 +11,10 @@ export const ROUTES_NAMES = {
     USER_PROFILE: '/user-profile',
     NFT_MARKET: '/nft-store',
     ASTRO_PUNKS: '/astroPunks',
+    // INOApplication
+    INO_APPLICATION: '/ino-application',
+    INO: '/ino',
+    INO_COLLECTION: '/ino-collection/:name',
     // beta
     FAUCET: '/faucet'
 }
