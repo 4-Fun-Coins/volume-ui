@@ -1,10 +1,10 @@
-import {VolumeJackpotABI} from "./volume-jackpot-abi";
+import {VolumeJackpotABI} from "./abis/volume-jackpot-abi";
 
 const Web3 = require('web3');
 const {volumeAddress, rpcUrl, volumeJackpotAddress, volumeFaucet, chainId} = require('./config.js');
 const Big = require('big.js');
-const {volumeABI} = require('./volume-abi');
-const {VolumeFaucetAbi} = require('./volume-faucet-abi');
+const {volumeABI} = require('./abis/volume-abi');
+const {VolumeFaucetAbi} = require('./abis/volume-faucet-abi');
 
 let web3 = new Web3(rpcUrl);
 const {BN} = web3.utils;
