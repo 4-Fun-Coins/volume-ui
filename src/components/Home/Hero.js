@@ -9,6 +9,7 @@ import {
     useTheme
 } from "@material-ui/core";
 import React, {useRef} from "react";
+import {ROUTES_NAMES} from "../../constants";
 
 const heroStyles = makeStyles((theme) => ({
     root: {
@@ -89,11 +90,11 @@ const Hero = ({reverse}) => {
                         Volume
                     </Typography>
                     <Typography variant={'h1'} className={classes.BigBody}>
-                        Volume is a spaceship floating through space. To sustain life on the ship, it needs fuel.
-                        Volume users supply fuel as transaction fees, NFT purchases, game participation, and so on.
-                        The ship has multiple milestones and, on each milestone, users who supplied the most fuel will receive
-                        generous rewards in Volume tokens and unique NFTs.
-                        Volume will also include a special launchpad for NFT artists, an NFT marketplace, community games and a space lottery!
+                        Volume is an NFT- and decentralized gaming project built on the Polygon Network. Crew members need
+                        to supply fuel to the Volume rocket for it to reach as many milestones as possible. Crew members
+                        can easily keep track of their stats on the dashboard. Upon reaching a new milestone all crew members that
+                        participated will receive a celebratory NFT and top refuellers will receive an additional Volume airdrop.
+                        If you have any questions not answered below, please join our discord to have them answered!
                     </Typography>
                     <Box style={{width: '100%', display: 'flex', justifyContent: 'space-evenly', marginTop: '0.8em'}}>
                         <Button color={"primary"} variant={'contained'} size={'large'} className={classes.button}> Buy

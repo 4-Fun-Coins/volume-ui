@@ -56,7 +56,8 @@ const LandingPage = () => {
                 </Typography>
                 <Typography variant={"body1"}
                             style={{width: "100%", textAlign: "center", color: 'white', marginBottom: 48}}>
-                    Volume holders and Volume liquidity provider can enjoy beautiful APY on Volume Farms
+                    Volume holders and Volume liquidity providers can enjoy great APYs on our farms! Thank you for helping
+                    the ecosystem!
                 </Typography>
                 <Box className={classes.farmsContainer}>
                     {farms && farms.map((farm, index) => {
