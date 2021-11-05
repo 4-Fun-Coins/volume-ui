@@ -32,3 +32,8 @@ export function getDataForApplication(
         artistSocial
     ).encodeABI();
 }
+
+export function getApplicationForAddress(address) {
+    const ino = new web3.eth.Contract(VolumeInoAbi, volumeINO);
+    return ino.methods.getApplicationForAddress(address);
+}

@@ -20,6 +20,10 @@ const getJSONFromIPFS = async (hash) => {
     });
 }
 
+const getCollections = async () => {
+
+}
+
 module.exports = {
     getJSONFromIPFS
 }
