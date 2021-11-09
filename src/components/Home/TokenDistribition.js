@@ -80,21 +80,21 @@ const DistributionChart = () => {
         series: [
             {
                 color: '#67BFF6',
-                data: 375000000,
+                data: 150000000,
                 label: 'ICO',
-                percentage: '37.5'
+                percentage: '15'
             },
             {
                 color: '#08D4CB',
-                data: 375000000,
+                data: 150000000,
                 label: 'LP',
-                percentage: '37.5'
+                percentage: '15'
             },
             {
                 color: '#FFE375',
-                data: 100000000,
+                data: 500000000,
                 label: 'Rewards',
-                percentage: '10'
+                percentage: '50'
             },
             {
                 color: '#FFCBAD',
@@ -104,9 +104,9 @@ const DistributionChart = () => {
             },
             {
                 color: '#FC4E4E',
-                data: 50000000,
+                data: 100000000,
                 label: 'Marketing',
-                percentage: '5'
+                percentage: '10'
             }
         ]
     };
