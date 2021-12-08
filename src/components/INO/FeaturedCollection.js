@@ -1,8 +1,10 @@
 import {Card, Grid, makeStyles, useMediaQuery, useTheme} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
 import {ROUTES_NAMES} from "../../constants";
+import {getFileContents, getImageURL, getNumberOfRandomImagesFromCollection} from "../../utils/ipfs-utils";
+import LoadingScreen from "../LoadingScreen";
 
 const featuredStyles = makeStyles((theme) => ({
     featuredCollectionName: {
@@ -76,7 +78,17 @@ const FeaturedCollection = ({collection}) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
 
-    const nfts = [1,1,1,1];
+    const [urlsSet, setUrlsSet] = useState(false);
+    const [refs, setRefs] = useState(undefined);
+
+    useEffect(() => {
+        if(!urlsSet) {
+            getNumberOfRandomImagesFromCollection(collection, 4).then((randomImages) => {
+                setRefs(randomImages);
+                setUrlsSet(true);
+            });
+        }
+    }, [urlsSet]);
 
     return (
         <>
@@ -88,7 +100,7 @@ const FeaturedCollection = ({collection}) => {
                 {collection.description}
             </Typography>
 
-            <Grid container item xs={12} justify={"space-evenly"} style={{marginBottom: '1em'}}>
+            <Grid container item xs={12} justifyContent={"space-evenly"} style={{marginBottom: '1em'}}>
                 <Typography className={classes.featuredArtistText} variant={"h4"}>
                     Collection by:
                     <Typography className={classes.featuredArtistFocusText} variant={"h4"}>
@@ -107,22 +119,33 @@ const FeaturedCollection = ({collection}) => {
             </Grid>
 
             {/*Carousel*/}
-            <Grid container item xs={12} justify={"space-around"}>
-                {
-                    nfts.map((source) => {
-                        return (
-                            <CollectionCard
-                                collection={collection}
-                            />
-                        );
-                    })
-                }
-            </Grid>
+            {
+                !urlsSet &&
+                    <Grid container item xs={12} justifyContent={"center"}>
+                        <LoadingScreen transparent/>
+                    </Grid>
+            }
+            {
+                urlsSet &&
+                <Grid container item xs={12} justifyContent={"space-around"}>
+                    {
+                        refs.map((ref) => {
+                            return (
+                                <CollectionCard
+                                    collection={collection}
+                                    uri={ref.url}
+                                    key={ref.cid}
+                                />
+                            );
+                        })
+                    }
+                </Grid>
+            }
         </>
     );
 }
 
-const CollectionCard = ({collection}) => {
+const CollectionCard = ({collection, uri}) => {
     const classes = featuredStyles();
     const history = useHistory();
 
@@ -134,17 +157,18 @@ const CollectionCard = ({collection}) => {
     }
 
     return (
+
         <Card
             onMouseEnter={() => setHovering(true)}
             onMouseLeave={() => setHovering(false)}
             onClick={() => handleClick(collection.name)}
             className={classes.collectionCard}
             style={{
-                backgroundImage: `url(${collection.URI}`,
+                backgroundImage: `url(${uri})`,
             }}
         >
             {hovering &&
-                <Grid container className={classes.hoverCard} direction={"column"} justify={"center"}>
+                <Grid container className={classes.hoverCard} direction={"column"} justifyContent={"center"}>
                     <Typography className={classes.cardText}>
                         {collection.name}
                     </Typography>
