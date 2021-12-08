@@ -16,6 +16,7 @@ import Box from "@material-ui/core/Box";
 import useVolume from "../../hooks/useVolume";
 import {getDir, getFileContents} from "../../utils/ipfs-utils";
 import {getDataForApplication} from "../../utils/volume-ino";
+import {getAddCreatorData} from "../../utils/volume-factory";
 import {volumeINO, daiAddress} from "../../utils/config.js";
 import {getDataForRefuel, waitForTransaction} from "../../utils/volume-core";
 import {useSnackbar} from "notistack";
@@ -176,7 +177,7 @@ const INOApplication = () => {
 
         setTimeout(() => {
             controller.abort()
-        }, 20000);
+        }, 30000);
 
         setCheckingIpfs(true);
 
@@ -197,12 +198,27 @@ const INOApplication = () => {
 
         }).catch((err) => {
             setError(true);
-            console.log(err);
             setErrorMessage('IPFS request timed out - please try again');
         }).finally(() => {
             setCheckingIpfs(false);
         });
     }
+
+    // const acceptApplication = () => {
+    //     const acceptParams = {
+    //         to: configs.volumeFactory,
+    //         from: wallet.account,
+    //         data: getAddCreatorData(configs.volumeINO), // make this the ino address
+    //         chainId: configs.chainId
+    //     }
+    //
+    //     wallet.ethereum.request({
+    //         method: 'eth_sendTransaction',
+    //         params: [acceptParams]
+    //     }).then(async (txHash) => {
+    //         console.log(txHash);
+    //     });
+    // }
 
     const submit = (totalSupply, perkLevels) => {
         // Approve
@@ -347,6 +363,7 @@ const INOApplication = () => {
 
                         <Button color={"secondary"} variant={"contained"}
                                 onClick={beforeSubmit}
+                                // onClick={acceptApplication}
                                 disabled={!enabled || busyApproving || busyApplying || checkingIpfs || wallet.status !== 'connected' || successfulApplication}
                                 style={{
                                     margin: '1.5em 0em 0.5em 0em',
