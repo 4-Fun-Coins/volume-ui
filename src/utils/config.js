@@ -18,8 +18,8 @@ const configs = {
         volumeFaucet: '0xBA0F2723beEa8B1bdeFCE44BeCc041A9f6685701',
 
         // INO
-        volumeFactory: '0x336878Fd391b83c2baaD35714D8804f6D019FD34',
-        volumeINO: '0xa09C94800D9e64dE6840F48B8669DB16241913C6',
+        volumeFactory: '0x9D995106C0640c77aa06aCdBCc39948f4390ffbb',
+        volumeINO: '0xb4d08416FC31CC9d598012CCE1F5c4d6b3dF71DD',
 
         // Chain info
         rpcUrl: 'https://kovan.poa.network/',
@@ -39,7 +39,7 @@ const configs = {
 }
 
 const conf = configs[process.env.REACT_APP_NETWORK_NAME ? process.env.REACT_APP_NETWORK_NAME : 'bscTest'];
-conf.ipfsGateway = 'https://dweb.link/';//'https://ipfs.infura.io:5001/api/v0';
+conf.ipfsGateway = 'https://ipfs.infura.io:5001/api/v0';//'https://dweb.link/';
 conf.resourceLink = 'https://github.com/4-Fun-Coins/volume-resource';
 
 module.exports = conf;
