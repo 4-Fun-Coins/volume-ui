@@ -20,6 +20,7 @@
     "d3-scale": "^4.0.0",
     "d3-shape": "^3.0.1",
     "ipfs-http-client": "^53.0.1",
+    "it-to-buffer": "^2.0.2",
     "js-cookie": "^2.2.1",
     "jss": "^10.6.0",
     "jss-rtl": "^0.3.0",
