@@ -1,4 +1,5 @@
 import {create} from 'ipfs-http-client';
+import toBuffer from "it-to-buffer";
 const {ipfsGateway} = require('./config');
 
 export async function getDir(cid, abortSignal) {
@@ -35,6 +36,40 @@ export const getFileContents = async (path) => {
 
 export const sortDirectory = (directory, key) => {
     return directory.sort(GetSortOrderWithSlice(key, 0, 5));
+}
+
+export const getImageURL = async (cid) => {
+    const ipfs = await create(ipfsGateway);
+    const buffer = await toBuffer(ipfs.cat(cid));
+    return new Blob([buffer]);
+}
+
+export const getNumberOfRandomImagesFromCollection = async (collection, numImages) => {
+    return new Promise((res, rej) => {
+        let numbers = [];
+        for(let i = 0; i < numImages; i++) {
+            // generate random number
+            let num;
+            do {
+                num = Math.floor((Math.random()*collection.totalSupply) + 1);
+            } while(numbers.includes(num));
+
+            numbers.push(num);
+        }
+
+        Promise.all(numbers.map(async (num) => {
+            // get url's
+            const json = JSON.parse(await getFileContents(`${collection.URI.slice(7,collection.URI.length-1)}/${num}.json`));
+            let blob = await getImageURL(json.properties.image.description.slice(7, json.properties.image.description.length));
+            let url = URL.createObjectURL(blob);
+            return {
+                cid: json.properties.image.description.slice(7, json.properties.image.description.length),
+                url: url
+            };
+        })).then((result) => {
+            res(result);
+        });
+    });
 }
 
 // === helper

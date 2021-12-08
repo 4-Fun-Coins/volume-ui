@@ -6,11 +6,14 @@ import {
     makeStyles,
 } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useSnackbar} from "notistack";
 import {useHistory} from "react-router-dom";
 import {ROUTES_NAMES} from "../../constants";
 import FeaturedCollection, {CollectionCard} from "../../components/INO/FeaturedCollection";
+import {getCollections} from "../../utils/volume-factory";
+import LoadingScreen from "../../components/LoadingScreen";
+import {getNumberOfRandomImagesFromCollection} from "../../utils/ipfs-utils";
 
 const configs = require('../../utils/config');
 
@@ -61,19 +64,31 @@ export const ViewOnExplorerButton = ({txHash}) => {
 
 const INO = () => {
     const {enqueueSnackbar} = useSnackbar();
-
     const classes = inoStyles();
-
     const history = useHistory();
 
     // Collection
-    const featuredCollection = {
+    const featuredCollection1 = {
         artistName: 'McJezus',
         artistSocial: 'https://twitter.com/',
         URI: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1470&q=80',
         name: 'AstroPunks',
         description: 'The AstroPunks is a collection of 10,000 unique, automatically generated NFTs that was launched with the unveiling of the Volume LaunchPad'
     }
+
+    const [otherCollections, setOtherCollections] = useState(undefined);
+    const [featuredCollection, setFeaturedCollection] = useState(undefined);
+
+    useEffect(() => {
+        if(!otherCollections) {
+            getCollections().then((res) => {
+                if(res && res.length > 0) {
+                    setOtherCollections(res.slice(1,res.length-1));
+                    setFeaturedCollection(res[0]);
+                }
+            });
+        }
+    }, [otherCollections]);
 
     const handleApply = (event) => {
         history.push(ROUTES_NAMES.INO_APPLICATION);
@@ -89,18 +104,32 @@ const INO = () => {
                     <Grid container item xs={12} style={{width: '100%', height: '100%', backgroundColor: "transparent"}}
                           justifyContent={"center"}>
 
-                        <FeaturedCollection
-                            collection={featuredCollection}
-                        />
+                        {
+                            featuredCollection &&
+                            <FeaturedCollection
+                                collection={featuredCollection}
+                            />
+                        }
 
                         {/* Other collections */}
-                        <Typography variant={'h1'} className={classes.title}>
+                        <Typography variant={'h2'} className={classes.title}>
                             Other Collections
                         </Typography>
 
-                        <CollectionCard
-                            collection={featuredCollection}
-                        />
+                        {
+                            otherCollections &&
+                                otherCollections.map(async (collection) => {
+                                    const randomImage = await getNumberOfRandomImagesFromCollection(collection, 1);
+                                    return (
+                                        <CollectionCard
+                                            collection={collection}
+                                            uri={randomImage.url}
+                                            key={randomImage.cid}
+                                        />
+                                    )
+                                })
+                        }
+
 
                         <Typography variant={"h4"} className={classes.applyText} onClick={handleApply}>
                             Want to launch your own collection?
