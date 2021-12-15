@@ -6,14 +6,13 @@ import {
     makeStyles,
 } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {useSnackbar} from "notistack";
 import {useHistory} from "react-router-dom";
 import {ROUTES_NAMES} from "../../constants";
 import FeaturedCollection, {CollectionCard} from "../../components/INO/FeaturedCollection";
-import {getCollections} from "../../utils/volume-factory";
-import LoadingScreen from "../../components/LoadingScreen";
 import {getNumberOfRandomImagesFromCollection} from "../../utils/ipfs-utils";
+import useCollections from "../../hooks/useCollections";
 
 const configs = require('../../utils/config');
 
@@ -67,32 +66,16 @@ const INO = () => {
     const classes = inoStyles();
     const history = useHistory();
 
-    // Collection
-    const featuredCollection1 = {
-        artistName: 'McJezus',
-        artistSocial: 'https://twitter.com/',
-        URI: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1470&q=80',
-        name: 'AstroPunks',
-        description: 'The AstroPunks is a collection of 10,000 unique, automatically generated NFTs that was launched with the unveiling of the Volume LaunchPad'
-    }
-
-    const [otherCollections, setOtherCollections] = useState(undefined);
-    const [featuredCollection, setFeaturedCollection] = useState(undefined);
-
-    useEffect(() => {
-        if(!otherCollections) {
-            getCollections().then((res) => {
-                if(res && res.length > 0) {
-                    setOtherCollections(res.slice(1,res.length-1));
-                    setFeaturedCollection(res[0]);
-                }
-            });
-        }
-    }, [otherCollections]);
+    const {featuredCollection, otherCollections, collectionsInit} = useCollections();
 
     const handleApply = (event) => {
         history.push(ROUTES_NAMES.INO_APPLICATION);
     }
+
+    useEffect(() => {
+        if(collectionsInit)
+            console.log(featuredCollection);
+    }, [collectionsInit]);
 
     return (
         <Page
@@ -100,14 +83,15 @@ const INO = () => {
             title={'Home'}
         >
             <Container className={classes.contentBackground} maxWidth={"lg"}>
-                <Grid container item justifyContent={"center"} className={classes.card}>
+                <Grid container item justify={"center"} className={classes.card}>
                     <Grid container item xs={12} style={{width: '100%', height: '100%', backgroundColor: "transparent"}}
-                          justifyContent={"center"}>
+                          justify={"center"}>
 
                         {
-                            featuredCollection &&
+                            collectionsInit &&
                             <FeaturedCollection
                                 collection={featuredCollection}
+
                             />
                         }
 
@@ -117,7 +101,7 @@ const INO = () => {
                         </Typography>
 
                         {
-                            otherCollections &&
+                            collectionsInit &&
                                 otherCollections.map(async (collection) => {
                                     const randomImage = await getNumberOfRandomImagesFromCollection(collection, 1);
                                     return (

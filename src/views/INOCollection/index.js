@@ -73,12 +73,11 @@ const INO = () => {
             <Container className={classes.contentBackground} maxWidth={"lg"}>
                 <Grid container item justifyContent={"center"} className={classes.card}>
                     <Grid container item xs={12} style={{width: '100%', height: '100%', backgroundColor: "transparent"}}
-                          justify={"center"}
-                          justifyContent={"center"}>
+                          justify={"center"}>
 
-                        <FeaturedCollection
-                            collection={featuredCollection}
-                        />
+                        {/*<FeaturedCollection*/}
+                        {/*    collection={featuredCollection}*/}
+                        {/*/>*/}
 
                         <Button
                             variant={"contained"}
@@ -94,6 +93,10 @@ const INO = () => {
             </Container>
         </Page>
     )
+}
+
+const buyDialog = () => {
+
 }
 
 export default INO;

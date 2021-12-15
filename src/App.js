@@ -15,6 +15,7 @@ import MainLayout from './layout/MainLayout';
 import {VolumeProvider} from "./contexts/VolumeContext";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
+import {CollectionsProvider} from "./contexts/CollectionsContext";
 
 const jss = create({plugins: [...jssPreset().plugins, rtl()]});
 
@@ -47,16 +48,17 @@ const App = () => {
                         maxSnack={3}
                     >
                         <VolumeProvider>
-
-                            <HashRouter>
-                                <GlobalStyles/>
-                                <div className={classes.universeBackground}>
-                                    <NewSpace/>
-                                </div>
-                                <MainLayout>
-                                    {renderRoutes(routes)}
-                                </MainLayout>
-                            </HashRouter>
+                            <CollectionsProvider>
+                                <HashRouter>
+                                    <GlobalStyles/>
+                                    <div className={classes.universeBackground}>
+                                        <NewSpace/>
+                                    </div>
+                                    <MainLayout>
+                                        {renderRoutes(routes)}
+                                    </MainLayout>
+                                </HashRouter>
+                            </CollectionsProvider>
                         </VolumeProvider>
 
                     </SnackbarProvider>

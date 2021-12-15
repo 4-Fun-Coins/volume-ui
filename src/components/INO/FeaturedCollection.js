@@ -5,6 +5,7 @@ import {useHistory} from "react-router-dom";
 import {ROUTES_NAMES} from "../../constants";
 import {getFileContents, getImageURL, getNumberOfRandomImagesFromCollection} from "../../utils/ipfs-utils";
 import LoadingScreen from "../LoadingScreen";
+import useCollections from "../../hooks/useCollections";
 
 const featuredStyles = makeStyles((theme) => ({
     featuredCollectionName: {
@@ -76,22 +77,11 @@ const FeaturedCollection = ({collection}) => {
     const classes = featuredStyles();
 
     const theme = useTheme();
+    const {featuredCollectionImages, collectionsInit} = useCollections();
     const isMobile = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
 
-    const [urlsSet, setUrlsSet] = useState(false);
-    const [refs, setRefs] = useState(undefined);
-
-    useEffect(() => {
-        if(!urlsSet) {
-            getNumberOfRandomImagesFromCollection(collection, 4).then((randomImages) => {
-                setRefs(randomImages);
-                setUrlsSet(true);
-            });
-        }
-    }, [urlsSet]);
-
     return (
-        <>
+        <Grid container>
             <Typography className={classes.featuredCollectionName}>
                 {collection.name}
             </Typography>
@@ -100,7 +90,7 @@ const FeaturedCollection = ({collection}) => {
                 {collection.description}
             </Typography>
 
-            <Grid container item xs={12} justifyContent={"space-evenly"} style={{marginBottom: '1em'}}>
+            <Grid container item xs={12} justify={"space-evenly"} style={{marginBottom: '1em'}}>
                 <Typography className={classes.featuredArtistText} variant={"h4"}>
                     Collection by:
                     <Typography className={classes.featuredArtistFocusText} variant={"h4"}>
@@ -120,28 +110,28 @@ const FeaturedCollection = ({collection}) => {
 
             {/*Carousel*/}
             {
-                !urlsSet &&
-                    <Grid container item xs={12} justifyContent={"center"}>
+                !collectionsInit &&
+                    <Grid container item xs={12} justify={"center"}>
                         <LoadingScreen transparent/>
                     </Grid>
             }
             {
-                urlsSet &&
-                <Grid container item xs={12} justifyContent={"space-around"}>
+                collectionsInit &&
+                <Grid container item xs={12} justify={"space-around"}>
                     {
-                        refs.map((ref) => {
+                        featuredCollectionImages.map((image) => {
                             return (
                                 <CollectionCard
                                     collection={collection}
-                                    uri={ref.url}
-                                    key={ref.cid}
+                                    uri={image.url}
+                                    key={image.cid}
                                 />
                             );
                         })
                     }
                 </Grid>
             }
-        </>
+        </Grid>
     );
 }
 
@@ -168,7 +158,7 @@ const CollectionCard = ({collection, uri}) => {
             }}
         >
             {hovering &&
-                <Grid container className={classes.hoverCard} direction={"column"} justifyContent={"center"}>
+                <Grid container className={classes.hoverCard} direction={"column"} justify={"center"}>
                     <Typography className={classes.cardText}>
                         {collection.name}
                     </Typography>
