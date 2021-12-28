@@ -1,3 +1,7 @@
+import Big from "big.js";
+import {getDataForRefuel} from "./volume-core";
+import configs from "./config";
+
 const {ipfsGateway} = require('./config.js');
 const {VolumeFactoryAbi} = require("./abis/volume-factory-abi");
 const {volumeFactory, rpcUrl} = require("./config");
@@ -5,7 +9,9 @@ const {volumeFactory, rpcUrl} = require("./config");
 const Web3 = require('web3');
 let web3 = new Web3(rpcUrl);
 
-const getJSONFromIPFS = async (hash) => {
+const {toWei} = web3.utils;
+
+export async function getJSONFromIPFS (hash) {
     return new Promise((res, rej) => {
         fetch(`${ipfsGateway.address}${hash}`,
             {
@@ -29,12 +35,17 @@ const getJSONFromIPFS = async (hash) => {
 //     return factory.methods.addCreator(newCreator).encodeABI();
 // }
 
-const getCollections = async () => {
-    const ino = new web3.eth.Contract(VolumeFactoryAbi, volumeFactory);
-    return ino.methods.getAllCategories().call();
+export async function getCollections() {
+    const factory = new web3.eth.Contract(VolumeFactoryAbi, volumeFactory);
+    return factory.methods.getAllCategories().call();
 }
 
-module.exports = {
-    getJSONFromIPFS,
-    getCollections,
+export async function getQuoteForAddress(address) {
+    const factory = new web3.eth.Contract(VolumeFactoryAbi, volumeFactory);
+    return factory.methods.getQuoteForNFTPurchase(address).call();
+}
+
+export function getDataForBuyNftForAddress(nftAddress, amount, slippage) {
+    const factory = new web3.eth.Contract(VolumeFactoryAbi, volumeFactory);
+    return factory.methods.buyForNFTAddress(nftAddress, toWei(amount.toString()), slippage*10).encodeABI();
 }
