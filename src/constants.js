@@ -14,7 +14,7 @@ export const ROUTES_NAMES = {
     // INOApplication
     INO_APPLICATION: '/ino-application',
     INO: '/ino',
-    INO_COLLECTION: '/ino-collection/:name',
+    INO_COLLECTION: '/ino-collection/:address',
     // beta
     FAUCET: '/faucet'
 }
