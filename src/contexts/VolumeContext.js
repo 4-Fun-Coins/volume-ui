@@ -1,13 +1,14 @@
 import React, {createContext, useEffect, useState} from 'react';
 import {
     blockToDate, getActiveMilestone,
-    getAllMilestones, getAverageBlockTime,
+    getAllMilestones, getAllowance, getAverageBlockTime,
     getBalanceForAddress, getClaimableWinnings,
     getCurrentBlock,
     getCurrentTotalSupply,
     getFuel, getFuelAddedForAddress, getTakeOffBlock, getTotalFuelAdded
 } from "../utils/volume-core";
 import {getFormattedTimePeriod} from "../utils/Utilities";
+import {volumeFactory} from '../utils/config';
 
 const VolumeContext = createContext({
     milestones: null,
@@ -116,6 +117,7 @@ export const VolumeProvider = ({children}) => {
         const balance = await getBalanceForAddress(wallet.account);
         const fuelAdded = await getFuelAddedForAddress(wallet.account);
         const winnings = await getClaimableWinnings(wallet.account);
+        const factoryAllowance = await getAllowance(wallet.account, volumeFactory);
 
         if (!milestones) {
             refreshMilestones();
@@ -148,6 +150,7 @@ export const VolumeProvider = ({children}) => {
             totalSecAdded: fuelAdded * await getAverageBlockTime(),
             milestonesStats: userMilestones,
             claimableRewards: winnings,
+            factoryAllowance: factoryAllowance
         })
     }
 

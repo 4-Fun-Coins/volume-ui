@@ -26,7 +26,7 @@ const inoStyles = makeStyles((theme) => ({
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
+        justify: 'center',
     },
     card: {
         borderRadius: 12,
@@ -66,16 +66,11 @@ const INO = () => {
     const classes = inoStyles();
     const history = useHistory();
 
-    const {featuredCollection, otherCollections, collectionsInit} = useCollections();
+    const {collections, collectionsInit, getImagesForCollection} = useCollections();
 
     const handleApply = (event) => {
         history.push(ROUTES_NAMES.INO_APPLICATION);
     }
-
-    useEffect(() => {
-        if(collectionsInit)
-            console.log(featuredCollection);
-    }, [collectionsInit]);
 
     return (
         <Page
@@ -90,8 +85,8 @@ const INO = () => {
                         {
                             collectionsInit &&
                             <FeaturedCollection
-                                collection={featuredCollection}
-
+                                collection={collections[0]}
+                                clickable
                             />
                         }
 
@@ -102,13 +97,13 @@ const INO = () => {
 
                         {
                             collectionsInit &&
-                                otherCollections.map(async (collection) => {
-                                    const randomImage = await getNumberOfRandomImagesFromCollection(collection, 1);
+                                collections.slice(1,collections.length-1).map(async (collection) => {
+                                    const image = getImagesForCollection(collection);
                                     return (
                                         <CollectionCard
                                             collection={collection}
-                                            uri={randomImage.url}
-                                            key={randomImage.cid}
+                                            uri={image.url}
+                                            key={image.cid}
                                         />
                                     )
                                 })

@@ -5,11 +5,14 @@ import {
     Grid,
     makeStyles,
 } from "@material-ui/core";
-import Typography from "@material-ui/core/Typography";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useSnackbar} from "notistack";
 import {useParams} from "react-router-dom";
 import FeaturedCollection from "../../components/INO/FeaturedCollection";
+import useCollections from "../../hooks/useCollections";
+import {useWallet} from "use-wallet";
+import {SimpleDialog} from "../../components/INO/BuyDialog";
+import Typography from "@material-ui/core/Typography";
 
 const configs = require('../../utils/config');
 
@@ -52,18 +55,31 @@ export const ViewOnExplorerButton = ({txHash}) => {
 
 const INO = () => {
     const {enqueueSnackbar} = useSnackbar();
-    const {name} = useParams();
+    const {address} = useParams();
+    const wallet = useWallet();
 
     const classes = inoStyles();
+    const {getCollectionForAddress} = useCollections();
+    const [initCollection, setInitCollection] = useState(false);
+    const [collection, setCollection] = useState(undefined);
 
-    // Collection
-    const featuredCollection = {
-        artistName: 'McJezus',
-        artistSocial: 'https://twitter.com/',
-        URI: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1470&q=80',
-        name: 'AstroPunks',
-        description: 'The AstroPunks is a collection of 10 000 unique, automatically generated NFTs that was launched with the unveiling of the Volume LaunchPad'
-    }
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickBuy = () => {
+        setOpen(true);
+    };
+
+    const handleCloseBuy = (value) => {
+        setOpen(false);
+    };
+
+    useEffect(() => {
+        if (!initCollection) {
+            const coll = getCollectionForAddress(address);
+            setCollection(coll);
+            setInitCollection(true);
+        }
+    }, [initCollection]);
 
     return (
         <Page
@@ -71,32 +87,47 @@ const INO = () => {
             title={'Home'}
         >
             <Container className={classes.contentBackground} maxWidth={"lg"}>
-                <Grid container item justifyContent={"center"} className={classes.card}>
+                <Grid container item justify={"center"} className={classes.card}>
                     <Grid container item xs={12} style={{width: '100%', height: '100%', backgroundColor: "transparent"}}
                           justify={"center"}>
 
-                        {/*<FeaturedCollection*/}
-                        {/*    collection={featuredCollection}*/}
-                        {/*/>*/}
+                        {
+                            initCollection &&
+                            <FeaturedCollection
+                                collection={collection}
+                                clickable={false}
+                            />
+                        }
+
 
                         <Button
                             variant={"contained"}
                             color={"secondary"}
                             className={classes.buyButton}
+                            onClick={handleClickBuy}
+                            disabled={wallet.status !== "connected"}
                         >
-                            <Typography className={classes.buttonText}>
-                                Buy random NFT from {featuredCollection.name}
-                            </Typography>
+                            {
+                                initCollection &&
+                                <Typography className={classes.buttonText}>
+                                    {wallet.status === "connected" ? `Buy random NFT fom ${collection.name}` : "Connect wallet"}
+                                </Typography>
+                            }
                         </Button>
                     </Grid>
                 </Grid>
+                {
+                    initCollection &&
+                    <SimpleDialog
+                        open={open}
+                        onClose={handleCloseBuy}
+                        collection={collection}
+                    />
+                }
+
             </Container>
         </Page>
     )
-}
-
-const buyDialog = () => {
-
 }
 
 export default INO;
