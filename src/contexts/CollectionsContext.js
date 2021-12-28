@@ -3,19 +3,17 @@ import {getCollections} from "../utils/volume-factory";
 import {getNumberOfRandomImagesFromCollection} from "../utils/ipfs-utils";
 
 const CollectionsContext = createContext({
-    featuredCollection: null,
-    featuredCollectionImages: null,
-    otherCollections: null,
-    otherCollectionsImages: null,
+    collections: null,
+    collectionsImages: null,
     collectionsInit: null,
     refreshCollections: null,
+    getImagesForCollection: null,
+    getCollectionForAddress: null
 });
 
 export const CollectionsProvider = ({children}) => {
-    const [featuredCollection, setFeaturedCollection] = useState({});
-    const [featuredCollectionImages, setFeaturedCollectionImages] = useState([]);
-    const [otherCollections, setOtherCollections] = useState([]);
-    const [otherCollectionsImages, setOtherCollectionsImages] = useState([]);
+    const [collections, setCollections] = useState([]);
+    const [collectionsImages, setCollectionsImages] = useState([]);
     const [collectionsInit, setCollectionsInit] = useState(false);
 
     useEffect(() => {
@@ -30,29 +28,40 @@ export const CollectionsProvider = ({children}) => {
                 let otherImages = [];
                 for (let i = 0; i < res.length; i++) {
                     let images = await getNumberOfRandomImagesFromCollection(res[i], 4); // {cid: "", url: ""}
-                    console.log(images);
-                    if(i === 0)
-                        setFeaturedCollectionImages(images);
-                    else
-                        otherImages.push(images);
+                    otherImages.push(images);
                 }
-                setOtherCollections(res.slice(1,res.length-1));
-                setOtherCollectionsImages(otherImages);
-                setFeaturedCollection(res[0]);
+                setCollections(res);
+                setCollectionsImages(otherImages);
             }
             setCollectionsInit(true);
         });
     }
 
+    const getImagesForCollection = (collection) => {
+        for (let i = 0; i < collections.length; i++) {
+            if (collection === collections[i]) {
+                return collectionsImages[i];
+            }
+        }
+    }
+
+    const getCollectionForAddress = (address) => {
+        for (let i = 0; i < collections.length; i++) {
+            if (address === collections[i].nftAddress) {
+                return collections[i];
+            }
+        }
+    }
+
     return (
         <CollectionsContext.Provider
             value={{
-                featuredCollection,
-                featuredCollectionImages,
-                otherCollections,
-                otherCollectionsImages,
+                collections,
+                collectionsImages,
                 collectionsInit,
-                refreshCollections
+                refreshCollections,
+                getImagesForCollection,
+                getCollectionForAddress
             }}
         >
             {children}
