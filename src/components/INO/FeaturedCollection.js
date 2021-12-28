@@ -73,12 +73,22 @@ const featuredStyles = makeStyles((theme) => ({
     }
 }));
 
-const FeaturedCollection = ({collection}) => {
+const FeaturedCollection = ({collection, clickable}) => {
     const classes = featuredStyles();
-
     const theme = useTheme();
-    const {featuredCollectionImages, collectionsInit} = useCollections();
     const isMobile = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
+
+    const {collectionsInit, getImagesForCollection} = useCollections();
+    const [imagesInit, setImagesInit] = useState(false);
+    const [images, setImages] = useState([]);
+
+    useEffect(() => {
+        if(collectionsInit && !imagesInit) {
+            const img = getImagesForCollection(collection);
+            setImages(img);
+            setImagesInit(true);
+        }
+    }, [collectionsInit, imagesInit]);
 
     return (
         <Grid container>
@@ -110,18 +120,19 @@ const FeaturedCollection = ({collection}) => {
 
             {/*Carousel*/}
             {
-                !collectionsInit &&
+                !imagesInit &&
                     <Grid container item xs={12} justify={"center"}>
                         <LoadingScreen transparent/>
                     </Grid>
             }
             {
-                collectionsInit &&
+                imagesInit &&
                 <Grid container item xs={12} justify={"space-around"}>
                     {
-                        featuredCollectionImages.map((image) => {
+                        images.map((image) => {
                             return (
                                 <CollectionCard
+                                    clickable={clickable}
                                     collection={collection}
                                     uri={image.url}
                                     key={image.cid}
@@ -135,23 +146,22 @@ const FeaturedCollection = ({collection}) => {
     );
 }
 
-const CollectionCard = ({collection, uri}) => {
+const CollectionCard = ({collection, uri, clickable}) => {
     const classes = featuredStyles();
     const history = useHistory();
 
     const [hovering, setHovering] = useState(false);
 
-    const handleClick = (collectionName) => {
-        console.log('Clicked',collectionName);
-        history.push(ROUTES_NAMES.INO_COLLECTION.replace(":name", collectionName));
+    const handleClick = (collectionAddress) => {
+        history.push(ROUTES_NAMES.INO_COLLECTION.replace(":address", collectionAddress));
     }
 
     return (
 
         <Card
-            onMouseEnter={() => setHovering(true)}
-            onMouseLeave={() => setHovering(false)}
-            onClick={() => handleClick(collection.name)}
+            onMouseEnter={clickable ? () => setHovering(true) : undefined}
+            onMouseLeave={clickable ? () => setHovering(false) : undefined}
+            onClick={clickable ? () => handleClick(collection.nftAddress) : undefined}
             className={classes.collectionCard}
             style={{
                 backgroundImage: `url(${uri})`,
