@@ -428,6 +428,42 @@ export const getWinnersAndAmounts = (participants, totalPot, winnersCount) => {
     return wins;
 }
 
+export const approve = (wallet, spender, amount) => {
+    const volume = new web3.eth.Contract(volumeABI, volumeAddress);
+    const data = volume.methods.approve(spender, amount).encodeABI();
+
+    return new Promise((resolve, reject) => {
+        const transactionParams = {
+            nonce: '0x00',
+            to: volumeAddress,
+            from: wallet.account,
+            data: data,
+            chainId: chainId
+        }
+
+        wallet.ethereum.request({
+            method: 'eth_sendTransaction',
+            params: [transactionParams]
+        }).then((txHash) => {
+            resolve(txHash);
+        }).catch(err => {
+            reject(err);
+        })
+    });
+}
+
+export const getAllowance = (owner, spender) => {
+    return new Promise((resolve, reject) => {
+        const volume = new web3.eth.Contract(volumeABI, volumeAddress);
+        volume.methods.allowance(owner, spender).call((error, amount) => {
+            if (error)
+                reject(error);
+
+            resolve(web3.utils.fromWei(amount));
+        });
+    });
+}
+
 // === HELPER FUNCTIONS === //
 
 const sortFunction = (a, b) => {
